@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Mint, Token};
 use crate::pda::boss::Boss;
+use crate::pda::contender::Contender;
 use crate::pda::leader::Leader;
 
 mod pda;
@@ -14,6 +15,10 @@ pub mod meme_race {
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         ix::initialize::ix(ctx)
+    }
+
+    pub fn contend(ctx: Context<Contend>, url: Pubkey) -> Result<()> {
+        ix::contend::ix(ctx, url)
     }
 }
 
@@ -41,6 +46,36 @@ pub struct Initialize<'info> {
     pub boss: Account<'info, Boss>,
     #[account()]
     pub two: SystemAccount<'info>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    // token program
+    pub token_program: Program<'info, Token>,
+    // system program
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Contend<'info> {
+    #[account(
+    seeds = [
+    pda::boss::SEED.as_bytes()
+    ], bump,
+    )]
+    pub boss: Account<'info, Boss>,
+    #[account(
+    address = boss.mint,
+    owner = token_program.key()
+    )]
+    pub mint: Account<'info, Mint>,
+    #[account(init,
+    seeds = [
+    pda::contender::SEED.as_bytes(),
+    payer.key().as_ref()
+    ], bump,
+    payer = payer,
+    space = pda::contender::SIZE
+    )]
+    pub contender: Account<'info, Contender>,
     #[account(mut)]
     pub payer: Signer<'info>,
     // token program
