@@ -11,14 +11,29 @@ export type MemeRace = {
           "isSigner": false
         },
         {
-          "name": "contender",
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "boss",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "two",
+          "isMut": false,
           "isSigner": false
         },
         {
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -60,6 +75,10 @@ export type MemeRace = {
             "type": "u64"
           },
           {
+            "name": "url",
+            "type": "publicKey"
+          },
+          {
             "name": "authority",
             "type": "publicKey"
           }
@@ -96,6 +115,10 @@ export type MemeRace = {
           {
             "name": "wager",
             "type": "u64"
+          },
+          {
+            "name": "contender",
+            "type": "publicKey"
           },
           {
             "name": "authority",
@@ -166,14 +189,29 @@ export const IDL: MemeRace = {
           "isSigner": false
         },
         {
-          "name": "contender",
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "boss",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "two",
+          "isMut": false,
           "isSigner": false
         },
         {
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -215,6 +253,10 @@ export const IDL: MemeRace = {
             "type": "u64"
           },
           {
+            "name": "url",
+            "type": "publicKey"
+          },
+          {
             "name": "authority",
             "type": "publicKey"
           }
@@ -251,6 +293,10 @@ export const IDL: MemeRace = {
           {
             "name": "wager",
             "type": "u64"
+          },
+          {
+            "name": "contender",
+            "type": "publicKey"
           },
           {
             "name": "authority",

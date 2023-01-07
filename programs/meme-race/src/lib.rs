@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use crate::pda::contender::Contender;
+use anchor_spl::token::{Mint, Token};
+use crate::pda::boss::Boss;
 use crate::pda::leader::Leader;
 
 mod pda;
@@ -26,16 +27,24 @@ pub struct Initialize<'info> {
     space = pda::leader::SIZE
     )]
     pub leader: Account<'info, Leader>,
+    #[account(
+    owner = token_program.key()
+    )]
+    pub mint: Account<'info, Mint>,
     #[account(init,
     seeds = [
-    pda::contender::SEED.as_bytes()
+    pda::boss::SEED.as_bytes()
     ], bump,
     payer = payer,
-    space = pda::contender::SIZE
+    space = pda::boss::SIZE
     )]
-    pub contender: Account<'info, Contender>,
+    pub boss: Account<'info, Boss>,
+    #[account()]
+    pub two: SystemAccount<'info>,
     #[account(mut)]
     pub payer: Signer<'info>,
+    // token program
+    pub token_program: Program<'info, Token>,
     // system program
     pub system_program: Program<'info, System>,
 }

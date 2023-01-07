@@ -10,8 +10,13 @@ describe("meme-race", () => {
         PROGRAM_ID,
         provider
     );
+    const SPL_TOKEN_PROGRAM_ID = new web3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    const SPL_ASSOCIATED_TOKEN_PROGRAM_ID = new web3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
     it("should race memes", async () => {
-        // init
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // init ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // derive leader pda
         let leaderPda, _;
         [leaderPda,] = web3.PublicKey.findProgramAddressSync(
             [
@@ -19,22 +24,31 @@ describe("meme-race", () => {
             ],
             new web3.PublicKey(PROGRAM_ID)
         );
-        let contenderPda;
-        [contenderPda,] = web3.PublicKey.findProgramAddressSync(
+        // derive boss pda
+        let bossPda;
+        [bossPda,] = web3.PublicKey.findProgramAddressSync(
             [
-                Buffer.from("contender")
+                Buffer.from("boss")
             ],
             new web3.PublicKey(PROGRAM_ID)
         );
-        const tx = await program.methods
+        // derive new keypair as two
+        const two = new web3.Keypair();
+        // derive new keypair as mint
+        const mint = new web3.Keypair();
+        // invoke rpc
+        // TODO; these tests gonna fail 'cause local host . . . accounts not init, etc . . . devnet??
+        await program.methods
             .initialize()
             .accounts(
                 {
                     leader: leaderPda,
-                    contender: contenderPda,
-                    payer: provider.wallet.publicKey
+                    mint: mint.publicKey,
+                    boss: bossPda,
+                    payer: provider.wallet.publicKey,
+                    two: two.publicKey,
+                    tokenProgram: SPL_TOKEN_PROGRAM_ID,
                 }
-            ).transaction()
-        console.log(tx);
+            ).rpc()
     });
 });
