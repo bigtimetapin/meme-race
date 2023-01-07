@@ -56,17 +56,6 @@ pub struct Initialize<'info> {
 
 #[derive(Accounts)]
 pub struct Contend<'info> {
-    #[account(
-    seeds = [
-    pda::boss::SEED.as_bytes()
-    ], bump,
-    )]
-    pub boss: Account<'info, Boss>,
-    #[account(
-    address = boss.mint,
-    owner = token_program.key()
-    )]
-    pub mint: Account<'info, Mint>,
     #[account(init,
     seeds = [
     pda::contender::SEED.as_bytes(),
