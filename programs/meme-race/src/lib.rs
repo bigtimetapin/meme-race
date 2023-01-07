@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint, Token};
+use anchor_spl::associated_token::AssociatedToken;
+use anchor_spl::token::{Mint, Token, TokenAccount};
 use crate::pda::boss::Boss;
 use crate::pda::contender::Contender;
 use crate::pda::leader::Leader;
@@ -20,6 +21,10 @@ pub mod meme_race {
 
     pub fn contend(ctx: Context<Contend>, url: Pubkey) -> Result<()> {
         ix::contend::ix(ctx, url)
+    }
+
+    pub fn wage(ctx: Context<Wage>, wager: u64) -> Result<()> {
+        ix::wage::ix(ctx, wager)
     }
 }
 
@@ -45,12 +50,20 @@ pub struct Initialize<'info> {
     space = pda::boss::SIZE
     )]
     pub boss: Account<'info, Boss>,
+    #[account(init,
+    associated_token::mint = mint,
+    associated_token::authority = boss,
+    payer = payer
+    )]
+    pub treasury: Account<'info, TokenAccount>,
     #[account()]
     pub two: SystemAccount<'info>,
     #[account(mut)]
     pub payer: Signer<'info>,
     // token program
     pub token_program: Program<'info, Token>,
+    // associated token program
+    pub associated_token_program: Program<'info, AssociatedToken>,
     // system program
     pub system_program: Program<'info, System>,
 }
@@ -68,6 +81,58 @@ pub struct Contend<'info> {
     pub contender: Account<'info, Contender>,
     #[account(mut)]
     pub payer: Signer<'info>,
+    // system program
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Wage<'info> {
+    #[account(mut)]
+    pub contender: Account<'info, Contender>,
+    #[account(init_if_needed,
+    seeds = [
+    pda::wager::SEED.as_bytes(),
+    contender.key().as_ref(),
+    payer.key().as_ref()
+    ], bump,
+    payer = payer,
+    space = pda::wager::SIZE
+    )]
+    pub wager: Account<'info, Wager>,
+    #[account(mut,
+    seeds = [
+    pda::leader::SEED.as_bytes()
+    ], bump,
+    )]
+    pub leader: Account<'info, Leader>,
+    #[account(
+    seeds = [
+    pda::boss::SEED.as_bytes()
+    ], bump,
+    )]
+    pub boss: Account<'info, Boss>,
+    #[account(
+    address = boss.mint,
+    owner = token_program.key()
+    )]
+    pub mint: Account<'info, Mint>,
+    #[account(init_if_needed,
+    associated_token::mint = mint,
+    associated_token::authority = payer,
+    payer = payer
+    )]
+    pub ata: Account<'info, TokenAccount>,
+    #[account(mut,
+    associated_token::mint = mint,
+    associated_token::authority = boss
+    )]
+    pub treasury: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    // token program
+    pub token_program: Program<'info, Token>,
+    // associated token program
+    pub associated_token_program: Program<'info, AssociatedToken>,
     // system program
     pub system_program: Program<'info, System>,
 }
