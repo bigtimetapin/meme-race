@@ -5,7 +5,8 @@ pub const SEED: &str = "leader";
 
 pub const SIZE: usize = 8 // discriminator
     + TOP_CONTENDER_SIZE // leader
-    + 4 + (TOP_CONTENDER_SIZE * 10); // top 10 race
+    + 4 + (TOP_CONTENDER_SIZE * 10) // top 10 race
+    + 1; // is race still open
 
 const TOP_CONTENDER_SIZE: usize = 8 // score
     + 32; // pda
@@ -14,6 +15,7 @@ const TOP_CONTENDER_SIZE: usize = 8 // score
 pub struct Leader {
     pub leader: TopContender,
     pub race: Vec<TopContender>,
+    pub open: bool,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]

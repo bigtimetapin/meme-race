@@ -1,3 +1,3 @@
 pub mod initialize;
-pub mod contend;
-pub mod wage;
+pub mod add_contender;
+pub mod place_wager;

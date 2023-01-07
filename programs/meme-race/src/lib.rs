@@ -19,12 +19,12 @@ pub mod meme_race {
         ix::initialize::ix(ctx)
     }
 
-    pub fn contend(ctx: Context<Contend>, url: Pubkey) -> Result<()> {
-        ix::contend::ix(ctx, url)
+    pub fn add_contender(ctx: Context<AddContender>, url: Pubkey) -> Result<()> {
+        ix::add_contender::ix(ctx, url)
     }
 
-    pub fn wage(ctx: Context<Wage>, wager: u64) -> Result<()> {
-        ix::wage::ix(ctx, wager)
+    pub fn place_wager(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
+        ix::place_wager::ix(ctx, wager)
     }
 }
 
@@ -69,7 +69,7 @@ pub struct Initialize<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Contend<'info> {
+pub struct AddContender<'info> {
     #[account(init,
     seeds = [
     pda::contender::SEED.as_bytes(),
@@ -86,7 +86,7 @@ pub struct Contend<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Wage<'info> {
+pub struct PlaceWager<'info> {
     #[account(mut)]
     pub contender: Account<'info, Contender>,
     #[account(init_if_needed,

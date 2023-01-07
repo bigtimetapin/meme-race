@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{transfer, Transfer};
 use crate::pda::leader::TopContender;
-use crate::{Leader, Wage};
+use crate::{Leader, PlaceWager};
 
-pub fn ix(ctx: Context<Wage>, wager: u64) -> Result<()> {
+pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     let contender = &mut ctx.accounts.contender;
     let wager_pda = &mut ctx.accounts.wager;
     let leader_pda = &mut ctx.accounts.leader;
