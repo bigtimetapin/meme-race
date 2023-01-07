@@ -12,5 +12,6 @@ pub fn ix(
     boss.two = ctx.accounts.two.key();
     // init leader board
     leader.open = true;
+    leader.authority = ctx.accounts.payer.key();
     Ok(())
 }

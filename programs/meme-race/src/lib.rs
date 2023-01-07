@@ -26,6 +26,10 @@ pub mod meme_race {
     pub fn place_wager(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
         ix::place_wager::ix(ctx, wager)
     }
+
+    pub fn close(ctx: Context<Close>) -> Result<()> {
+        ix::close::ix(ctx)
+    }
 }
 
 #[derive(Accounts)]
@@ -135,4 +139,18 @@ pub struct PlaceWager<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
     // system program
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Close<'info> {
+    #[account(mut,
+    seeds = [
+    pda::leader::SEED.as_bytes()
+    ], bump,
+    )]
+    pub leader: Account<'info, Leader>,
+    #[account(
+    address = leader.authority
+    )]
+    pub authority: SystemAccount<'info>,
 }
