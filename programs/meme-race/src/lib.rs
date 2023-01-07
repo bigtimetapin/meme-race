@@ -3,6 +3,7 @@ use anchor_spl::token::{Mint, Token};
 use crate::pda::boss::Boss;
 use crate::pda::contender::Contender;
 use crate::pda::leader::Leader;
+use crate::pda::wager::Wager;
 
 mod pda;
 mod ix;
@@ -67,8 +68,6 @@ pub struct Contend<'info> {
     pub contender: Account<'info, Contender>,
     #[account(mut)]
     pub payer: Signer<'info>,
-    // token program
-    pub token_program: Program<'info, Token>,
     // system program
     pub system_program: Program<'info, System>,
 }
