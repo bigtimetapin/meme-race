@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{transfer, Transfer};
 use crate::pda::leader::TopContender;
-use crate::{Leader, PlaceWager};
+use crate::PlaceWager;
 
 pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     let contender = &mut ctx.accounts.contender;
@@ -46,5 +46,6 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     // finalize new leader board
     leader_pda.leader = leader.clone();
     leader_pda.race = new_top_contenders.clone();
+    leader_pda.total += wager;
     Ok(())
 }

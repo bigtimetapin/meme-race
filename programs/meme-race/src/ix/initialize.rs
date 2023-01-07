@@ -4,6 +4,7 @@ use crate::Initialize;
 pub fn ix(
     ctx: Context<Initialize>,
 ) -> Result<()> {
+    // grab accounts
     let boss = &mut ctx.accounts.boss;
     let leader = &mut ctx.accounts.leader;
     // init boss
