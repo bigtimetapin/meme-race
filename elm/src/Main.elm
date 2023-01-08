@@ -14,7 +14,6 @@ import Model.Model as Model exposing (Model)
 import Model.State.Exception.Exception as Exception
 import Model.State.Global.Global as Global
 import Model.State.Local.Local as Local exposing (Local)
-import Model.Wallet as Wallet
 import Msg.Contender.Msg as ContenderMsg
 import Msg.Js as JsMsg
 import Msg.LeaderBoard.Msg as LeaderBoardMsg
@@ -30,6 +29,7 @@ import Sub.Sub as Sub
 import Url
 import View.Error.Error
 import View.Hero
+import View.LeaderBoard.View
 
 
 main : Program () Model Msg
@@ -318,6 +318,9 @@ view model =
 
         html =
             case model.state.local of
+                Local.LeaderBoard leaderBoard ->
+                    hero <| View.LeaderBoard.View.view leaderBoard
+
                 Local.Error error ->
                     hero <| View.Error.Error.body error
 

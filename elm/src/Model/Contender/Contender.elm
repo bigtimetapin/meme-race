@@ -6,9 +6,10 @@ import Util.Decode as Util
 
 
 type alias Contender =
-    { score : Int
+    { score : String
     , url : String
     , authority : PublicKey
+    , pda : PublicKey
     }
 
 
@@ -19,7 +20,8 @@ decode string =
 
 decoder : Decode.Decoder Contender
 decoder =
-    Decode.map3 Contender
-        (Decode.field "score" Decode.int)
+    Decode.map4 Contender
+        (Decode.field "score" Decode.string)
         (Decode.field "url" Decode.string)
         (Decode.field "authority" Decode.string)
+        (Decode.field "pda" Decode.string)

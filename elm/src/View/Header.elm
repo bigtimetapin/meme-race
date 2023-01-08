@@ -121,7 +121,7 @@ viewGlobal global =
                                 [ Html.text <|
                                     String.concat
                                         [ "total $BONK wagered on your meme: "
-                                        , String.fromInt c.score
+                                        , c.score
                                         ]
                                 ]
 
@@ -151,9 +151,9 @@ viewGlobal global =
                                         , " "
                                         , "memes for a total of"
                                         , " "
-                                        , String.fromInt <| List.sum (List.map (\w -> w.wagerSize) nel)
-                                        , " "
                                         , "$BONK 🔥"
+                                        , " "
+                                        , String.fromInt <| List.sum (List.map (\w -> w.wagerSize) nel)
                                         ]
                                 ]
             in
