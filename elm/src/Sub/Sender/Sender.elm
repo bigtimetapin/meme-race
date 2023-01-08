@@ -1,12 +1,14 @@
 module Sub.Sender.Sender exposing (Sender(..), WithMore, encode, encode0)
 
 import Json.Encode as Encode
-import Msg.Collector.Collector as CollectorMsg exposing (FromCollector)
+import Msg.Contender.Msg as Contender
 import Msg.Global as FromGlobal
+import Msg.LeaderBoard.Msg as LeaderBoard
 
 
 type Sender
-    = Collect FromCollector
+    = LeaderBoard LeaderBoard.Msg
+    | Contender Contender.Msg
     | Global FromGlobal.Global
 
 
@@ -42,8 +44,11 @@ encode0 role =
 toString : Sender -> String
 toString role =
     case role of
-        Collect fromCollector ->
-            CollectorMsg.toString fromCollector
+        LeaderBoard msg ->
+            LeaderBoard.toString msg
+
+        Contender msg ->
+            Contender.toString msg
 
         Global fromGlobal ->
             FromGlobal.toString fromGlobal

@@ -2,14 +2,18 @@ module Model.State.Local.Local exposing (..)
 
 import Html
 import Html.Attributes
-import Model.Collector.Collector as Collector exposing (Collector)
+import Model.Contender.State as Contender
+import Model.Degen.State as Degen
+import Model.LeaderBoard.State as LeaderBoard
 import Url
 import Url.Parser as UrlParser exposing ((</>))
 
 
 type Local
-    = Collect Collector
-    | Error String
+    = Error String
+    | LeaderBoard LeaderBoard.State
+    | Degen Degen.State
+    | Contender Contender.State
 
 
 urlParser : UrlParser.Parser (Local -> c) c
@@ -20,16 +24,15 @@ urlParser =
             (Error "Invalid state; Click to homepage.")
             (UrlParser.s "invalid")
 
-        -- collector
+        -- almost contender
         , UrlParser.map
-            (Collect (Collector.TypingHandle ""))
+            (\s -> Contender <| Contender.Almost <| { pda = s })
+            (UrlParser.s "contender" </> UrlParser.string)
+
+        -- leader board
+        , UrlParser.map
+            (LeaderBoard <| LeaderBoard.Top [])
             UrlParser.top
-        , UrlParser.map
-            (\handle -> Collect (Collector.MaybeExistingCreator handle))
-            UrlParser.string
-        , UrlParser.map
-            (\handle index -> Collect (Collector.MaybeExistingCollection handle index))
-            (UrlParser.string </> UrlParser.int)
         ]
 
 
@@ -53,28 +56,11 @@ parse url =
 path : Local -> String
 path local =
     case local of
-        Collect collector ->
-            case collector of
-                Collector.TypingHandle "" ->
-                    -- top
-                    "#/"
-
-                Collector.MaybeExistingCreator string ->
-                    String.concat
-                        [ "#/"
-                        , string
-                        ]
-
-                Collector.MaybeExistingCollection string int ->
-                    String.join
-                        "/"
-                        [ "#"
-                        , string
-                        , String.fromInt int
-                        ]
-
-                _ ->
-                    "#/invalid"
+        Contender (Contender.Almost almost) ->
+            String.concat
+                [ "#/contender/"
+                , almost.pda
+                ]
 
         _ ->
             "#/invalid"

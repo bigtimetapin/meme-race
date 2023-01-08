@@ -3,9 +3,7 @@ module View.Header exposing (view)
 import Html exposing (Html)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Model.Collector.Collector as Collector
 import Model.State.Global.Global exposing (Global(..))
-import Model.State.Local.Local as Local
 import Model.Wallet as Wallet
 import Msg.Global as FromGlobal
 import Msg.Msg as Msg exposing (Msg(..))
@@ -25,8 +23,7 @@ view global =
                 [ Html.h1
                     []
                     [ Html.a
-                        [ Local.href <| Local.Collect (Collector.TypingHandle "")
-                        ]
+                        []
                         [ Html.div
                             [ class "is-text-container-4"
                             ]
@@ -85,12 +82,6 @@ viewWallet global =
                 []
                 []
 
-        Connecting ->
-            Html.div
-                [ class "is-loading-tiny"
-                ]
-                []
-
         _ ->
             Html.button
                 [ class "is-light-text-container-4 mr-2"
@@ -115,13 +106,7 @@ viewGlobal global =
                 [ Html.text "no-wallet-installed"
                 ]
 
-        Connecting ->
-            Html.div
-                [ class "is-loading-tiny"
-                ]
-                []
-
-        HasWallet hasWallet ->
+        HasWallet wallet ->
             Html.div
                 []
                 [ Html.div
@@ -130,7 +115,7 @@ viewGlobal global =
                         String.concat
                             [ "wallet:"
                             , " "
-                            , Wallet.slice hasWallet.wallet
+                            , Wallet.slice wallet
                             ]
                     ]
                 , Html.div
@@ -149,7 +134,7 @@ viewGlobal global =
                     ]
                 ]
 
-        HasWalletAndHandle hasWalletAndHandle ->
+        HasDegen wallet _ ->
             Html.div
                 []
                 [ Html.div
@@ -158,15 +143,7 @@ viewGlobal global =
                         String.concat
                             [ "wallet:"
                             , " "
-                            , Wallet.slice hasWalletAndHandle.wallet
+                            , Wallet.slice wallet
                             ]
-                    ]
-                , Html.div
-                    []
-                    [ Html.a
-                        [ class "has-sky-blue-text"
-                        ]
-                        [ Html.text hasWalletAndHandle.handle
-                        ]
                     ]
                 ]

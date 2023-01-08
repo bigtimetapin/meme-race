@@ -2,9 +2,10 @@ module Msg.Msg exposing (Msg(..), resetViewport)
 
 import Browser
 import Browser.Dom as Dom
-import Msg.Collector.Collector exposing (FromCollector)
+import Msg.Contender.Msg as Contender
 import Msg.Global as FromGlobal
 import Msg.Js exposing (FromJs)
+import Msg.LeaderBoard.Msg as LeaderBoard
 import Task
 import Url
 
@@ -17,8 +18,10 @@ type
     | LinkClicked Browser.UrlRequest
       -- wallet
     | Global FromGlobal.Global
-      -- collector
-    | FromCollector FromCollector
+      -- leader-board
+    | FromLeaderBoard LeaderBoard.Msg
+      -- contender
+    | FromContender Contender.Msg
       -- exception
     | CloseExceptionModal
       -- js ports

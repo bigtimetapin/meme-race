@@ -3,7 +3,6 @@ module Model.PublicKey exposing (PublicKey, encode)
 import Json.Encode as Encode
 
 
-
 type alias PublicKey =
     String
 

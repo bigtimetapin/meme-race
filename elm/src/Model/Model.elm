@@ -1,14 +1,15 @@
 module Model.Model exposing (Model, init)
 
 import Browser.Navigation as Nav
-import Model.AlmostExistingCollection as AlmostExistingCollection
-import Model.Collector.Collector as Collector
-import Model.Handle as Handle
+import Model.Contender.AlmostContender as AlmostContender
+import Model.Contender.State as Contender
+import Model.LeaderBoard.State as LeaderBoard
 import Model.State.Exception.Exception as Exception
 import Model.State.Global.Global as Global
 import Model.State.Local.Local as Local exposing (Local)
 import Model.State.State exposing (State)
-import Msg.Collector.Collector as FromCollector
+import Msg.Contender.Msg as ContenderMsg
+import Msg.LeaderBoard.Msg as LeaderBoardMsg
 import Msg.Msg exposing (Msg(..))
 import Sub.Sender.Ports exposing (sender)
 import Sub.Sender.Sender as Sender
@@ -41,22 +42,33 @@ init _ url key =
             }
     in
     case local of
-        Local.Collect (Collector.MaybeExistingCreator handle) ->
-            ( model
+        Local.Contender (Contender.Almost almostContender) ->
+            ( { model
+                | state =
+                    { local = model.state.local
+                    , global = model.state.global
+                    , exception = Exception.Waiting
+                    }
+              }
             , sender <|
                 Sender.encode <|
-                    { sender = Sender.Collect <| FromCollector.HandleForm <| Handle.Confirm handle
-                    , more = Handle.encode handle
+                    { sender = Sender.Contender <| ContenderMsg.Fetch
+                    , more = AlmostContender.encode almostContender
                     }
             )
 
-        Local.Collect (Collector.MaybeExistingCollection handle index) ->
-            ( model
-            , sender <|
-                Sender.encode <|
-                    { sender = Sender.Collect <| FromCollector.SelectCollection handle index
-                    , more = AlmostExistingCollection.encode { handle = handle, index = index }
+        Local.LeaderBoard (LeaderBoard.Top _) ->
+            ( { model
+                | state =
+                    { local = model.state.local
+                    , global = model.state.global
+                    , exception = Exception.Waiting
                     }
+              }
+            , sender <|
+                Sender.encode0 <|
+                    Sender.LeaderBoard <|
+                        LeaderBoardMsg.Fetch
             )
 
         _ ->
