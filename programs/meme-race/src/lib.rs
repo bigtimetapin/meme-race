@@ -3,8 +3,10 @@ use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token::{Mint, Token, TokenAccount};
 use crate::pda::boss::Boss;
 use crate::pda::contender::Contender;
+use crate::pda::degen::Degen;
 use crate::pda::leader_board::LeaderBoard;
 use crate::pda::wager::Wager;
+use crate::pda::wager_index::WagerIndex;
 
 mod pda;
 mod ix;
@@ -21,6 +23,10 @@ pub mod meme_race {
 
     pub fn add_contender(ctx: Context<AddContender>, url: Pubkey) -> Result<()> {
         ix::add_contender::ix(ctx, url)
+    }
+
+    pub fn add_degen(ctx: Context<AddDegen>) -> Result<()> {
+        ix::add_degen::ix(ctx)
     }
 
     pub fn place_wager(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
@@ -100,6 +106,23 @@ pub struct AddContender<'info> {
 }
 
 #[derive(Accounts)]
+pub struct AddDegen<'info> {
+    #[account(init,
+    seeds = [
+    pda::degen::SEED.as_bytes(),
+    payer.key().as_ref()
+    ], bump,
+    payer = payer,
+    space = pda::degen::SIZE
+    )]
+    pub degen: Account<'info, Degen>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    // system program
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
 pub struct PlaceWager<'info> {
     #[account(mut)]
     pub contender: Account<'info, Contender>,
@@ -113,6 +136,23 @@ pub struct PlaceWager<'info> {
     space = pda::wager::SIZE
     )]
     pub wager: Account<'info, Wager>,
+    #[account(init_if_needed,
+    seeds = [
+    pda::wager_index::SEED.as_bytes(),
+    payer.key().as_ref(),
+    & [degen.total_wagers_placed + 1]
+    ], bump,
+    payer = payer,
+    space = pda::wager_index::SIZE
+    )]
+    pub wager_index: Account<'info, WagerIndex>,
+    #[account(mut,
+    seeds = [
+    pda::degen::SEED.as_bytes(),
+    payer.key().as_ref()
+    ], bump,
+    )]
+    pub degen: Account<'info, Degen>,
     #[account(mut,
     seeds = [
     pda::leader_board::SEED.as_bytes()
