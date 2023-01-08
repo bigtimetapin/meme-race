@@ -38,7 +38,7 @@ view state =
                                         ]
                                 ]
                             , Html.div
-                                [ class "columns is-half"
+                                [ class "column is-half"
                                 ]
                                 [ Html.text <|
                                     String.concat
@@ -65,6 +65,51 @@ view state =
                               <|
                                 List.map
                                     (\contender ->
+                                        let
+                                            wager =
+                                                case contender.wager of
+                                                    Just w ->
+                                                        Html.div
+                                                            []
+                                                            [ Html.div
+                                                                []
+                                                                [ Html.text <|
+                                                                    String.concat
+                                                                        [ "your current wager"
+                                                                        , ": "
+                                                                        , "$BONK"
+                                                                        , " "
+                                                                        , w
+                                                                        ]
+                                                                ]
+                                                            , Html.div
+                                                                []
+                                                                [ Html.a
+                                                                    [ Local.href <|
+                                                                        Local.Contender <|
+                                                                            ContenderState.Almost
+                                                                                { pda = contender.pda
+                                                                                }
+                                                                    ]
+                                                                    [ Html.text "add to your wager 🤔"
+                                                                    ]
+                                                                ]
+                                                            ]
+
+                                                    Nothing ->
+                                                        Html.div
+                                                            []
+                                                            [ Html.a
+                                                                [ Local.href <|
+                                                                    Local.Contender <|
+                                                                        ContenderState.Almost
+                                                                            { pda = contender.pda
+                                                                            }
+                                                                ]
+                                                                [ Html.text "place wager 🤔"
+                                                                ]
+                                                            ]
+                                        in
                                         Html.div
                                             []
                                             [ Html.div
@@ -103,15 +148,7 @@ view state =
                                                         ]
                                                     , Html.div
                                                         []
-                                                        [ Html.a
-                                                            [ Local.href <|
-                                                                Local.Contender <|
-                                                                    ContenderState.Almost
-                                                                        { pda = contender.pda
-                                                                        }
-                                                            ]
-                                                            [ Html.text "place wager 🤔"
-                                                            ]
+                                                        [ wager
                                                         ]
                                                     ]
                                                 , Html.div
@@ -130,6 +167,29 @@ view state =
                         ]
 
                 False ->
+                    let
+                        wager =
+                            case leaderBoard.leader.wager of
+                                Just w ->
+                                    Html.div
+                                        []
+                                        [ Html.button
+                                            []
+                                            [ Html.text
+                                                """claim winnings 🎉
+                                                """
+                                            ]
+                                        ]
+
+                                Nothing ->
+                                    Html.div
+                                        []
+                                        [ Html.text
+                                            """Looks like you didn't place a wager on this meme
+                                            better luck next time 🤝
+                                            """
+                                        ]
+                    in
                     Html.div
                         []
                         [ Html.div
@@ -148,12 +208,70 @@ view state =
                                         ]
                                 ]
                             , Html.div
-                                [ class "columns is-half"
+                                [ class "column is-half"
                                 ]
                                 [ Html.text <|
                                     String.concat
                                         [ "Race closed 🏁"
                                         ]
+                                ]
+                            ]
+                        , Html.div
+                            []
+                            [ Html.div
+                                []
+                                [ Html.text "Winner 🏅"
+                                ]
+                            , Html.div
+                                []
+                                [ Html.div
+                                    [ class "columns"
+                                    ]
+                                    [ Html.div
+                                        [ class "column is-half"
+                                        ]
+                                        [ Html.div
+                                            []
+                                            [ Html.text <|
+                                                String.concat
+                                                    [ "$BONK"
+                                                    , " "
+                                                    , leaderBoard.leader.score
+                                                    ]
+                                            ]
+                                        , Html.div
+                                            []
+                                            [ Html.text <|
+                                                String.concat
+                                                    [ "uploaded by"
+                                                    , ": "
+                                                    ]
+                                            , Html.a
+                                                [ href <|
+                                                    String.concat
+                                                        [ "https://solscan.io/account/"
+                                                        , leaderBoard.leader.authority
+                                                        ]
+                                                , target "_blank"
+                                                ]
+                                                [ Html.text <|
+                                                    Wallet.slice leaderBoard.leader.authority
+                                                ]
+                                            ]
+                                        , Html.div
+                                            []
+                                            [ wager
+                                            ]
+                                        ]
+                                    , Html.div
+                                        [ class "column is-half"
+                                        ]
+                                        [ Html.img
+                                            [ src leaderBoard.leader.url
+                                            ]
+                                            []
+                                        ]
+                                    ]
                                 ]
                             ]
                         ]
