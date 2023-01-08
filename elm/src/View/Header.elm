@@ -3,7 +3,10 @@ module View.Header exposing (view)
 import Html exposing (Html)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+import Model.Degen.State as DegenState
+import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Global.Global exposing (Global(..))
+import Model.State.Local.Local as Local
 import Model.Wallet as Wallet
 import Msg.Global as FromGlobal
 import Msg.Msg as Msg exposing (Msg(..))
@@ -23,12 +26,15 @@ view global =
                 [ Html.h1
                     []
                     [ Html.a
-                        []
+                        [ Local.href <|
+                            Local.LeaderBoard <|
+                                LeaderBoardState.Almost
+                        ]
                         [ Html.div
                             [ class "is-text-container-4"
                             ]
-                            [ Html.text "DAP.COOL"
-                            , Html.text "🆒"
+                            [ Html.text "MEME RACE"
+                            , Html.text "🔥"
                             ]
                         ]
                     ]
@@ -45,7 +51,7 @@ view global =
                     ]
                     [ Html.span
                         []
-                        [ viewWallet global
+                        [ connect global
                         ]
                     , Html.span
                         [ class "icon"
@@ -66,8 +72,8 @@ view global =
         ]
 
 
-viewWallet : Global -> Html Msg
-viewWallet global =
+connect : Global -> Html Msg
+connect global =
     case global of
         NoWalletYet ->
             Html.button
@@ -97,8 +103,7 @@ viewGlobal global =
         NoWalletYet ->
             Html.div
                 []
-                [ Html.text "no-wallet-yet"
-                ]
+                []
 
         WalletMissing ->
             Html.div
@@ -106,7 +111,52 @@ viewGlobal global =
                 [ Html.text "no-wallet-installed"
                 ]
 
-        HasWallet wallet ->
+        HasDegen degen ->
+            let
+                contender =
+                    case degen.contender of
+                        Just c ->
+                            Html.div
+                                []
+                                [ Html.text <|
+                                    String.concat
+                                        [ "total $BONK wagered on your meme: "
+                                        , String.fromInt c.score
+                                        ]
+                                ]
+
+                        Nothing ->
+                            Html.div
+                                []
+                                [ Html.text
+                                    """you haven't added a meme to the race yet 🤨
+                                    """
+                                ]
+
+                wagers =
+                    case degen.wagers of
+                        [] ->
+                            Html.div
+                                []
+                                []
+
+                        nel ->
+                            Html.div
+                                []
+                                [ Html.text <|
+                                    String.concat
+                                        [ "you've placed wagers on"
+                                        , " "
+                                        , String.fromInt <| List.length nel
+                                        , " "
+                                        , "memes for a total of"
+                                        , " "
+                                        , String.fromInt <| List.sum (List.map (\w -> w.wagerSize) nel)
+                                        , " "
+                                        , "$BONK 🔥"
+                                        ]
+                                ]
+            in
             Html.div
                 []
                 [ Html.div
@@ -115,35 +165,26 @@ viewGlobal global =
                         String.concat
                             [ "wallet:"
                             , " "
-                            , Wallet.slice wallet
+                            , Wallet.slice degen.wallet
                             ]
                     ]
                 , Html.div
                     []
-                    [ Html.text
-                        """no-handle-yet
-                        """
+                    [ contender
+                    , wagers
                     , Html.div
                         []
                         [ Html.a
                             [ class "has-sky-blue-text"
+                            , Local.href <|
+                                Local.Degen <|
+                                    DegenState.Top <|
+                                        degen
                             ]
-                            [ Html.text "create-handle-now"
+                            [ Html.text <|
+                                """degen page 😎
+                                """
                             ]
                         ]
-                    ]
-                ]
-
-        HasDegen wallet _ ->
-            Html.div
-                []
-                [ Html.div
-                    []
-                    [ Html.text <|
-                        String.concat
-                            [ "wallet:"
-                            , " "
-                            , Wallet.slice wallet
-                            ]
                     ]
                 ]

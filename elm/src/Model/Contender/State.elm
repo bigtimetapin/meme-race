@@ -6,5 +6,4 @@ import Model.Contender.Contender exposing (Contender)
 
 type State
     = Almost AlmostContender
-    | Invalid String
     | Top Contender

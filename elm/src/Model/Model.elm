@@ -57,7 +57,7 @@ init _ url key =
                     }
             )
 
-        Local.LeaderBoard (LeaderBoard.Top _) ->
+        Local.LeaderBoard LeaderBoard.Almost ->
             ( { model
                 | state =
                     { local = model.state.local

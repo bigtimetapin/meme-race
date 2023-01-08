@@ -1,7 +1,8 @@
 module Model.LeaderBoard.State exposing (State(..))
 
-import Model.Contender.Contender exposing (Contender)
+import Model.LeaderBoard.LeaderBoard exposing (LeaderBoard)
 
 
 type State
-    = Top (List Contender)
+    = Almost
+    | Top LeaderBoard

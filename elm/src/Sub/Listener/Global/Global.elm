@@ -4,7 +4,6 @@ module Sub.Listener.Global.Global exposing (ToGlobal(..), fromString)
 type ToGlobal
     = FoundWalletDisconnected
     | FoundMissingWalletPlugin -- no browser plugin installed
-    | FoundWallet
     | FoundDegen
 
 
@@ -16,9 +15,6 @@ fromString string =
 
         "global-found-missing-wallet-plugin" ->
             Just FoundMissingWalletPlugin
-
-        "global-found-wallet" ->
-            Just FoundWallet
 
         "global-found-degen" ->
             Just FoundDegen

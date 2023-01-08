@@ -31,7 +31,7 @@ urlParser =
 
         -- leader board
         , UrlParser.map
-            (LeaderBoard <| LeaderBoard.Top [])
+            (LeaderBoard <| LeaderBoard.Almost)
             UrlParser.top
         ]
 

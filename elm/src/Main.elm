@@ -4,10 +4,17 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
+import Model.Contender.AlmostContender as AlmostContender
+import Model.Contender.Contender as Contender
+import Model.Contender.State as ContenderState
+import Model.Degen.Degen as Degen
+import Model.LeaderBoard.LeaderBoard as LeaderBoard
+import Model.LeaderBoard.State as LeaderBoardState
 import Model.Model as Model exposing (Model)
 import Model.State.Exception.Exception as Exception
 import Model.State.Global.Global as Global
 import Model.State.Local.Local as Local exposing (Local)
+import Model.Wallet as Wallet
 import Msg.Contender.Msg as ContenderMsg
 import Msg.Js as JsMsg
 import Msg.LeaderBoard.Msg as LeaderBoardMsg
@@ -65,6 +72,21 @@ update msg model =
                     }
             in
             case local of
+                Local.Contender (ContenderState.Almost almostContender) ->
+                    ( { model
+                        | state =
+                            { local = model.state.local
+                            , global = model.state.global
+                            , exception = Exception.Waiting
+                            }
+                      }
+                    , sender <|
+                        Sender.encode <|
+                            { sender = Sender.Contender <| ContenderMsg.Fetch
+                            , more = AlmostContender.encode almostContender
+                            }
+                    )
+
                 _ ->
                     ( bump
                     , resetViewport
@@ -121,19 +143,37 @@ update msg model =
                                             case toLocal of
                                                 ToLocal.LeaderBoard leaderBoardListener ->
                                                     case leaderBoardListener of
-                                                        -- TODO;
                                                         LeaderBoardListener.Fetched ->
-                                                            ( model
-                                                            , Cmd.none
-                                                            )
+                                                            let
+                                                                f leaderBoard =
+                                                                    { model
+                                                                        | state =
+                                                                            { local =
+                                                                                Local.LeaderBoard <|
+                                                                                    LeaderBoardState.Top leaderBoard
+                                                                            , global = model.state.global
+                                                                            , exception = Exception.Closed
+                                                                            }
+                                                                    }
+                                                            in
+                                                            Listener.decode model json LeaderBoard.decode f
 
                                                 ToLocal.Contender contenderListener ->
                                                     case contenderListener of
-                                                        -- TODO;
                                                         ContenderListener.Fetched ->
-                                                            ( model
-                                                            , Cmd.none
-                                                            )
+                                                            let
+                                                                f contender =
+                                                                    { model
+                                                                        | state =
+                                                                            { local =
+                                                                                Local.Contender <|
+                                                                                    ContenderState.Top contender
+                                                                            , global = model.state.global
+                                                                            , exception = Exception.Closed
+                                                                            }
+                                                                    }
+                                                            in
+                                                            Listener.decode model json Contender.decode f
 
                                         -- found msg for global
                                         Listener.Global toGlobal ->
@@ -161,15 +201,18 @@ update msg model =
                                                     , Cmd.none
                                                     )
 
-                                                ToGlobal.FoundWallet ->
-                                                    ( model
-                                                    , Cmd.none
-                                                    )
-
                                                 ToGlobal.FoundDegen ->
-                                                    ( model
-                                                    , Cmd.none
-                                                    )
+                                                    let
+                                                        f degen =
+                                                            { model
+                                                                | state =
+                                                                    { local = model.state.local
+                                                                    , global = Global.HasDegen degen
+                                                                    , exception = Exception.Closed
+                                                                    }
+                                                            }
+                                                    in
+                                                    Listener.decode model json Degen.decode f
 
                                 -- undefined role
                                 Nothing ->
