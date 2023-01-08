@@ -125,7 +125,7 @@ pub struct AddDegen<'info> {
 #[derive(Accounts)]
 pub struct PlaceWager<'info> {
     #[account(mut)]
-    pub contender: Account<'info, Contender>,
+    pub contender: Box<Account<'info, Contender>>,
     #[account(init_if_needed,
     seeds = [
     pda::wager::SEED.as_bytes(),
@@ -135,7 +135,7 @@ pub struct PlaceWager<'info> {
     payer = payer,
     space = pda::wager::SIZE
     )]
-    pub wager: Account<'info, Wager>,
+    pub wager: Box<Account<'info, Wager>>,
     #[account(init_if_needed,
     seeds = [
     pda::wager_index::SEED.as_bytes(),
@@ -145,26 +145,26 @@ pub struct PlaceWager<'info> {
     payer = payer,
     space = pda::wager_index::SIZE
     )]
-    pub wager_index: Account<'info, WagerIndex>,
+    pub wager_index: Box<Account<'info, WagerIndex>>,
     #[account(mut,
     seeds = [
     pda::degen::SEED.as_bytes(),
     payer.key().as_ref()
     ], bump,
     )]
-    pub degen: Account<'info, Degen>,
+    pub degen: Box<Account<'info, Degen>>,
     #[account(mut,
     seeds = [
     pda::leader_board::SEED.as_bytes()
     ], bump,
     )]
-    pub leader_board: Account<'info, LeaderBoard>,
+    pub leader_board: Box<Account<'info, LeaderBoard>>,
     #[account(
     seeds = [
     pda::boss::SEED.as_bytes()
     ], bump,
     )]
-    pub boss: Account<'info, Boss>,
+    pub boss: Box<Account<'info, Boss>>,
     #[account(
     address = boss.mint,
     owner = token_program.key()
