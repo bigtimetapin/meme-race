@@ -13,7 +13,7 @@ const TOP_CONTENDER_SIZE: usize = 8 // score
     + 32; // pda
 
 #[account]
-pub struct Leader {
+pub struct LeaderBoard {
     pub authority: Pubkey,
     pub leader: TopContender,
     pub race: Vec<TopContender>,

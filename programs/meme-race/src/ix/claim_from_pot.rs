@@ -5,8 +5,8 @@ use crate::{ClaimFromPot, pda};
 
 pub fn ix(ctx: Context<ClaimFromPot>) -> Result<()> {
     // grab accounts
-    let leader_board = &ctx.accounts.leader;
-    let winner = &ctx.accounts.contender;
+    let leader_board = &ctx.accounts.leader_board;
+    let winner = &ctx.accounts.winner;
     let wager = &ctx.accounts.wager;
     // build signer seeds
     let bump = ctx.bumps.get(

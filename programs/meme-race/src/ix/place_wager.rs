@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{transfer, Transfer};
-use crate::pda::leader::TopContender;
+use crate::pda::leader_board::TopContender;
 use crate::PlaceWager;
 
 pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     let contender = &mut ctx.accounts.contender;
     let wager_pda = &mut ctx.accounts.wager;
-    let leader_pda = &mut ctx.accounts.leader;
+    let leader_pda = &mut ctx.accounts.leader_board;
     // build transfer ix
     let transfer_accounts = Transfer {
         from: ctx.accounts.ata.to_account_info(),

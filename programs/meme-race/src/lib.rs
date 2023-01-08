@@ -3,7 +3,7 @@ use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token::{Mint, Token, TokenAccount};
 use crate::pda::boss::Boss;
 use crate::pda::contender::Contender;
-use crate::pda::leader::Leader;
+use crate::pda::leader_board::LeaderBoard;
 use crate::pda::wager::Wager;
 
 mod pda;
@@ -40,12 +40,12 @@ pub mod meme_race {
 pub struct Initialize<'info> {
     #[account(init,
     seeds = [
-    pda::leader::SEED.as_bytes()
+    pda::leader_board::SEED.as_bytes()
     ], bump,
     payer = payer,
-    space = pda::leader::SIZE
+    space = pda::leader_board::SIZE
     )]
-    pub leader: Account<'info, Leader>,
+    pub leader_board: Account<'info, LeaderBoard>,
     #[account(
     owner = token_program.key()
     )]
@@ -109,10 +109,10 @@ pub struct PlaceWager<'info> {
     pub wager: Account<'info, Wager>,
     #[account(mut,
     seeds = [
-    pda::leader::SEED.as_bytes()
+    pda::leader_board::SEED.as_bytes()
     ], bump,
     )]
-    pub leader: Account<'info, Leader>,
+    pub leader_board: Account<'info, LeaderBoard>,
     #[account(
     seeds = [
     pda::boss::SEED.as_bytes()
@@ -149,12 +149,12 @@ pub struct PlaceWager<'info> {
 pub struct Close<'info> {
     #[account(mut,
     seeds = [
-    pda::leader::SEED.as_bytes()
+    pda::leader_board::SEED.as_bytes()
     ], bump,
     )]
-    pub leader: Account<'info, Leader>,
+    pub leader_board: Account<'info, LeaderBoard>,
     #[account(
-    address = leader.authority
+    address = leader_board.authority
     )]
     pub authority: SystemAccount<'info>,
 }
@@ -162,23 +162,23 @@ pub struct Close<'info> {
 #[derive(Accounts)]
 pub struct ClaimFromPot<'info> {
     #[account(
-    address = leader.leader.pda
+    address = leader_board.leader.pda
     )]
-    pub contender: Account<'info, Contender>,
+    pub winner: Account<'info, Contender>,
     #[account(
     seeds = [
     pda::wager::SEED.as_bytes(),
-    contender.key().as_ref(),
+    winner.key().as_ref(),
     claimer.key().as_ref()
     ], bump,
     )]
     pub wager: Account<'info, Wager>,
     #[account(
     seeds = [
-    pda::leader::SEED.as_bytes()
+    pda::leader_board::SEED.as_bytes()
     ], bump,
     )]
-    pub leader: Account<'info, Leader>,
+    pub leader_board: Account<'info, LeaderBoard>,
     #[account(
     seeds = [
     pda::boss::SEED.as_bytes()

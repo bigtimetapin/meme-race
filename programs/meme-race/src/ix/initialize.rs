@@ -6,7 +6,7 @@ pub fn ix(
 ) -> Result<()> {
     // grab accounts
     let boss = &mut ctx.accounts.boss;
-    let leader = &mut ctx.accounts.leader;
+    let leader = &mut ctx.accounts.leader_board;
     // init boss
     boss.mint = ctx.accounts.mint.key();
     boss.one = ctx.accounts.payer.key();
