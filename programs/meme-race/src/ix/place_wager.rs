@@ -84,6 +84,7 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     // check wager-count
     if wager_pda.wager_count == 0 {
         degen.total_wagers_placed += 1;
+        wager_pda.contender = contender.key();
         wager_index.pda = wager_pda.key();
     }
     // bump wager-count
