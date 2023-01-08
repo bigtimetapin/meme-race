@@ -327,7 +327,7 @@ view model =
                 _ ->
                     hero <| View.Error.Error.body "todo;"
     in
-    { title = "dap.cool"
+    { title = "meme-race.com"
     , body =
         [ html
         ]
