@@ -1,7 +1,8 @@
+use std::ops::Div;
 use anchor_lang::prelude::*;
-use anchor_spl::token::{transfer, Transfer};
+use anchor_spl::token::{burn, transfer, Burn, Transfer};
 use crate::pda::leader_board::TopContender;
-use crate::PlaceWager;
+use crate::{pda, PlaceWager};
 
 pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     // grab accounts
@@ -10,6 +11,15 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     let wager_index = &mut ctx.accounts.wager_index;
     let degen = &mut ctx.accounts.degen;
     let leader_pda = &mut ctx.accounts.leader_board;
+    // build signer seeds
+    let bump = ctx.bumps.get(
+        pda::boss::SEED
+    ).unwrap();
+    let seeds = &[
+        pda::boss::SEED.as_bytes(),
+        &[*bump]
+    ];
+    let signer_seeds = &[&seeds[..]];
     // check that race is still open
     if leader_pda.open {
         // build transfer ix
@@ -22,10 +32,28 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
             ctx.accounts.token_program.to_account_info(),
             transfer_accounts,
         );
+        // build burn ix
+        let burn_accounts = Burn {
+            mint: ctx.accounts.mint.to_account_info(),
+            from: ctx.accounts.treasury.to_account_info(),
+            authority: ctx.accounts.boss.to_account_info(),
+        };
+        let burn_cpi_context = CpiContext::new(
+            ctx.accounts.token_program.to_account_info(),
+            burn_accounts,
+        );
         // invoke transfer ix
         transfer(
             transfer_cpi_context,
             wager,
+        )?;
+        // invoke burn ix for half the wager amount
+        let burn_amount = wager.div(2);
+        burn(
+            burn_cpi_context.with_signer(
+                signer_seeds
+            ),
+            burn_amount,
         )?;
         // bump contender
         contender.score += wager;
