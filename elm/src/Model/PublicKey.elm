@@ -1,22 +1,19 @@
-module Model.Mint exposing (Mint, encode)
+module Model.PublicKey exposing (PublicKey, encode)
 
 import Json.Encode as Encode
 
 
 
--- TODO; rename to public-key ??
-
-
-type alias Mint =
+type alias PublicKey =
     String
 
 
-encode : Mint -> String
-encode mint =
+encode : PublicKey -> String
+encode publicKey =
     let
         encoder =
             Encode.object
-                [ ( "mint", Encode.string mint )
+                [ ( "publicKey", Encode.string publicKey )
                 ]
     in
     Encode.encode 0 encoder

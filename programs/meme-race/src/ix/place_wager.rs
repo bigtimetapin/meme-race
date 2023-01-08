@@ -7,6 +7,8 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
     // grab accounts
     let contender = &mut ctx.accounts.contender;
     let wager_pda = &mut ctx.accounts.wager;
+    let wager_index = &mut ctx.accounts.wager_index;
+    let degen = &mut ctx.accounts.degen;
     let leader_pda = &mut ctx.accounts.leader_board;
     // check that race is still open
     if leader_pda.open {
@@ -28,7 +30,7 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
         // bump contender
         contender.score += wager;
         // bump wager
-        wager_pda.wager += wager;
+        wager_pda.wager_size += wager;
         // bump leader board
         // add this contender to leader board
         let this_contender = TopContender {
@@ -51,5 +53,12 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
         leader_pda.race = new_top_contenders.clone();
         leader_pda.total += wager;
     }
+    // check wager-count
+    if wager_pda.wager_count == 0 {
+        degen.total_wagers_placed += 1;
+        wager_index.pda = wager_pda.key();
+    }
+    // bump wager-count
+    wager_pda.wager_count += 1;
     Ok(())
 }
