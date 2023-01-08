@@ -87,6 +87,12 @@ pub struct AddContender<'info> {
     space = pda::contender::SIZE
     )]
     pub contender: Account<'info, Contender>,
+    #[account(
+    seeds = [
+    pda::leader_board::SEED.as_bytes()
+    ], bump,
+    )]
+    pub leader_board: Account<'info, LeaderBoard>,
     #[account(mut)]
     pub payer: Signer<'info>,
     // system program

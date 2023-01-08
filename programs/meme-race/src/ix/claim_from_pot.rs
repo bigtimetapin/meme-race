@@ -17,8 +17,8 @@ pub fn ix(ctx: Context<ClaimFromPot>) -> Result<()> {
         &[*bump]
     ];
     let signer_seeds = &[&seeds[..]];
-    // check that wager was placed on winner
-    if wager.contender.key().eq(&winner.key()) {
+    // check that race has been closed
+    if !leader_board.open {
         // compute winners pot
         let pot = ((leader_board.total - winner.score) as f32) * pda::boss::POT_SPLIT;
         // floor div bc this dog coin has got too many digits anyways
