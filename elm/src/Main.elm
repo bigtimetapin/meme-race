@@ -4,8 +4,11 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
+import FormatNumber as FormatNumber
+import FormatNumber.Locales exposing (usLocale)
 import Model.Contender.AlmostContender as AlmostContender
 import Model.Contender.Contender as Contender
+import Model.Contender.NewWagerForm as NewWagerForm
 import Model.Contender.State as ContenderState
 import Model.Degen.Degen as Degen
 import Model.LeaderBoard.LeaderBoard as LeaderBoard
@@ -122,6 +125,49 @@ update msg model =
                 ContenderMsg.Fetch ->
                     ( model
                     , Cmd.none
+                    )
+
+                ContenderMsg.TypingNewWager string form contender ->
+                    case String.toInt string of
+                        Just int ->
+                            ( { model
+                                | state =
+                                    { local =
+                                        Local.Contender <|
+                                            ContenderState.NewWager
+                                                { form
+                                                    | newWager =
+                                                        Just <|
+                                                            { wager = int
+                                                            , formatted = FormatNumber.format usLocale (Basics.toFloat int)
+                                                            }
+                                                }
+                                                contender
+                                    , global = model.state.global
+                                    , exception = model.state.exception
+                                    }
+                              }
+                            , Cmd.none
+                            )
+
+                        Nothing ->
+                            ( model
+                            , Cmd.none
+                            )
+
+                ContenderMsg.PlaceNewWager newWager contender ->
+                    ( { model
+                        | state =
+                            { local = model.state.local
+                            , global = model.state.global
+                            , exception = Exception.Waiting
+                            }
+                      }
+                    , sender <|
+                        Sender.encode <|
+                            { sender = Sender.Contender fromContender
+                            , more = NewWagerForm.encode newWager contender
+                            }
                     )
 
         FromJs fromJsMsg ->
