@@ -147,72 +147,79 @@ view state =
 
 viewWagers : List Wager -> Html Msg
 viewWagers wagers =
-    Html.div
-        []
-        [ Html.h3
-            []
-            [ Html.text "Here's your wager list you degen \u{1FAE1}"
-            ]
-        , Html.div
-            []
-          <|
-            List.map
-                (\w ->
-                    Html.div
-                        []
-                        [ Html.div
-                            [ class "columns"
-                            ]
-                            [ Html.div
-                                [ class "column is-half"
-                                ]
+    case wagers of
+        [] ->
+            Html.div
+                []
+                []
+
+        nel ->
+            Html.div
+                []
+                [ Html.h3
+                    []
+                    [ Html.text "Here's your wager list you degen \u{1FAE1}"
+                    ]
+                , Html.div
+                    []
+                  <|
+                    List.map
+                        (\w ->
+                            Html.div
+                                []
                                 [ Html.div
-                                    []
-                                    [ Html.text <|
-                                        String.concat
-                                            [ "$BONK"
-                                            , " "
-                                            , w.wagerSizeFormatted
-                                            , " "
-                                            , "wagered in total"
+                                    [ class "columns"
+                                    ]
+                                    [ Html.div
+                                        [ class "column is-half"
+                                        ]
+                                        [ Html.div
+                                            []
+                                            [ Html.text <|
+                                                String.concat
+                                                    [ "$BONK"
+                                                    , " "
+                                                    , w.wagerSizeFormatted
+                                                    , " "
+                                                    , "wagered in total"
+                                                    ]
                                             ]
-                                    ]
-                                , Html.div
-                                    []
-                                    [ Html.text <|
-                                        String.concat
-                                            [ "distributed over"
-                                            , String.fromInt w.wagerCount
-                                            , " "
-                                            , "total wagers placed"
+                                        , Html.div
+                                            []
+                                            [ Html.text <|
+                                                String.concat
+                                                    [ "distributed over"
+                                                    , String.fromInt w.wagerCount
+                                                    , " "
+                                                    , "total wagers placed"
+                                                    ]
                                             ]
-                                    ]
-                                , Html.div
-                                    []
-                                    [ Html.a
-                                        [ Local.href <|
-                                            Local.Contender <|
-                                                ContenderState.Almost
-                                                    { pda = w.contender.pda
-                                                    }
+                                        , Html.div
+                                            []
+                                            [ Html.a
+                                                [ Local.href <|
+                                                    Local.Contender <|
+                                                        ContenderState.Almost
+                                                            { pda = w.contender.pda
+                                                            }
+                                                ]
+                                                [ Html.text "add to your wager 🤔"
+                                                ]
+                                            ]
                                         ]
-                                        [ Html.text "add to your wager 🤔"
+                                    , Html.div
+                                        [ class "column is-half"
+                                        ]
+                                        [ Html.div
+                                            []
+                                            [ Html.img
+                                                [ src w.contender.url
+                                                ]
+                                                []
+                                            ]
                                         ]
                                     ]
                                 ]
-                            , Html.div
-                                [ class "column is-half"
-                                ]
-                                [ Html.div
-                                    []
-                                    [ Html.img
-                                        [ src w.contender.url
-                                        ]
-                                        []
-                                    ]
-                                ]
-                            ]
-                        ]
-                )
-                wagers
-        ]
+                        )
+                        nel
+                ]
