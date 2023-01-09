@@ -7,6 +7,7 @@ import Util.Decode as Util
 
 type alias Wager =
     { wagerSize : Int
+    , wagerSizeFormatted : String
     , wagerCount : Int
     , contender : Contender
     }
@@ -19,7 +20,8 @@ decode string =
 
 decoder : Decode.Decoder Wager
 decoder =
-    Decode.map3 Wager
+    Decode.map4 Wager
         (Decode.field "wagerSize" Decode.int)
+        (Decode.field "wagerSizeFormatted" Decode.string)
         (Decode.field "wagerCount" Decode.int)
         (Decode.field "contender" Contender.decoder)

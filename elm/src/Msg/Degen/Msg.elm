@@ -5,7 +5,9 @@ import Model.Degen.Degen exposing (Degen)
 
 
 type Msg
-    = SelectMeme Degen
+    = ToTop Degen
+    | StartNewContenderForm Degen
+    | SelectMeme Degen
     | MemeSelected Degen File
     | MemeRead Degen DataUrl
     | AddNewContender DataUrl

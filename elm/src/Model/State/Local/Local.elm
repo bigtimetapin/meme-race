@@ -62,6 +62,9 @@ path local =
                 , almost.pda
                 ]
 
+        LeaderBoard LeaderBoard.Almost ->
+            "#/"
+
         _ ->
             "#/invalid"
 

@@ -8,6 +8,7 @@ import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Global.Global exposing (Global(..))
 import Model.State.Local.Local as Local
 import Model.Wallet as Wallet
+import Msg.Degen.Msg as DegenMsg
 import Msg.Global as FromGlobal
 import Msg.Msg as Msg exposing (Msg(..))
 
@@ -174,11 +175,10 @@ viewGlobal global =
                     , wagers
                     , Html.div
                         []
-                        [ Html.a
-                            [ class "has-sky-blue-text"
-                            , Local.href <|
-                                Local.Degen <|
-                                    DegenState.Top <|
+                        [ Html.button
+                            [ onClick <|
+                                FromDegen <|
+                                    DegenMsg.ToTop
                                         degen
                             ]
                             [ Html.text <|

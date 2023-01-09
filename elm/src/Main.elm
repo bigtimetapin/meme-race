@@ -37,6 +37,7 @@ import Sub.Sender.Sender as Sender
 import Sub.Sub as Sub
 import Task
 import Url
+import View.Degen.View
 import View.Error.Error
 import View.Hero
 import View.LeaderBoard.View
@@ -179,6 +180,28 @@ update msg model =
 
         FromDegen fromDegen ->
             case fromDegen of
+                DegenMsg.ToTop degen ->
+                    ( { model
+                        | state =
+                            { local = Local.Degen <| DegenState.Top degen
+                            , global = model.state.global
+                            , exception = model.state.exception
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                DegenMsg.StartNewContenderForm degen ->
+                    ( { model
+                        | state =
+                            { local = Local.Degen <| DegenState.NewContender Nothing degen
+                            , global = model.state.global
+                            , exception = model.state.exception
+                            }
+                      }
+                    , Cmd.none
+                    )
+
                 DegenMsg.SelectMeme degen ->
                     ( { model
                         | state =
@@ -454,6 +477,9 @@ view model =
             case model.state.local of
                 Local.LeaderBoard leaderBoard ->
                     hero <| View.LeaderBoard.View.view leaderBoard
+
+                Local.Degen degen ->
+                    hero <| View.Degen.View.view degen
 
                 Local.Error error ->
                     hero <| View.Error.Error.body error
