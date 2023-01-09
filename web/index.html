@@ -15,11 +15,11 @@
     // init elm
     let app = Elm.Main.init({node: document.getElementById("elm")});
     // import js bundle
-    // import {main, onWalletChange} from "./js/bundle.js";
-    // //  listen for sender
-    // app.ports.sender.subscribe(async function (json) {
-    //     await main(app, json);
-    // });
+    import {main} from "./js/bundle.js";
+    //  listen for sender
+    app.ports.sender.subscribe(async function (json) {
+        await main(app, json);
+    });
     // // listen for wallet change
     // await onWalletChange(
     //     app
