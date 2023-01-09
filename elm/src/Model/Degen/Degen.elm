@@ -11,6 +11,7 @@ type alias Degen =
     { wallet : PublicKey
     , contender : Maybe Contender
     , wagers : List Wager
+    , shadow : { balance : Int }
     }
 
 
@@ -21,9 +22,13 @@ decode string =
 
 decoder : Decode.Decoder Degen
 decoder =
-    Decode.map3 Degen
+    Decode.map4 Degen
         (Decode.field "wallet" Decode.string)
         (Decode.maybe <|
             Decode.field "contender" Contender.decoder
         )
         (Decode.field "wagers" <| Decode.list Wager.decoder)
+        (Decode.field "shadow" <|
+            Decode.map (\b -> { balance = b })
+                (Decode.field "balance" Decode.int)
+        )
