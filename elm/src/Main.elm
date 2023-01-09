@@ -4,6 +4,8 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
+import File
+import File.Select as Select
 import FormatNumber as FormatNumber
 import FormatNumber.Locales exposing (usLocale)
 import Model.Contender.AlmostContender as AlmostContender
@@ -11,6 +13,8 @@ import Model.Contender.Contender as Contender
 import Model.Contender.NewWagerForm as NewWagerForm
 import Model.Contender.State as ContenderState
 import Model.Degen.Degen as Degen
+import Model.Degen.NewContenderForm as NewContenderForm
+import Model.Degen.State as DegenState
 import Model.LeaderBoard.LeaderBoard as LeaderBoard
 import Model.LeaderBoard.State as LeaderBoardState
 import Model.Model as Model exposing (Model)
@@ -18,17 +22,20 @@ import Model.State.Exception.Exception as Exception
 import Model.State.Global.Global as Global
 import Model.State.Local.Local as Local exposing (Local)
 import Msg.Contender.Msg as ContenderMsg
+import Msg.Degen.Msg as DegenMsg
 import Msg.Js as JsMsg
 import Msg.LeaderBoard.Msg as LeaderBoardMsg
 import Msg.Msg exposing (Msg(..), resetViewport)
 import Sub.Listener.Global.Global as ToGlobal
 import Sub.Listener.Listener as Listener
 import Sub.Listener.Local.Contender.Contender as ContenderListener
+import Sub.Listener.Local.Degen.Listener as DegenListener
 import Sub.Listener.Local.LeaderBoard.LeaderBoard as LeaderBoardListener
 import Sub.Listener.Local.Local as ToLocal
 import Sub.Sender.Ports exposing (sender)
 import Sub.Sender.Sender as Sender
 import Sub.Sub as Sub
+import Task
 import Url
 import View.Error.Error
 import View.Hero
@@ -170,6 +177,70 @@ update msg model =
                             }
                     )
 
+        FromDegen fromDegen ->
+            case fromDegen of
+                DegenMsg.SelectMeme degen ->
+                    ( { model
+                        | state =
+                            { local = model.state.local
+                            , global = model.state.global
+                            , exception = Exception.Waiting
+                            }
+                      }
+                    , Select.file
+                        [ "image/jpeg"
+                        , "image/jpeg"
+                        , "image/png"
+                        , "image/gif"
+                        , "image/avif"
+                        , "image/bmp"
+                        , "image/vnd.microsoft.icon"
+                        , "image/svg+xml"
+                        ]
+                        (\file ->
+                            FromDegen <| DegenMsg.MemeSelected degen file
+                        )
+                    )
+
+                DegenMsg.MemeSelected degen file ->
+                    ( model
+                    , Task.perform
+                        (\dataUrl ->
+                            FromDegen <| DegenMsg.MemeRead degen dataUrl
+                        )
+                        (File.toUrl file)
+                    )
+
+                DegenMsg.MemeRead degen dataUrl ->
+                    ( { model
+                        | state =
+                            { local =
+                                Local.Degen <|
+                                    DegenState.NewContender
+                                        (Just dataUrl)
+                                        degen
+                            , global = model.state.global
+                            , exception = Exception.Closed
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                DegenMsg.AddNewContender dataUrl ->
+                    ( { model
+                        | state =
+                            { local = model.state.local
+                            , global = model.state.global
+                            , exception = Exception.Waiting
+                            }
+                      }
+                    , sender <|
+                        Sender.encode <|
+                            { sender = Sender.Degen fromDegen
+                            , more = NewContenderForm.encode dataUrl
+                            }
+                    )
+
         FromJs fromJsMsg ->
             case fromJsMsg of
                 -- JS sending success for decoding
@@ -220,6 +291,23 @@ update msg model =
                                                                     }
                                                             in
                                                             Listener.decode model json Contender.decode f
+
+                                                ToLocal.Degen degenListener ->
+                                                    case degenListener of
+                                                        DegenListener.Fetched ->
+                                                            let
+                                                                f degen =
+                                                                    { model
+                                                                        | state =
+                                                                            { local =
+                                                                                Local.Degen <|
+                                                                                    DegenState.Top degen
+                                                                            , global = model.state.global
+                                                                            , exception = Exception.Closed
+                                                                            }
+                                                                    }
+                                                            in
+                                                            Listener.decode model json Degen.decode f
 
                                         -- found msg for global
                                         Listener.Global toGlobal ->

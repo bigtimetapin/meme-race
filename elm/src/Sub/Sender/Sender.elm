@@ -2,6 +2,7 @@ module Sub.Sender.Sender exposing (Sender(..), WithMore, encode, encode0)
 
 import Json.Encode as Encode
 import Msg.Contender.Msg as Contender
+import Msg.Degen.Msg as Degen
 import Msg.Global as FromGlobal
 import Msg.LeaderBoard.Msg as LeaderBoard
 
@@ -9,6 +10,7 @@ import Msg.LeaderBoard.Msg as LeaderBoard
 type Sender
     = LeaderBoard LeaderBoard.Msg
     | Contender Contender.Msg
+    | Degen Degen.Msg
     | Global FromGlobal.Global
 
 
@@ -49,6 +51,9 @@ toString role =
 
         Contender msg ->
             Contender.toString msg
+
+        Degen msg ->
+            Degen.toString msg
 
         Global fromGlobal ->
             FromGlobal.toString fromGlobal

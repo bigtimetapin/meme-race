@@ -3,6 +3,7 @@ module Msg.Msg exposing (Msg(..), resetViewport)
 import Browser
 import Browser.Dom as Dom
 import Msg.Contender.Msg as Contender
+import Msg.Degen.Msg as Degen
 import Msg.Global as FromGlobal
 import Msg.Js exposing (FromJs)
 import Msg.LeaderBoard.Msg as LeaderBoard
@@ -22,6 +23,8 @@ type
     | FromLeaderBoard LeaderBoard.Msg
       -- contender
     | FromContender Contender.Msg
+      -- degen
+    | FromDegen Degen.Msg
       -- exception
     | CloseExceptionModal
       -- js ports

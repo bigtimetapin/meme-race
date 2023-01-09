@@ -1,12 +1,14 @@
 module Sub.Listener.Local.Local exposing (ToLocal(..), fromString)
 
 import Sub.Listener.Local.Contender.Contender as Contender
+import Sub.Listener.Local.Degen.Listener as Degen
 import Sub.Listener.Local.LeaderBoard.LeaderBoard as LeaderBoard
 
 
 type ToLocal
     = LeaderBoard LeaderBoard.Listener
     | Contender Contender.Listener
+    | Degen Degen.Listener
 
 
 fromString : String -> Maybe ToLocal
@@ -21,4 +23,9 @@ fromString string =
                     Just <| Contender listener
 
                 Nothing ->
-                    Nothing
+                    case Degen.fromString string of
+                        Just listener ->
+                            Just <| Degen listener
+
+                        Nothing ->
+                            Nothing
