@@ -2,6 +2,7 @@ import {getPhantom, getPhantomProvider} from "./phantom";
 import {getEphemeralPP, getPP} from "./anchor/util/context";
 import {initialize} from "./anchor/methods/initialize";
 import {addContender} from "./anchor/methods/add-contender";
+import {getGlobal} from "./anchor/pda/get-global";
 
 // init phantom
 let phantom = null;
@@ -20,23 +21,11 @@ export async function main(app, json) {
             if (phantom) {
                 // get provider & program
                 const pp = getPP(phantom);
-                // send mock degen to elm
-                app.ports.success.send(
-                    JSON.stringify(
-                        {
-                            listener: "global-found-degen",
-                            more: JSON.stringify(
-                                {
-                                    wallet: pp.provider.wallet.publicKey.toString(),
-                                    contender: null,
-                                    wagers: [],
-                                    shadow: {
-                                        balance: 0
-                                    }
-                                }
-                            )
-                        }
-                    )
+                // get global
+                await getGlobal(
+                    app,
+                    pp.provider,
+                    pp.programs
                 );
             }
             // or listen for disconnect
@@ -164,22 +153,21 @@ export async function main(app, json) {
     }
 }
 
-// export async function onWalletChange(app) {
-//     const phantomProvider = getPhantomProvider();
-//     if (phantomProvider) {
-//         phantomProvider.on("accountChanged", async () => {
-//             console.log("wallet changed");
-//             // fetch state if previously connected
-//             if (phantom) {
-//                 phantom = await getPhantom(app);
-//                 const pp = getPP(phantom);
-//                 await getGlobal(
-//                     app,
-//                     pp.provider,
-//                     pp.programs
-//                 );
-//             }
-//         });
-//     }
-// }
-//
+export async function onWalletChange(app) {
+    const phantomProvider = getPhantomProvider();
+    if (phantomProvider) {
+        phantomProvider.on("accountChanged", async () => {
+            console.log("wallet changed");
+            // fetch state if previously connected
+            if (phantom) {
+                phantom = await getPhantom(app);
+                const pp = getPP(phantom);
+                await getGlobal(
+                    app,
+                    pp.provider,
+                    pp.programs
+                );
+            }
+        });
+    }
+}

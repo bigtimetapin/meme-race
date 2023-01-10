@@ -210,6 +210,18 @@ view state =
                                 [ upload
                                 , Html.div
                                     []
+                                    [ Html.button
+                                        [ onClick <|
+                                            FromDegen <|
+                                                DegenMsg.AddNewContender dataUrl
+                                        ]
+                                        [ Html.text
+                                            """upload meme!
+                                            """
+                                        ]
+                                    ]
+                                , Html.div
+                                    []
                                     [ Html.img
                                         [ src dataUrl
                                         ]
