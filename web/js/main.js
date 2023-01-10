@@ -1,6 +1,7 @@
 import {getPhantom, getPhantomProvider} from "./phantom";
 import {getEphemeralPP, getPP} from "./anchor/util/context";
 import {initialize} from "./anchor/methods/initialize";
+import {addContender} from "./anchor/methods/add-contender";
 
 // init phantom
 let phantom = null;
@@ -94,6 +95,19 @@ export async function main(app, json) {
                         )
                     }
                 )
+            );
+            // degen add contender
+        } else if (sender === "degen-add-new-contender") {
+            // get provider & program
+            const pp = getPP(phantom);
+            // parse more json
+            const more = JSON.parse(parsed.more);
+            // invoke rpc
+            await addContender(
+                app,
+                pp.provider,
+                pp.programs,
+                more
             );
             // degen refresh shadow balance
         } else if (sender === "degen-refresh-shadow-balance") {

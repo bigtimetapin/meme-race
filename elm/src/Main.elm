@@ -246,7 +246,6 @@ update msg model =
                         , "image/gif"
                         , "image/avif"
                         , "image/bmp"
-                        , "image/vnd.microsoft.icon"
                         , "image/svg+xml"
                         ]
                         (\file ->

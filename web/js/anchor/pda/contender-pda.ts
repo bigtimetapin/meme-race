@@ -150,7 +150,7 @@ interface Metadata {
     meme: string // file name
 }
 
-function encodeMetadata(metadata: Metadata): File {
+export function encodeMetadata(metadata: Metadata): File {
     const json = JSON.stringify(metadata);
     const textEncoder = new TextEncoder();
     const bytes = textEncoder.encode(json);

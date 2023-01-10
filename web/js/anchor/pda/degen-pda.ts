@@ -38,23 +38,29 @@ export async function getDegenPda(
     pda: DegenPda
 ): Promise<Degen> {
     // fetch wagers
-    const fetchedDegen = await programs.meme.account.degen.fetch(
-        pda.address
-    ) as RawDegen;
-    const wagerIndexPdaArray = Array.from(new Array(fetchedDegen.totalWagersPlaced), (_, ix) => {
-            const index = ix + 1;
-            return deriveWagerIndexPda(provider, programs.meme, index)
-        }
-    );
-    const fetchedWagerIndexArray = await getManyWagerIndexPda(
-        programs.meme,
-        wagerIndexPdaArray
-    );
-    const wagers = await getManyWagerPda(
-        provider,
-        programs.meme,
-        fetchedWagerIndexArray.map(w => w.pda)
-    );
+    let wagers;
+    try {
+        const fetchedDegen = await programs.meme.account.degen.fetch(
+            pda.address
+        ) as RawDegen;
+        const wagerIndexPdaArray = Array.from(new Array(fetchedDegen.totalWagersPlaced), (_, ix) => {
+                const index = ix + 1;
+                return deriveWagerIndexPda(provider, programs.meme, index)
+            }
+        );
+        const fetchedWagerIndexArray = await getManyWagerIndexPda(
+            programs.meme,
+            wagerIndexPdaArray
+        );
+        wagers = await getManyWagerPda(
+            provider,
+            programs.meme,
+            fetchedWagerIndexArray.map(w => w.pda)
+        );
+    } catch (error) {
+        console.log("no wagers found for this degen");
+        wagers = [];
+    }
     // fetch contender
     const contenderPda = deriveContenderPda(
         provider,
@@ -75,15 +81,22 @@ export async function getDegenPda(
         provider.wallet.publicKey,
         SHDW
     );
-    const shdwAta = await programs.token.account.token.fetch(
-        shdwAtaPda
-    ) as RawSplToken;
+    let balance;
+    try {
+        const shdwAta = await programs.token.account.token.fetch(
+            shdwAtaPda
+        ) as RawSplToken;
+        balance = shdwAta.amount.toNumber();
+    } catch (error) {
+        console.log("no existing balance found for $shdw token");
+        balance = 0;
+    }
     return {
         wallet: provider.wallet.publicKey,
         contender: maybeContender,
         wagers,
         shadow: {
-            balance: shdwAta.amount.toNumber()
+            balance: balance
         }
     }
 }
