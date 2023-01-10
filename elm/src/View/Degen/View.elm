@@ -1,7 +1,7 @@
 module View.Degen.View exposing (view)
 
 import Html exposing (Html)
-import Html.Attributes exposing (class, src)
+import Html.Attributes exposing (class, href, src, target)
 import Html.Events exposing (onClick)
 import Model.Contender.State as ContenderState
 import Model.Degen.State exposing (State(..))
@@ -102,17 +102,95 @@ view state =
 
         NewContender newContenderForm degen ->
             let
-                upload =
+                shadowBalance =
                     Html.div
                         []
-                        [ Html.button
-                            [ onClick <|
-                                FromDegen <|
-                                    DegenMsg.SelectMeme degen
-                            ]
-                            [ Html.text "select meme to upload"
+                        [ Html.div
+                            []
+                            [ Html.text
+                                """Your
+                                """
+                            , Html.a
+                                [ class "has-sky-blue-text"
+                                , href "https://solscan.io/token/SHDWyBxihqiCj6YekG2GUr7wqKLeLAMK1gHZck9pL6y"
+                                , target "_blank"
+                                ]
+                                [ Html.text "$SHDW"
+                                ]
+                            , Html.text <|
+                                String.concat
+                                    [ " "
+                                    , "balance"
+                                    , ": "
+                                    , String.fromFloat (Basics.toFloat degen.shadow.balance / 1000000000)
+                                    ]
                             ]
                         ]
+
+                upload =
+                    case degen.shadow.balance >= 25000000000 of
+                        True ->
+                            Html.div
+                                []
+                                [ Html.button
+                                    [ onClick <|
+                                        FromDegen <|
+                                            DegenMsg.SelectMeme degen
+                                    ]
+                                    [ Html.text "select meme to upload"
+                                    ]
+                                ]
+
+                        False ->
+                            Html.div
+                                []
+                                [ Html.div
+                                    []
+                                    [ Html.text
+                                        """It looks like you have an insufficient $SHDW balance 👀
+                                        """
+                                    ]
+                                , Html.div
+                                    []
+                                    [ Html.text
+                                        """We are using
+                                        """
+                                    , Html.a
+                                        [ class "has-sky-blue-text"
+                                        , href "https://docs.genesysgo.com/shadow/shadow-drive/before-you-begin"
+                                        , target "_blank"
+                                        ]
+                                        [ Html.text "shadow-drive"
+                                        ]
+                                    , Html.text
+                                        """ for decentralized storage of the meme you're gonna upload 🤪
+                                        """
+                                    ]
+                                , Html.div
+                                    []
+                                    [ Html.text
+                                        """Before uploading we require a minimum balance of 0.25 $SHDW which is
+                                        equivalent to 1GB of permanent storage on the network.
+                                        """
+                                    ]
+                                , Html.div
+                                    []
+                                    [ Html.text
+                                        """Why this requirement? Because the max upload size is 1GB & we want your
+                                        transaction to land the first time. Also, we're *long* $SHDW & you should be too.
+                                        """
+                                    ]
+                                , Html.div
+                                    []
+                                    [ Html.a
+                                        [ class "has-sky-blue-text"
+                                        , href "https://jup.ag/swap/SOL-SHDW"
+                                        , target "_blank"
+                                        ]
+                                        [ Html.text "$SOL --> $SHDW"
+                                        ]
+                                    ]
+                                ]
 
                 form_ =
                     case newContenderForm of
@@ -137,10 +215,8 @@ view state =
             in
             Html.div
                 []
-                [ Html.div
-                    []
-                    [ form_
-                    ]
+                [ shadowBalance
+                , form_
                 , viewWagers degen.wagers
                 ]
 
