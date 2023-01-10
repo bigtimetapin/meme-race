@@ -1,5 +1,7 @@
 module View.LeaderBoard.View exposing (view)
 
+import FormatNumber
+import FormatNumber.Locales exposing (usLocale)
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
 import Model.Contender.State as ContenderState
@@ -32,9 +34,11 @@ view state =
                                     String.concat
                                         [ "Total Pot Size"
                                         , ": "
-                                        , String.fromInt leaderBoard.total
+                                        , "$BONK"
                                         , " "
-                                        , "😮\u{200D}💨"
+                                        , FormatNumber.format usLocale (Basics.toFloat leaderBoard.total)
+                                        , " "
+                                        , "🎉"
                                         ]
                                 ]
                             , Html.div
@@ -85,7 +89,8 @@ view state =
                                                             , Html.div
                                                                 []
                                                                 [ Html.a
-                                                                    [ Local.href <|
+                                                                    [ class "has-sky-blue-text"
+                                                                    , Local.href <|
                                                                         Local.Contender <|
                                                                             ContenderState.Almost
                                                                                 { pda = contender.pda
@@ -100,7 +105,8 @@ view state =
                                                         Html.div
                                                             []
                                                             [ Html.a
-                                                                [ Local.href <|
+                                                                [ class "has-sky-blue-text"
+                                                                , Local.href <|
                                                                     Local.Contender <|
                                                                         ContenderState.Almost
                                                                             { pda = contender.pda
@@ -125,6 +131,8 @@ view state =
                                                                 [ "$BONK"
                                                                 , " "
                                                                 , contender.score
+                                                                , " "
+                                                                , "wagered on this meme by the community"
                                                                 ]
                                                         ]
                                                     , Html.div
@@ -135,7 +143,8 @@ view state =
                                                                 , ": "
                                                                 ]
                                                         , Html.a
-                                                            [ href <|
+                                                            [ class "has-sky-blue-text"
+                                                            , href <|
                                                                 String.concat
                                                                     [ "https://solscan.io/account/"
                                                                     , contender.authority
@@ -247,7 +256,8 @@ view state =
                                                     , ": "
                                                     ]
                                             , Html.a
-                                                [ href <|
+                                                [ class "has-sky-blue-text"
+                                                , href <|
                                                     String.concat
                                                         [ "https://solscan.io/account/"
                                                         , leaderBoard.leader.authority

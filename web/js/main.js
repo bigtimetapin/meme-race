@@ -49,6 +49,51 @@ export async function main(app, json) {
                     }
                 )
             );
+        } else if (sender === "leader-board-fetch") {
+            app.ports.success.send(
+                JSON.stringify(
+                    {
+                        listener: "leader-board-fetched",
+                        more: JSON.stringify(
+                            {
+                                authority: "authority",
+                                leader: {
+                                    score: (198).toLocaleString(),
+                                    wager: null,
+                                    url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
+                                    authority: "authority",
+                                    pda: "pda"
+                                },
+                                race: [
+                                    {
+                                        score: (198).toLocaleString(),
+                                        wager: null,
+                                        url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
+                                        authority: "authority",
+                                        pda: "pda"
+                                    },
+                                    {
+                                        score: (2110).toLocaleString(),
+                                        wager: (2009).toLocaleString(),
+                                        url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
+                                        authority: "authority",
+                                        pda: "pda"
+                                    },
+                                    {
+                                        score: (198).toLocaleString(),
+                                        wager: null,
+                                        url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
+                                        authority: "authority",
+                                        pda: "pda"
+                                    }
+                                ],
+                                total: 2099,
+                                open: true
+                            }
+                        )
+                    }
+                )
+            );
             // degen refresh shadow balance
         } else if (sender === "degen-refresh-shadow-balance") {
             // get provider & program
