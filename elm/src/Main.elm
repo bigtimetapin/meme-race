@@ -39,6 +39,7 @@ import Sub.Sub as Sub
 import Task
 import Url
 import View.Admin.View
+import View.Contender.View
 import View.Degen.View
 import View.Error.Error
 import View.Hero
@@ -148,6 +149,21 @@ update msg model =
                 -- handled by href
                 ContenderMsg.Fetch ->
                     ( model
+                    , Cmd.none
+                    )
+
+                ContenderMsg.StartNewWager contender ->
+                    ( { model
+                        | state =
+                            { local =
+                                Local.Contender <|
+                                    ContenderState.NewWager
+                                        NewWagerForm.default
+                                        contender
+                            , global = model.state.global
+                            , exception = model.state.exception
+                            }
+                      }
                     , Cmd.none
                     )
 
@@ -533,6 +549,9 @@ view model =
                 Local.LeaderBoard leaderBoard ->
                     hero <| View.LeaderBoard.View.view leaderBoard
 
+                Local.Contender contender ->
+                    hero <| View.Contender.View.view contender
+
                 Local.Degen degen ->
                     hero <| View.Degen.View.view degen
 
@@ -541,9 +560,6 @@ view model =
 
                 Local.Error error ->
                     hero <| View.Error.Error.body error
-
-                _ ->
-                    hero <| View.Error.Error.body "todo;"
     in
     { title = "meme-race.com"
     , body =

@@ -6,6 +6,7 @@ import Model.Contender.NewWagerForm exposing (NewWager, NewWagerForm)
 
 type Msg
     = Fetch
+    | StartNewWager Contender
     | TypingNewWager String NewWagerForm Contender
     | PlaceNewWager NewWager Contender
 

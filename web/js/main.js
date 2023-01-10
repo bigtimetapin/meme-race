@@ -4,6 +4,7 @@ import {initialize} from "./anchor/methods/initialize";
 import {addContender} from "./anchor/methods/add-contender";
 import {getGlobal} from "./anchor/pda/get-global";
 import {deriveDegenPda, getDegenPda} from "./anchor/pda/degen-pda";
+import {deriveContenderPda, getContenderPda} from "./anchor/pda/contender-pda";
 
 // init phantom
 let phantom = null;
@@ -86,6 +87,33 @@ export async function main(app, json) {
                     }
                 )
             );
+            // contender fetch
+        } else if (sender === "contender-fetch") {
+            // get provider & program
+            let pp;
+            if (phantom) {
+                pp = getPP(phantom);
+            } else {
+                pp = getEphemeralPP();
+            }
+            // parse more json
+            const more = JSON.parse(parsed.more);
+            // fetch contender
+            const contender = await getContenderPda(
+                pp.provider,
+                pp.programs.meme,
+                more.pda
+            );
+            app.ports.success.send(
+                JSON.stringify(
+                    {
+                        listener: "contender-fetched",
+                        more: JSON.stringify(
+                            contender
+                        )
+                    }
+                )
+            );
             // degen add contender
         } else if (sender === "degen-add-new-contender") {
             // get provider & program
@@ -113,7 +141,6 @@ export async function main(app, json) {
                 pp.programs,
                 degenPda
             );
-            // send mock degen to elm
             app.ports.success.send(
                 JSON.stringify(
                     {
