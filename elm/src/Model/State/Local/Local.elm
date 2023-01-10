@@ -2,6 +2,7 @@ module Model.State.Local.Local exposing (..)
 
 import Html
 import Html.Attributes
+import Model.Admin.State as Admin
 import Model.Contender.State as Contender
 import Model.Degen.State as Degen
 import Model.LeaderBoard.State as LeaderBoard
@@ -14,18 +15,14 @@ type Local
     | LeaderBoard LeaderBoard.State
     | Degen Degen.State
     | Contender Contender.State
+    | Admin Admin.State
 
 
 urlParser : UrlParser.Parser (Local -> c) c
 urlParser =
     UrlParser.oneOf
-        [ -- invalid literal
+        [ -- almost contender
           UrlParser.map
-            (Error "Invalid state; Click to homepage.")
-            (UrlParser.s "invalid")
-
-        -- almost contender
-        , UrlParser.map
             (\s -> Contender <| Contender.Almost <| { pda = s })
             (UrlParser.s "contender" </> UrlParser.string)
 
@@ -33,6 +30,16 @@ urlParser =
         , UrlParser.map
             (LeaderBoard <| LeaderBoard.Almost)
             UrlParser.top
+
+        -- invalid literal
+        , UrlParser.map
+            (Error "Invalid state; Click to homepage.")
+            (UrlParser.s "invalid")
+
+        -- admin
+        , UrlParser.map
+            (Admin <| Admin.Top)
+            (UrlParser.s "admin")
         ]
 
 

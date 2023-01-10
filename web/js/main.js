@@ -1,5 +1,6 @@
 import {getPhantom, getPhantomProvider} from "./phantom";
 import {getEphemeralPP, getPP} from "./anchor/util/context";
+import {initialize} from "./anchor/methods/initialize";
 
 // init phantom
 let phantom = null;
@@ -115,6 +116,16 @@ export async function main(app, json) {
                         )
                     }
                 )
+            );
+        } else if (sender === "admin-init") {
+            // get phantom
+            phantom = await getPhantom(app);
+            // get provider & program
+            const pp = getPP(phantom);
+            // invoke rpc
+            await initialize(
+                pp.provider,
+                pp.programs.meme
             );
             // or throw error
         } else {

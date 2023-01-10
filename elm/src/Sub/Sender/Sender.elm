@@ -1,6 +1,7 @@
 module Sub.Sender.Sender exposing (Sender(..), WithMore, encode, encode0)
 
 import Json.Encode as Encode
+import Msg.Admin.Msg as Admin
 import Msg.Contender.Msg as Contender
 import Msg.Degen.Msg as Degen
 import Msg.Global as FromGlobal
@@ -11,6 +12,7 @@ type Sender
     = LeaderBoard LeaderBoard.Msg
     | Contender Contender.Msg
     | Degen Degen.Msg
+    | Admin Admin.Msg
     | Global FromGlobal.Global
 
 
@@ -54,6 +56,9 @@ toString role =
 
         Degen msg ->
             Degen.toString msg
+
+        Admin msg ->
+            Admin.toString msg
 
         Global fromGlobal ->
             FromGlobal.toString fromGlobal

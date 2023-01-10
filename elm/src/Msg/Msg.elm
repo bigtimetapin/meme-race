@@ -2,6 +2,7 @@ module Msg.Msg exposing (Msg(..), resetViewport)
 
 import Browser
 import Browser.Dom as Dom
+import Msg.Admin.Msg as Admin
 import Msg.Contender.Msg as Contender
 import Msg.Degen.Msg as Degen
 import Msg.Global as FromGlobal
@@ -25,6 +26,8 @@ type
     | FromContender Contender.Msg
       -- degen
     | FromDegen Degen.Msg
+      -- admin
+    | FromAdmin Admin.Msg
       -- exception
     | CloseExceptionModal
       -- js ports

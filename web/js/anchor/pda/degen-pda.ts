@@ -6,6 +6,7 @@ import {Contender, deriveContenderPda, getContenderPda} from "./contender-pda";
 import {getManyWagerPda, Wager} from "./wager-pda";
 import {deriveWagerIndexPda, getManyWagerIndexPda} from "./wager-index-pda";
 import {SHDW, SPL_ASSOCIATED_TOKEN_PROGRAM_ID, SPL_TOKEN_PROGRAM_ID} from "../util/constants";
+import {deriveAtaPda} from "./ata-pda";
 
 export interface DegenPda extends Pda {
 }
@@ -71,7 +72,7 @@ export async function getDegenPda(
     }
     // fetch shadow balance
     const shdwAtaPda = deriveAtaPda(
-        provider,
+        provider.wallet.publicKey,
         SHDW
     );
     const shdwAta = await programs.token.account.token.fetch(
@@ -85,19 +86,6 @@ export async function getDegenPda(
             balance: shdwAta.amount.toNumber()
         }
     }
-}
-
-function deriveAtaPda(provider: AnchorProvider, mint: PublicKey): PublicKey {
-    let ataPda: PublicKey, _;
-    [ataPda, _] = PublicKey.findProgramAddressSync(
-        [
-            provider.publicKey.toBuffer(),
-            SPL_TOKEN_PROGRAM_ID.toBuffer(),
-            mint.toBuffer()
-        ],
-        SPL_ASSOCIATED_TOKEN_PROGRAM_ID
-    )
-    return ataPda
 }
 
 export function deriveDegenPda(provider: AnchorProvider, program: Program<MemeRace>): DegenPda {

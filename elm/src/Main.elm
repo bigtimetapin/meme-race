@@ -21,6 +21,7 @@ import Model.Model as Model exposing (Model)
 import Model.State.Exception.Exception as Exception
 import Model.State.Global.Global as Global
 import Model.State.Local.Local as Local exposing (Local)
+import Msg.Admin.Msg as AdminMsg
 import Msg.Contender.Msg as ContenderMsg
 import Msg.Degen.Msg as DegenMsg
 import Msg.Js as JsMsg
@@ -37,6 +38,7 @@ import Sub.Sender.Sender as Sender
 import Sub.Sub as Sub
 import Task
 import Url
+import View.Admin.View
 import View.Degen.View
 import View.Error.Error
 import View.Hero
@@ -277,6 +279,15 @@ update msg model =
                             }
                     )
 
+        FromAdmin fromAdmin ->
+            case fromAdmin of
+                AdminMsg.Init ->
+                    ( model
+                    , sender <|
+                        Sender.encode0 <|
+                            Sender.Admin fromAdmin
+                    )
+
         FromJs fromJsMsg ->
             case fromJsMsg of
                 -- JS sending success for decoding
@@ -510,6 +521,9 @@ view model =
 
                 Local.Degen degen ->
                     hero <| View.Degen.View.view degen
+
+                Local.Admin _ ->
+                    hero <| View.Admin.View.view
 
                 Local.Error error ->
                     hero <| View.Error.Error.body error
