@@ -286,6 +286,10 @@ export type MemeRace = {
           {
             "name": "authority",
             "type": "publicKey"
+          },
+          {
+            "name": "pda",
+            "type": "publicKey"
           }
         ]
       }
@@ -676,6 +680,10 @@ export const IDL: MemeRace = {
           },
           {
             "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "pda",
             "type": "publicKey"
           }
         ]

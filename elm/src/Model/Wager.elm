@@ -1,7 +1,7 @@
 module Model.Wager exposing (Wager, decode, decoder)
 
 import Json.Decode as Decode
-import Model.Contender.Contender as Contender exposing (Contender)
+import Model.PublicKey exposing (PublicKey)
 import Util.Decode as Util
 
 
@@ -9,7 +9,10 @@ type alias Wager =
     { wagerSize : Int
     , wagerSizeFormatted : String
     , wagerCount : Int
-    , contender : Contender
+    , contender :
+        { pda : PublicKey
+        , url : String
+        }
     }
 
 
@@ -24,4 +27,8 @@ decoder =
         (Decode.field "wagerSize" Decode.int)
         (Decode.field "wagerSizeFormatted" Decode.string)
         (Decode.field "wagerCount" Decode.int)
-        (Decode.field "contender" Contender.decoder)
+        (Decode.field "contender" <|
+            Decode.map2 (\pda url -> { pda = pda, url = url })
+                (Decode.field "pda" Decode.string)
+                (Decode.field "url" Decode.string)
+        )

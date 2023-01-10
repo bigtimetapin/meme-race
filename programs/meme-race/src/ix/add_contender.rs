@@ -8,6 +8,7 @@ pub fn ix(ctx: Context<AddContender>, url: Pubkey) -> Result<()> {
     if leader_board.open {
         contender.url = url;
         contender.authority = ctx.accounts.payer.key();
+        contender.pda = contender.key();
     }
     Ok(())
 }

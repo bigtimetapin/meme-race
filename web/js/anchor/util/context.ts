@@ -8,7 +8,7 @@ import {MemeRace, IDL} from "../idl/idl";
 export function getPP(_phantom: any): {
     provider: AnchorProvider;
     programs: {
-        dap: Program<MemeRace>;
+        meme: Program<MemeRace>;
         token: Program<SplToken>
     }
 } {
@@ -20,7 +20,7 @@ export function getPP(_phantom: any): {
 export function getEphemeralPP(): {
     provider: AnchorProvider;
     programs: {
-        dap: Program<MemeRace>;
+        meme: Program<MemeRace>;
         token: Program<SplToken>
     }
 } {
@@ -32,7 +32,7 @@ export function getEphemeralPP(): {
 function getPP_(wallet: Wallet): {
     provider: AnchorProvider;
     programs: {
-        dap: Program<MemeRace>;
+        meme: Program<MemeRace>;
         token: Program<SplToken>
     }
 } {
@@ -52,7 +52,7 @@ function getPP_(wallet: Wallet): {
     return {
         provider: provider,
         programs: {
-            dap: memeRaceProgram,
+            meme: memeRaceProgram,
             token: tokenProgram,
         }
     }
