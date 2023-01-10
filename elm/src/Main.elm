@@ -362,7 +362,8 @@ update msg model =
                                                                             { local =
                                                                                 Local.Degen <|
                                                                                     DegenState.Top degen
-                                                                            , global = model.state.global
+                                                                            , global =
+                                                                                Global.HasDegen degen
                                                                             , exception = Exception.Closed
                                                                             }
                                                                     }
