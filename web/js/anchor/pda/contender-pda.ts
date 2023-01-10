@@ -25,11 +25,11 @@ export interface RawContender {
 export async function getManyContenderPda(
     provider: AnchorProvider,
     program: Program<MemeRace>,
-    pdaArray: ContenderPda[]
+    pdaArray: PublicKey[]
 ): Promise<Contender[]> {
     // fetch raw contender array
     const rawContenders = (await program.account.contender.fetchMultiple(
-        pdaArray.map(pda => pda.address)
+        pdaArray
     )).filter(Boolean) as RawContender[];
     // fetch raw wager array
     const wagerPdaArray = rawContenders.map(rawContender =>
