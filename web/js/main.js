@@ -3,6 +3,7 @@ import {getEphemeralPP, getPP} from "./anchor/util/context";
 import {initialize} from "./anchor/methods/initialize";
 import {addContender} from "./anchor/methods/add-contender";
 import {getGlobal} from "./anchor/pda/get-global";
+import {deriveDegenPda, getDegenPda} from "./anchor/pda/degen-pda";
 
 // init phantom
 let phantom = null;
@@ -102,20 +103,23 @@ export async function main(app, json) {
         } else if (sender === "degen-refresh-shadow-balance") {
             // get provider & program
             const pp = getPP(phantom);
+            // get degen
+            const degenPda = deriveDegenPda(
+                pp.provider,
+                pp.programs.meme
+            );
+            const degen = await getDegenPda(
+                pp.provider,
+                pp.programs,
+                degenPda
+            );
             // send mock degen to elm
             app.ports.success.send(
                 JSON.stringify(
                     {
                         listener: "degen-refreshed-shadow-balance",
                         more: JSON.stringify(
-                            {
-                                wallet: pp.provider.wallet.publicKey.toString(),
-                                contender: null,
-                                wagers: [],
-                                shadow: {
-                                    balance: 260000000
-                                }
-                            }
+                            degen
                         )
                     }
                 )
