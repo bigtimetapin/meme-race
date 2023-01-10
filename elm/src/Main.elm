@@ -85,6 +85,20 @@ update msg model =
                     }
             in
             case local of
+                Local.LeaderBoard LeaderBoardState.Almost ->
+                    ( { model
+                        | state =
+                            { local = model.state.local
+                            , global = model.state.global
+                            , exception = Exception.Waiting
+                            }
+                      }
+                    , sender <|
+                        Sender.encode0 <|
+                            Sender.LeaderBoard <|
+                                LeaderBoardMsg.Fetch
+                    )
+
                 Local.Contender (ContenderState.Almost almostContender) ->
                     ( { model
                         | state =
