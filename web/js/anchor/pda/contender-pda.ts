@@ -22,20 +22,45 @@ export interface RawContender {
     pda: PublicKey
 }
 
-// TODO; batch fetch wagers
 export async function getManyContenderPda(
     provider: AnchorProvider,
     program: Program<MemeRace>,
     pdaArray: ContenderPda[]
 ): Promise<Contender[]> {
-    // fetch raw pda array
-    const fetched = (await program.account.contender.fetchMultiple(
+    // fetch raw contender array
+    const rawContenders = (await program.account.contender.fetchMultiple(
         pdaArray.map(pda => pda.address)
-    )).filter(null) as RawContender[];
-    // fetch meme urls & wagers
+    )).filter(Boolean) as RawContender[];
+    // fetch raw wager array
+    const wagerPdaArray = rawContenders.map(rawContender =>
+        deriveWagerPda(rawContender.pda, provider, program).address
+    );
+    const rawWagers = (await program.account.wager.fetchMultiple(
+        wagerPdaArray
+    )).filter(Boolean) as RawWager[];
+    // join
     return await Promise.all(
-        fetched.map( async (raw) =>
-            await rawToPolished(raw, provider, program)
+        rawContenders.map(async (rawContender) => {
+                // look for wager
+                let wager: string | null;
+                const maybeWager = rawWagers.find(
+                    w => w.contender.equals(rawContender.pda)
+                );
+                if (maybeWager) {
+                    wager = maybeWager.wagerSize.toNumber().toLocaleString();
+                }
+                // fetch meme url
+                const url = await getMemeUrl(
+                    rawContender
+                );
+                return {
+                    score: rawContender.score.toNumber().toLocaleString(),
+                    wager,
+                    url,
+                    authority: rawContender.authority,
+                    pda: rawContender.pda
+                } as Contender
+            }
         )
     )
 }
