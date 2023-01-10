@@ -26,11 +26,11 @@ export interface RawWager {
 export async function getManyWagerPda(
     provider: AnchorProvider,
     program: Program<MemeRace>,
-    pdaArray: WagerPda[]
+    pdaArray: PublicKey[]
 ): Promise<Wager[]> {
     // fetch raw wager array
     const fetchedWagers = (await program.account.wager.fetchMultiple(
-        pdaArray.map(pda => pda.address)
+        pdaArray
     )).filter(Boolean) as RawWager[];
     // fetch raw contender array
     const fetchedContenders = (await program.account.contender.fetchMultiple(
