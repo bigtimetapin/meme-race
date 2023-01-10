@@ -191,6 +191,19 @@ update msg model =
                     , Cmd.none
                     )
 
+                DegenMsg.RefreshShadowBalance ->
+                    ( { model
+                        | state =
+                            { local = model.state.local
+                            , global = model.state.global
+                            , exception = Exception.Waiting
+                            }
+                      }
+                    , sender <|
+                        Sender.encode0 <|
+                            Sender.Degen fromDegen
+                    )
+
                 DegenMsg.StartNewContenderForm degen ->
                     ( { model
                         | state =
@@ -325,6 +338,23 @@ update msg model =
                                                                             { local =
                                                                                 Local.Degen <|
                                                                                     DegenState.Top degen
+                                                                            , global = model.state.global
+                                                                            , exception = Exception.Closed
+                                                                            }
+                                                                    }
+                                                            in
+                                                            Listener.decode model json Degen.decode f
+
+                                                        DegenListener.RefreshedShadowBalance ->
+                                                            let
+                                                                f degen =
+                                                                    { model
+                                                                        | state =
+                                                                            { local =
+                                                                                Local.Degen <|
+                                                                                    DegenState.NewContender
+                                                                                        Nothing
+                                                                                        degen
                                                                             , global = model.state.global
                                                                             , exception = Exception.Closed
                                                                             }

@@ -128,7 +128,7 @@ view state =
                         ]
 
                 upload =
-                    case degen.shadow.balance >= 25000000000 of
+                    case degen.shadow.balance >= 250000000 of
                         True ->
                             Html.div
                                 []
@@ -188,6 +188,16 @@ view state =
                                         , target "_blank"
                                         ]
                                         [ Html.text "$SOL --> $SHDW"
+                                        ]
+                                    ]
+                                , Html.div
+                                    []
+                                    [ Html.button
+                                        [ onClick <|
+                                            FromDegen <|
+                                                DegenMsg.RefreshShadowBalance
+                                        ]
+                                        [ Html.text "refresh"
                                         ]
                                     ]
                                 ]

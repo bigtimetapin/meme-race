@@ -7,6 +7,7 @@ import Model.Degen.Degen exposing (Degen)
 type Msg
     = ToTop Degen
     | StartNewContenderForm Degen
+    | RefreshShadowBalance
     | SelectMeme Degen
     | MemeSelected Degen File
     | MemeRead Degen DataUrl
@@ -22,6 +23,9 @@ toString msg =
     case msg of
         AddNewContender _ ->
             "degen-add-new-contender"
+
+        RefreshShadowBalance ->
+            "degen-refresh-shadow-balance"
 
         _ ->
             "no-op"

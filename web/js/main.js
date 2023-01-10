@@ -49,6 +49,28 @@ export async function main(app, json) {
                     }
                 )
             );
+            // degen refresh shadow balance
+        } else if (sender === "degen-refresh-shadow-balance") {
+            // get provider & program
+            const pp = getPP(phantom);
+            // send mock degen to elm
+            app.ports.success.send(
+                JSON.stringify(
+                    {
+                        listener: "degen-refreshed-shadow-balance",
+                        more: JSON.stringify(
+                            {
+                                wallet: pp.provider.wallet.publicKey.toString(),
+                                contender: null,
+                                wagers: [],
+                                shadow: {
+                                    balance: 260000000
+                                }
+                            }
+                        )
+                    }
+                )
+            );
             // or throw error
         } else {
             const msg = "invalid role sent to js: " + sender;
