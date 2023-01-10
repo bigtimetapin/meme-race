@@ -18,7 +18,7 @@ echo "Publishing New Assets..."
 aws s3 cp web/index.html $BUCKET --profile tap-in
 aws s3 cp web/elm.min.js $BUCKET --profile tap-in
 aws s3 cp web/css/ $BUCKET/css/ --recursive --profile tap-in
-## aws s3 cp web/js/bundle.js $BUCKET/js/ --profile tap-in
+aws s3 cp web/js/bundle.js $BUCKET/js/ --profile tap-in
 
 echo "Invalidating CloudFront Cache..."
 aws cloudfront create-invalidation --distribution-id E1G8ZLLJOSOIW8 --paths "/*" --profile tap-in
