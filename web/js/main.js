@@ -7,6 +7,7 @@ import {deriveDegenPda, getDegenPda} from "./anchor/pda/degen-pda";
 import {deriveContenderPda, getContenderPda} from "./anchor/pda/contender-pda";
 import {placeWager} from "./anchor/methods/place-wager";
 import {PublicKey} from "@solana/web3.js";
+import {deriveLeaderBoardPda, getLeaderBoardPda} from "./anchor/pda/leader-board-pda";
 
 // init phantom
 let phantom = null;
@@ -45,46 +46,29 @@ export async function main(app, json) {
                 )
             );
         } else if (sender === "leader-board-fetch") {
+            // get provider & program
+            let pp;
+            if (phantom) {
+                pp = getPP(phantom);
+            } else {
+                pp = getEphemeralPP();
+            }
+            // get leader-board
+            const leaderBoardPda = deriveLeaderBoardPda(
+                pp.programs.meme
+            );
+            const leaderBoard = await getLeaderBoardPda(
+                pp.provider,
+                pp.programs.meme,
+                leaderBoardPda
+            );
+            console.log(leaderBoard);
             app.ports.success.send(
                 JSON.stringify(
                     {
                         listener: "leader-board-fetched",
                         more: JSON.stringify(
-                            {
-                                authority: "authority",
-                                leader: {
-                                    score: (198).toLocaleString(),
-                                    wager: null,
-                                    url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
-                                    authority: "authority",
-                                    pda: "pda"
-                                },
-                                race: [
-                                    {
-                                        score: (198).toLocaleString(),
-                                        wager: null,
-                                        url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
-                                        authority: "authority",
-                                        pda: "pda"
-                                    },
-                                    {
-                                        score: (2110).toLocaleString(),
-                                        wager: (2009).toLocaleString(),
-                                        url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
-                                        authority: "authority",
-                                        pda: "pda"
-                                    },
-                                    {
-                                        score: (198).toLocaleString(),
-                                        wager: null,
-                                        url: "https://shdw-drive.genesysgo.net/37j9qF4XNRESYkDAbmXDD6DuW2WQFCJe9fjzz11nEs6T/logo.jpeg",
-                                        authority: "authority",
-                                        pda: "pda"
-                                    }
-                                ],
-                                total: 2099,
-                                open: true
-                            }
+                            leaderBoard
                         )
                     }
                 )
