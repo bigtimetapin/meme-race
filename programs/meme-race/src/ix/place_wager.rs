@@ -69,20 +69,20 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
         let race: &Vec<TopContender> = &leader_pda.race.clone();
         let top_contenders = &mut race
             .iter()
-            .filter(|&contender|
-                !(*contender).pda.eq(&this_contender.pda)
-            ).collect::<Vec<&TopContender>>();
-        top_contenders.push(&this_contender);
+            .filter_map(|contender|
+                if (contender).pda.eq(&this_contender.pda) {
+                    Some(contender.clone())
+                } else {
+                    None
+                }
+            ).collect::<Vec<TopContender>>();
+        top_contenders.push(this_contender);
         // sort leader board by score with highest score as first element
         top_contenders.sort_by(|left, right|
             right.score.cmp(&left.score)
         );
         // grab first 10 elements which is now the top 10
-        let sorted = top_contenders.clone()
-            .iter()
-            .map(|&tc|
-                tc.clone()
-            ).collect::<Vec<TopContender>>();
+        let sorted = top_contenders.clone();
         if sorted.len() > 10 {
             leader_pda.race = sorted[..10].to_vec();
         } else {
