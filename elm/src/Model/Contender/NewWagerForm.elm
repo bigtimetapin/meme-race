@@ -28,7 +28,7 @@ encode newWager contender =
             [ ( "wager", Encode.int newWager.wager )
             , ( "contender"
               , Encode.object
-                    [ ( "authority", Encode.string contender.authority )
+                    [ ( "pda", Encode.string contender.pda )
                     ]
               )
             ]

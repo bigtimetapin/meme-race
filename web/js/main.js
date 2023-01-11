@@ -148,7 +148,10 @@ export async function main(app, json) {
                     JSON.stringify(
                         {
                             message: "It looks like there's no wallet installed!",
-                            href: href
+                            href: {
+                                url: href,
+                                internal: true
+                            }
                         }
                     )
                 );

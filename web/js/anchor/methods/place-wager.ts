@@ -26,89 +26,132 @@ export async function placeWager(
     },
     form: Form
 ): Promise<void> {
-    const degenPda = deriveDegenPda(
-        provider,
-        programs.meme
-    );
-    let degen: Degen
-    try {
-        await programs.meme.account.degen.fetch(
-            degenPda.address
-        );
-        degen = await getDegenPda(
-            provider,
-            programs,
-            degenPda
-        );
-    } catch (error) {
-        degen = await addDegen(
-            provider,
-            programs,
-            degenPda
-        );
-    }
-    const wagerPda = deriveWagerPda(
-        form.contender.pda,
-        provider,
-        programs.meme
-    );
-    const wagerIndexPda = deriveWagerIndexPda(
-        provider,
-        programs.meme,
-        degen.totalWagersPlaced + 1
-    );
-    const leaderBoardPda = deriveLeaderBoardPda(
-        programs.meme
-    );
-    const bossPda = deriveBossPda(
-        programs.meme
-    );
     const ata = deriveAtaPda(
         provider.wallet.publicKey,
         BONK
     );
-    const treasury = deriveAtaPda(
-        bossPda.address,
-        BONK
-    );
-    await programs
-        .meme
-        .methods
-        .placeWager(
-            new BN(form.wager)
-        )
-        .accounts(
-            {
-                contender: form.contender.pda,
-                wager: wagerPda.address,
-                wagerIndex: wagerIndexPda.address,
-                degen: degenPda.address,
-                leaderBoard: leaderBoardPda.address,
-                boss: bossPda.address,
-                mint: BONK,
-                ata: ata,
-                treasury: treasury,
-                payer: provider.wallet.publicKey,
-                tokenProgram: SPL_TOKEN_PROGRAM_ID,
-                associatedTokenProgram: SPL_ASSOCIATED_TOKEN_PROGRAM_ID,
-                systemProgram: SystemProgram.programId
-            }
-        ).rpc()
-    const contender = await getContenderPda(
-        provider,
-        programs.meme,
-        form.contender.pda
-    );
-    app.ports.success.send(
-        JSON.stringify(
-            {
-                listener: "contender-fetched",
-                more: JSON.stringify(
-                    contender
+    let sufficientBalance;
+    try {
+        const balance = await programs.token.account.token.fetch(
+            ata
+        );
+        if (balance.amount.toNumber() > form.wager) {
+            console.log("sufficient balance")
+            sufficientBalance = true;
+        } else {
+            const href = "https://jup.ag/swap/SOL-Bonk";
+            const message = "Insufficient $BONK balance found respective to your wager . . . go re-up ya degen 🤣";
+            app.ports.exception.send(
+                JSON.stringify(
+                    {
+                        message: message,
+                        href: {
+                            url: href,
+                            internal: false
+                        }
+                    }
                 )
-            }
-        )
-    );
+            );
+            sufficientBalance = false;
+        }
+    } catch (error) {
+        console.log("no existing balance!")
+        const href = "https://jup.ag/swap/SOL-Bonk";
+        const message = "The wallet you're using has never held $BONK . . . go get you some ya degen 🤣";
+        app.ports.exception.send(
+            JSON.stringify(
+                {
+                    message: message,
+                    href: {
+                        url: href,
+                        internal: false
+                    }
+                }
+            )
+        );
+        sufficientBalance = false;
+    }
+    if (sufficientBalance) {
+        const degenPda = deriveDegenPda(
+            provider,
+            programs.meme
+        );
+        let degen: Degen
+        try {
+            await programs.meme.account.degen.fetch(
+                degenPda.address
+            );
+            degen = await getDegenPda(
+                provider,
+                programs,
+                degenPda
+            );
+        } catch (error) {
+            degen = await addDegen(
+                provider,
+                programs,
+                degenPda
+            );
+        }
+        const wagerPda = deriveWagerPda(
+            form.contender.pda,
+            provider,
+            programs.meme
+        );
+        const wagerIndexPda = deriveWagerIndexPda(
+            provider,
+            programs.meme,
+            degen.totalWagersPlaced + 1
+        );
+        const leaderBoardPda = deriveLeaderBoardPda(
+            programs.meme
+        );
+        const bossPda = deriveBossPda(
+            programs.meme
+        );
+        const treasury = deriveAtaPda(
+            bossPda.address,
+            BONK
+        );
+        await programs
+            .meme
+            .methods
+            .placeWager(
+                new BN(form.wager)
+            )
+            .accounts(
+                {
+                    contender: form.contender.pda,
+                    wager: wagerPda.address,
+                    wagerIndex: wagerIndexPda.address,
+                    degen: degenPda.address,
+                    leaderBoard: leaderBoardPda.address,
+                    boss: bossPda.address,
+                    mint: BONK,
+                    ata: ata,
+                    treasury: treasury,
+                    payer: provider.wallet.publicKey,
+                    tokenProgram: SPL_TOKEN_PROGRAM_ID,
+                    associatedTokenProgram: SPL_ASSOCIATED_TOKEN_PROGRAM_ID,
+                    systemProgram: SystemProgram.programId
+                }
+            ).rpc()
+        const contender = await getContenderPda(
+            provider,
+            programs.meme,
+            form.contender.pda
+        );
+        app.ports.success.send(
+            JSON.stringify(
+                {
+                    listener: "contender-fetched",
+                    more: JSON.stringify(
+                        contender
+                    )
+                }
+            )
+        );
+    }
 }
 
 async function addDegen(
