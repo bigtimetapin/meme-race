@@ -5,7 +5,7 @@ import {PublicKey} from "@solana/web3.js";
 import {Contender, deriveContenderPda, getContenderPda} from "./contender-pda";
 import {getManyWagerPda, Wager} from "./wager-pda";
 import {deriveWagerIndexPda, getManyWagerIndexPda} from "./wager-index-pda";
-import {SHDW, SPL_ASSOCIATED_TOKEN_PROGRAM_ID, SPL_TOKEN_PROGRAM_ID} from "../util/constants";
+import {SHDW} from "../util/constants";
 import {deriveAtaPda} from "./ata-pda";
 
 export interface DegenPda extends Pda {
@@ -15,6 +15,7 @@ export interface Degen {
     wallet: PublicKey
     contender: Contender | null
     wagers: Wager[]
+    totalWagersPlaced: number
     shadow: {
         balance: number
     }
@@ -39,6 +40,7 @@ export async function getDegenPda(
 ): Promise<Degen> {
     // fetch wagers
     let wagers;
+    let totalWagersPlaced;
     try {
         const fetchedDegen = await programs.meme.account.degen.fetch(
             pda.address
@@ -57,9 +59,11 @@ export async function getDegenPda(
             programs.meme,
             fetchedWagerIndexArray.map(w => w.pda)
         );
+        totalWagersPlaced = fetchedDegen.totalWagersPlaced;
     } catch (error) {
         console.log("no wagers found for this degen");
         wagers = [];
+        totalWagersPlaced = 0;
     }
     // fetch contender
     const contenderPda = deriveContenderPda(
@@ -95,6 +99,7 @@ export async function getDegenPda(
         wallet: provider.wallet.publicKey,
         contender: maybeContender,
         wagers,
+        totalWagersPlaced,
         shadow: {
             balance: balance
         }

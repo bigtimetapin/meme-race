@@ -5,6 +5,8 @@ import {addContender} from "./anchor/methods/add-contender";
 import {getGlobal} from "./anchor/pda/get-global";
 import {deriveDegenPda, getDegenPda} from "./anchor/pda/degen-pda";
 import {deriveContenderPda, getContenderPda} from "./anchor/pda/contender-pda";
+import {placeWager} from "./anchor/methods/place-wager";
+import {PublicKey} from "@solana/web3.js";
 
 // init phantom
 let phantom = null;
@@ -114,6 +116,43 @@ export async function main(app, json) {
                     }
                 )
             );
+            // contender place new wager
+        } else if (sender === "contender-place-new-wager") {
+            // parse more json
+            const more = JSON.parse(parsed.more);
+            // get phantom
+            phantom = await getPhantom(app);
+            if (phantom) {
+                // get provider & program
+                const pp = getPP(phantom);
+                // build form
+                let form = more;
+                form.contender = {
+                    pda: new PublicKey(
+                        form.contender.pda
+                    )
+                };
+                console.log(form);
+                // invoke rpc
+                await placeWager(
+                    app,
+                    pp.provider,
+                    pp.programs,
+                    more
+                );
+            } else {
+                const browse = "https://phantom.app/ul/browse/";
+                const dap = "https://meme-race.com/#/contender/" + more.contender.pda;
+                const href = browse + encodeURIComponent(dap);
+                app.ports.exception.send(
+                    JSON.stringify(
+                        {
+                            message: "It looks like there's no wallet installed!",
+                            href: href
+                        }
+                    )
+                );
+            }
             // degen add contender
         } else if (sender === "degen-add-new-contender") {
             // get provider & program
