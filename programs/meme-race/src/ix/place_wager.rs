@@ -56,9 +56,9 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
             burn_amount,
         )?;
         // bump contender
-        contender.score += wager;
+        contender.score += burn_amount;
         // bump wager
-        wager_pda.wager_size += wager;
+        wager_pda.wager_size += burn_amount;
         // bump leader board
         // add this contender to leader board
         let this_contender = TopContender {
@@ -82,7 +82,7 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
         let leader = top_contenders.first().unwrap();
         // finalize new leader board
         leader_pda.leader = leader.clone();
-        leader_pda.total += wager;
+        leader_pda.total += burn_amount;
     }
     // check wager-count
     if wager_pda.wager_count == 0 {
