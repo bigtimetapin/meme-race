@@ -11,7 +11,7 @@ use crate::pda::wager_index::WagerIndex;
 mod pda;
 mod ix;
 
-declare_id!("EGkSrbRq86xw8EFdUtE5zaK7SvSPKQYnpUQWUeGPPX9H");
+declare_id!("33fEC4j6KhvZCGUMYshKakLQxGfK1tp1CHWWC1By6GJk");
 
 #[program]
 pub mod meme_race {
@@ -165,7 +165,7 @@ pub struct PlaceWager<'info> {
     ], bump,
     )]
     pub boss: Box<Account<'info, Boss>>,
-    #[account(
+    #[account(mut,
     address = boss.mint,
     owner = token_program.key()
     )]

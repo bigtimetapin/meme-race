@@ -140,7 +140,7 @@ export type MemeRace = {
         },
         {
           "name": "mint",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -535,7 +535,7 @@ export const IDL: MemeRace = {
         },
         {
           "name": "mint",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
