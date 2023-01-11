@@ -73,12 +73,15 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
         );
         // grab first 10 elements which is now the top 10
         let sorted = top_contenders.clone();
-        let new_top_contenders = &sorted[..10].to_vec();
+        if sorted.len() > 10 {
+            leader_pda.race = sorted[..10].to_vec();
+        } else {
+            leader_pda.race = sorted;
+        }
         // grab first element which is now the leader
         let leader = top_contenders.first().unwrap();
         // finalize new leader board
         leader_pda.leader = leader.clone();
-        leader_pda.race = new_top_contenders.clone();
         leader_pda.total += wager;
     }
     // check wager-count
