@@ -65,23 +65,32 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
             score: contender.score,
             pda: contender.key(),
         };
-        let top_contenders = &mut leader_pda.race.clone();
-        top_contenders.push(this_contender);
+        // but filter previous occurrence of this contender
+        let race: &Vec<TopContender> = &leader_pda.race.clone();
+        let top_contenders = &mut race
+            .iter()
+            .filter(|&contender|
+                !(*contender).pda.eq(&this_contender.pda)
+            ).collect::<Vec<&TopContender>>();
+        top_contenders.push(&this_contender);
         // sort leader board by score with highest score as first element
         top_contenders.sort_by(|left, right|
             right.score.cmp(&left.score)
         );
         // grab first 10 elements which is now the top 10
-        let sorted = top_contenders.clone();
+        let sorted = top_contenders.clone()
+            .iter()
+            .map(|&tc|
+                tc.clone()
+            ).collect::<Vec<TopContender>>();
         if sorted.len() > 10 {
             leader_pda.race = sorted[..10].to_vec();
         } else {
             leader_pda.race = sorted;
         }
         // grab first element which is now the leader
-        let leader = top_contenders.first().unwrap();
-        // finalize new leader board
-        leader_pda.leader = leader.clone();
+        leader_pda.leader = leader_pda.race.first().unwrap().clone();
+        // increment global wager count
         leader_pda.total += burn_amount;
     }
     // check wager-count
