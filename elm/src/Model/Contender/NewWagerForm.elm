@@ -1,7 +1,10 @@
-module Model.Contender.NewWagerForm exposing (NewWager, NewWagerForm, default, encode)
+module Model.Contender.NewWagerForm exposing (NewWager, NewWagerForm, decode, default, encode)
 
+import Json.Decode as Decode
 import Json.Encode as Encode
-import Model.Contender.Contender exposing (Contender)
+import Model.Contender.Contender as Contender exposing (Contender)
+import Model.Degen.Degen as Degen exposing (Degen)
+import Util.Decode as Util
 
 
 type alias NewWagerForm =
@@ -32,3 +35,15 @@ encode newWager contender =
                     ]
               )
             ]
+
+
+decode : String -> Result String { degen : Degen, contender : Contender }
+decode string =
+    Util.decode string decoder identity
+
+
+decoder : Decode.Decoder { degen : Degen, contender : Contender }
+decoder =
+    Decode.map2 (\d c -> { degen = d, contender = c })
+        (Decode.field "degen" Degen.decoder)
+        (Decode.field "contender" Contender.decoder)

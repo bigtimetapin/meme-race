@@ -368,6 +368,24 @@ update msg model =
                                                             in
                                                             Listener.decode model json Contender.decode f
 
+                                                        ContenderListener.WagerPlaced ->
+                                                            let
+                                                                f decoded =
+                                                                    { model
+                                                                        | state =
+                                                                            { local =
+                                                                                Local.Contender <|
+                                                                                    ContenderState.Top
+                                                                                        decoded.contender
+                                                                            , global =
+                                                                                Global.HasDegen
+                                                                                    decoded.degen
+                                                                            , exception = Exception.Closed
+                                                                            }
+                                                                    }
+                                                            in
+                                                            Listener.decode model json NewWagerForm.decode f
+
                                                 ToLocal.Degen degenListener ->
                                                     case degenListener of
                                                         DegenListener.Fetched ->

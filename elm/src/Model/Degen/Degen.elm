@@ -1,4 +1,4 @@
-module Model.Degen.Degen exposing (Degen, decode)
+module Model.Degen.Degen exposing (Degen, decode, decoder)
 
 import Json.Decode as Decode
 import Model.Contender.Contender as Contender exposing (Contender)

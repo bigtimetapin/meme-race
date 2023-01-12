@@ -141,12 +141,20 @@ export async function placeWager(
             programs.meme,
             form.contender.pda
         );
+        degen = await getDegenPda(
+            provider,
+            programs,
+            degenPda
+        );
         app.ports.success.send(
             JSON.stringify(
                 {
-                    listener: "contender-fetched",
+                    listener: "contender-wager-placed",
                     more: JSON.stringify(
-                        contender
+                        {
+                            contender,
+                            degen
+                        }
                     )
                 }
             )
