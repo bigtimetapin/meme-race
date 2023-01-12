@@ -36,7 +36,7 @@ view state =
                                         , ": "
                                         , "$BONK"
                                         , " "
-                                        , FormatNumber.format usLocale (Basics.toFloat leaderBoard.total)
+                                        , leaderBoard.totalFormatted
                                         , " "
                                         , "🎉"
                                         ]
@@ -211,7 +211,7 @@ view state =
                                     String.concat
                                         [ "Total Pot Size"
                                         , ": "
-                                        , String.fromInt leaderBoard.total
+                                        , leaderBoard.totalFormatted
                                         , " "
                                         , "😮\u{200D}💨"
                                         ]

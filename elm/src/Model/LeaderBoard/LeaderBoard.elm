@@ -11,6 +11,7 @@ type alias LeaderBoard =
     , leader : Contender
     , race : List Contender
     , total : Int
+    , totalFormatted : String
     , open : Bool
     }
 
@@ -22,9 +23,10 @@ decode string =
 
 decoder : Decode.Decoder LeaderBoard
 decoder =
-    Decode.map5 LeaderBoard
+    Decode.map6 LeaderBoard
         (Decode.field "authority" Decode.string)
         (Decode.field "leader" Contender.decoder)
         (Decode.field "race" <| Decode.list Contender.decoder)
         (Decode.field "total" Decode.int)
+        (Decode.field "totalFormatted" Decode.string)
         (Decode.field "open" Decode.bool)

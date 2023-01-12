@@ -198,8 +198,8 @@ update msg model =
                 ContenderMsg.PlaceNewWager newWager contender ->
                     let
                         scaled =
-                            { newWager |
-                                wager = newWager.wager * 100000
+                            { newWager
+                                | wager = newWager.wager * 100000
                             }
                     in
                     ( { model

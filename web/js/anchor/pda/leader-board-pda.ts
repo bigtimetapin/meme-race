@@ -11,7 +11,8 @@ export interface LeaderBoard {
     authority: PublicKey
     leader: Contender
     race: Contender[]
-    total: number // TODO: check precision
+    total: number
+    totalFormatted: string
     open: boolean
 }
 
@@ -51,6 +52,7 @@ export async function getLeaderBoardPda(
         leader,
         race,
         total: fetched.total.toNumber(),
+        totalFormatted: (fetched.total.toNumber() * 100000).toLocaleString(),
         open: fetched.open
     }
 }
