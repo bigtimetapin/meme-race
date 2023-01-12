@@ -55,7 +55,7 @@ export async function getManyContenderPda(
                     rawContender
                 );
                 return {
-                    score: rawContender.score.toNumber().toLocaleString(),
+                    score: (rawContender.score.toNumber() / BONK_DECIMALS).toLocaleString(),
                     wager,
                     url,
                     authority: rawContender.authority,
@@ -124,7 +124,7 @@ async function rawToPolished(
         wager = null;
     }
     return {
-        score: raw.score.toNumber().toLocaleString(),
+        score: (raw.score.toNumber() / BONK_DECIMALS).toLocaleString(),
         wager: wager,
         url: url,
         authority: raw.authority,
