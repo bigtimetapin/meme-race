@@ -196,6 +196,12 @@ update msg model =
                             )
 
                 ContenderMsg.PlaceNewWager newWager contender ->
+                    let
+                        scaled =
+                            { newWager |
+                                wager = newWager.wager * 100000
+                            }
+                    in
                     ( { model
                         | state =
                             { local = model.state.local
@@ -206,7 +212,7 @@ update msg model =
                     , sender <|
                         Sender.encode <|
                             { sender = Sender.Contender fromContender
-                            , more = NewWagerForm.encode newWager contender
+                            , more = NewWagerForm.encode scaled contender
                             }
                     )
 
