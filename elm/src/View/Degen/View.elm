@@ -63,7 +63,10 @@ view state =
                                         , Html.div
                                             [ class "pt-3"
                                             ]
-                                            [ Html.a
+                                            [ Html.text
+                                                """view your 
+                                                """
+                                            , Html.a
                                                 [ class "has-sky-blue-text"
                                                 , Local.href <|
                                                     Local.Contender <|
@@ -72,11 +75,11 @@ view state =
                                                             }
                                                 ]
                                                 [ Html.text
-                                                    """copy
+                                                    """contender-url
                                                     """
                                                 ]
                                             , Html.text
-                                                """ your contender-url & share it on your socials \u{1FAE1}
+                                                """ & share it on your socials \u{1FAE1}
                                                 """
                                             ]
                                         ]
