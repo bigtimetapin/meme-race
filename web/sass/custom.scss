@@ -55,6 +55,11 @@ $family-secondary: "Press Start 2P", BlinkMacSystemFont, -apple-system, "Helveti
   color: #FDF9EF;
 }
 
+.has-white {
+  background-color: #FDF9EF;
+  color: #2B2B2B;
+}
+
 .has-sky-blue-text {
   color: #3D92CA !important;
 }
@@ -291,6 +296,11 @@ $size-7: 12px;
 .table {
   border: 20px solid #a569bd;
   border-radius: 20px !important;
+}
+
+.button {
+  background-color: #a569bd;
+  color: white;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

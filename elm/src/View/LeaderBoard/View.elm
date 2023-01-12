@@ -199,13 +199,8 @@ view state =
                         [ Html.div
                             [ class "is-family-secondary has-text-centered"
                             ]
-                            [ Html.h1
-                                [ class "is-size-2 pb-3"
-                                ]
-                                [ Html.text "MEME RACE"
-                                ]
-                            , Html.div
-                                [ class "pb-2"
+                            [ Html.div
+                                [ class "mb-4"
                                 ]
                                 [ Html.h2
                                     [ class "is-size-5"
@@ -213,13 +208,15 @@ view state =
                                     [ Html.text <|
                                         String.concat
                                             [ "Pot Total"
-                                            , ": "
+                                            , ":"
                                             ]
-                                    , Html.strong
-                                        []
+                                    , Html.b
+                                        [ class "is-bold"
+                                        ]
                                         [ Html.text <|
                                             String.concat
-                                                [ "$BONK"
+                                                [ " "
+                                                , "$BONK"
                                                 , " "
                                                 , leaderBoard.totalFormatted
                                                 ]
@@ -248,7 +245,11 @@ view state =
                                     ]
                                 ]
                             ]
-                        , table
+                        , Html.div
+                            [ class "mt-6"
+                            ]
+                            [ table
+                            ]
                         ]
 
                 False ->

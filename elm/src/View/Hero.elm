@@ -130,7 +130,7 @@ view exception global body =
                         []
     in
     Html.section
-        [ class "hero is-fullheight has-black is-family-primary"
+        [ class "hero is-fullheight has-white is-family-primary"
         ]
         [ Html.div
             [ class "hero-head"
@@ -140,7 +140,12 @@ view exception global body =
         , Html.div
             [ class "mx-6 my-6"
             ]
-            [ body
+            [ Html.h1
+                [ class "is-family-secondary has-text-centered is-size-2 mb-4"
+                ]
+                [ Html.text "MEME RACE"
+                ]
+            , body
             , exceptionModal
             ]
         , Html.div

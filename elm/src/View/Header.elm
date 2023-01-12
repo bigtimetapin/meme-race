@@ -3,7 +3,6 @@ module View.Header exposing (view)
 import Html exposing (Html)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Model.Degen.State as DegenState
 import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Global.Global exposing (Global(..))
 import Model.State.Local.Local as Local
@@ -32,7 +31,7 @@ view global =
                                 LeaderBoardState.Almost
                         ]
                         [ Html.div
-                            [ class "is-text-container-4"
+                            [ class "is-text-container-4 is-family-secondary"
                             ]
                             [ Html.text "MEME RACE"
                             , Html.text "🔥"
@@ -47,27 +46,7 @@ view global =
             [ Html.div
                 [ class "level-item"
                 ]
-                [ Html.span
-                    [ class "icon-text"
-                    ]
-                    [ Html.span
-                        []
-                        [ connect global
-                        ]
-                    , Html.span
-                        [ class "icon"
-                        ]
-                        [ Html.i
-                            [ class "fas fa-user"
-                            ]
-                            []
-                        ]
-                    ]
-                ]
-            , Html.div
-                [ class "level-item"
-                ]
-                [ viewGlobal global
+                [ connect global
                 ]
             ]
         ]
@@ -78,33 +57,11 @@ connect global =
     case global of
         NoWalletYet ->
             Html.button
-                [ class "is-light-text-container-4 mr-2"
+                [ class "button is-light-text-container-4 mr-2"
                 , onClick <| Msg.Global FromGlobal.Connect
                 ]
                 [ Html.text "Connect Wallet"
                 ]
-
-        WalletMissing ->
-            Html.div
-                []
-                []
-
-        _ ->
-            Html.button
-                [ class "is-light-text-container-4 mr-2"
-                , onClick <| Msg.Global FromGlobal.Disconnect
-                ]
-                [ Html.text "Disconnect Wallet"
-                ]
-
-
-viewGlobal : Global -> Html Msg
-viewGlobal global =
-    case global of
-        NoWalletYet ->
-            Html.div
-                []
-                []
 
         WalletMissing ->
             Html.div
@@ -116,52 +73,24 @@ viewGlobal global =
             let
                 contender =
                     case degen.contender of
-                        Just c ->
+                        Just _ ->
                             Html.div
                                 []
-                                [ Html.text <|
-                                    String.concat
-                                        [ "total $BONK wagered on your meme: "
-                                        , c.score
-                                        ]
-                                ]
+                                []
 
                         Nothing ->
                             Html.div
                                 []
                                 [ Html.text
-                                    """you haven't added a meme to the race yet 🤨
+                                    """add meme 2 race 🏎️
                                     """
-                                ]
-
-                wagers =
-                    case degen.wagers of
-                        [] ->
-                            Html.div
-                                []
-                                []
-
-                        nel ->
-                            Html.div
-                                []
-                                [ Html.text <|
-                                    String.concat
-                                        [ "you've placed wagers on"
-                                        , " "
-                                        , String.fromInt <| List.length nel
-                                        , " "
-                                        , "memes for a total of"
-                                        , " "
-                                        , "$BONK 🔥"
-                                        , " "
-                                        , String.fromInt <| List.sum (List.map (\w -> w.wagerSize) nel)
-                                        ]
                                 ]
             in
             Html.div
                 []
                 [ Html.div
-                    []
+                    [ class "button"
+                    ]
                     [ Html.text <|
                         String.concat
                             [ "wallet:"
@@ -171,8 +100,16 @@ viewGlobal global =
                     ]
                 , Html.div
                     []
+                    [ Html.button
+                        [ class "button is-light-text-container-4 mr-2"
+                        , onClick <| Msg.Global FromGlobal.Disconnect
+                        ]
+                        [ Html.text "Disconnect"
+                        ]
+                    ]
+                , Html.div
+                    []
                     [ contender
-                    , wagers
                     , Html.div
                         []
                         [ Html.button
