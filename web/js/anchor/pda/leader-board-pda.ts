@@ -3,6 +3,7 @@ import {AnchorProvider, Program} from "@project-serum/anchor";
 import {Pda} from "./pda";
 import {PublicKey} from "@solana/web3.js";
 import {Contender, getContenderPda, getManyContenderPda} from "./contender-pda";
+import {BONK_DECIMALS} from "../util/constants";
 
 export interface LeaderBoardPda extends Pda {
 }
@@ -52,7 +53,7 @@ export async function getLeaderBoardPda(
         leader,
         race,
         total: fetched.total.toNumber(),
-        totalFormatted: (fetched.total.toNumber() * 100000).toLocaleString(),
+        totalFormatted: (fetched.total.toNumber() * BONK_DECIMALS).toLocaleString(),
         open: fetched.open
     }
 }

@@ -3,6 +3,7 @@ import {AnchorProvider, Program} from "@project-serum/anchor";
 import {MemeRace} from "../idl/idl";
 import {PublicKey} from "@solana/web3.js";
 import {deriveWagerPda, RawWager} from "./wager-pda";
+import {BONK_DECIMALS} from "../util/constants";
 
 export interface ContenderPda extends Pda {
 }
@@ -47,7 +48,7 @@ export async function getManyContenderPda(
                     w => w.contender.equals(rawContender.pda)
                 );
                 if (maybeWager) {
-                    wager = maybeWager.wagerSize.toNumber().toLocaleString();
+                    wager = (maybeWager.wagerSize.toNumber() * BONK_DECIMALS).toLocaleString();
                 }
                 // fetch meme url
                 const url = await getMemeUrl(
@@ -117,7 +118,7 @@ async function rawToPolished(
         ) as RawWager;
         console.log(wager_);
         console.log(wager_.wagerSize);
-        wager = (wager_.wagerSize).toNumber().toLocaleString();
+        wager = ((wager_.wagerSize).toNumber() * BONK_DECIMALS).toLocaleString();
     } catch (error) {
         console.log("no wagers placed on this contender");
         wager = null;
