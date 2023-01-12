@@ -14,7 +14,7 @@ echo "Building Elm Assets..."
 ## cd ../..
 
 echo "Publishing New Assets..."
-## aws s3 sync web/images/ $BUCKET/images/ --profile tap-in
+aws s3 sync web/images/ $BUCKET/images/ --profile tap-in
 aws s3 cp web/index.html $BUCKET --profile tap-in
 aws s3 cp web/elm.min.js $BUCKET --profile tap-in
 aws s3 cp web/css/ $BUCKET/css/ --recursive --profile tap-in
