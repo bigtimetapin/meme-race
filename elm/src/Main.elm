@@ -503,15 +503,93 @@ update msg model =
                                                 ToGlobal.FoundDegen ->
                                                     let
                                                         f degen =
-                                                            { model
-                                                                | state =
-                                                                    { local = model.state.local
-                                                                    , global = Global.HasDegen degen
-                                                                    , exception = Exception.Closed
+                                                            let
+                                                                waiting =
+                                                                    { model
+                                                                        | state =
+                                                                            { local = model.state.local
+                                                                            , global = Global.HasDegen degen
+                                                                            , exception = Exception.Waiting
+                                                                            }
                                                                     }
-                                                            }
+                                                            in
+                                                            case model.state.local of
+                                                                Local.LeaderBoard _ ->
+                                                                    ( waiting
+                                                                    , sender <|
+                                                                        Sender.encode0 <|
+                                                                            Sender.LeaderBoard <|
+                                                                                LeaderBoardMsg.Fetch
+                                                                    )
+
+                                                                Local.Degen degenState ->
+                                                                    case degenState of
+                                                                        DegenState.Top _ ->
+                                                                            ( { model
+                                                                                | state =
+                                                                                    { local =
+                                                                                        Local.Degen <|
+                                                                                            DegenState.Top degen
+                                                                                    , global = Global.HasDegen degen
+                                                                                    , exception = Exception.Closed
+                                                                                    }
+                                                                              }
+                                                                            , Cmd.none
+                                                                            )
+
+                                                                        DegenState.NewContender newContenderForm _ ->
+                                                                            ( { model
+                                                                                | state =
+                                                                                    { local =
+                                                                                        Local.Degen <|
+                                                                                            DegenState.NewContender
+                                                                                                newContenderForm
+                                                                                                degen
+                                                                                    , global = Global.HasDegen degen
+                                                                                    , exception = Exception.Closed
+                                                                                    }
+                                                                              }
+                                                                            , Cmd.none
+                                                                            )
+
+                                                                Local.Contender (ContenderState.Top contender) ->
+                                                                    ( waiting
+                                                                    , sender <|
+                                                                        Sender.encode <|
+                                                                            { sender =
+                                                                                Sender.Contender <|
+                                                                                    ContenderMsg.Fetch
+                                                                            , more =
+                                                                                AlmostContender.encode <|
+                                                                                    { pda = contender.pda }
+                                                                            }
+                                                                    )
+
+                                                                Local.Contender (ContenderState.NewWager _ contender) ->
+                                                                    ( waiting
+                                                                    , sender <|
+                                                                        Sender.encode <|
+                                                                            { sender =
+                                                                                Sender.Contender <|
+                                                                                    ContenderMsg.Fetch
+                                                                            , more =
+                                                                                AlmostContender.encode <|
+                                                                                    { pda = contender.pda }
+                                                                            }
+                                                                    )
+
+                                                                _ ->
+                                                                    ( { model
+                                                                        | state =
+                                                                            { local = model.state.local
+                                                                            , global = Global.HasDegen degen
+                                                                            , exception = model.state.exception
+                                                                            }
+                                                                      }
+                                                                    , Cmd.none
+                                                                    )
                                                     in
-                                                    Listener.decode model json Degen.decode f
+                                                    Listener.decode2 model json Degen.decode f
 
                                 -- undefined role
                                 Nothing ->
