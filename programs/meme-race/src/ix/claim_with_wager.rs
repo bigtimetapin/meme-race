@@ -1,11 +1,11 @@
 use std::ops::Div;
 use anchor_lang::prelude::*;
 use anchor_spl::token::{transfer, Transfer};
-use crate::{ClaimFromPot, pda};
+use crate::{ClaimWithWager, pda};
 
-pub fn ix(ctx: Context<ClaimFromPot>) -> Result<()> {
+pub fn ix(ctx: Context<ClaimWithWager>) -> Result<()> {
     // grab accounts
-    let leader_board = &ctx.accounts.leader_board;
+    let leader_board = &mut ctx.accounts.leader_board;
     let winner = &ctx.accounts.winner;
     let wager = &ctx.accounts.wager;
     // build signer seeds
@@ -41,6 +41,8 @@ pub fn ix(ctx: Context<ClaimFromPot>) -> Result<()> {
             ),
             share,
         )?;
+        // increment claimed
+        leader_board.claimed += share;
     }
     Ok(())
 }

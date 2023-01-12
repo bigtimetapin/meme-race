@@ -7,6 +7,7 @@ pub const SIZE: usize = 8 // discriminator
     + TOP_CONTENDER_SIZE // leader
     + 4 + (TOP_CONTENDER_SIZE * 10) // top 10 race
     + 8 // pool size
+    + 8 // claimed from pool
     + 1; // is race still open
 
 const TOP_CONTENDER_SIZE: usize = 8 // score
@@ -18,6 +19,7 @@ pub struct LeaderBoard {
     pub leader: TopContender,
     pub race: Vec<TopContender>,
     pub total: u64,
+    pub claimed: u64,
     pub open: bool,
 }
 

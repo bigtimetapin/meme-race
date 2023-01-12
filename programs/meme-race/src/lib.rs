@@ -37,8 +37,12 @@ pub mod meme_race {
         ix::close::ix(ctx)
     }
 
-    pub fn claim_from_pot(ctx: Context<ClaimFromPot>) -> Result<()> {
-        ix::claim_from_pot::ix(ctx)
+    pub fn claim_with_wager(ctx: Context<ClaimWithWager>) -> Result<()> {
+        ix::claim_with_wager::ix(ctx)
+    }
+
+    pub fn claim_as_boss(ctx: Context<ClaimAsBoss>) -> Result<()> {
+        ix::claim_as_boss::ix(ctx)
     }
 }
 
@@ -206,7 +210,7 @@ pub struct Close<'info> {
 }
 
 #[derive(Accounts)]
-pub struct ClaimFromPot<'info> {
+pub struct ClaimWithWager<'info> {
     #[account(
     address = leader_board.leader.pda
     )]
@@ -219,6 +223,45 @@ pub struct ClaimFromPot<'info> {
     ], bump,
     )]
     pub wager: Account<'info, Wager>,
+    #[account(
+    seeds = [
+    pda::leader_board::SEED.as_bytes()
+    ], bump,
+    )]
+    pub leader_board: Account<'info, LeaderBoard>,
+    #[account(
+    seeds = [
+    pda::boss::SEED.as_bytes()
+    ], bump,
+    )]
+    pub boss: Account<'info, Boss>,
+    #[account(
+    address = boss.mint,
+    owner = token_program.key()
+    )]
+    pub mint: Account<'info, Mint>,
+    #[account(mut,
+    associated_token::mint = mint,
+    associated_token::authority = claimer
+    )]
+    pub ata: Account<'info, TokenAccount>,
+    #[account(mut,
+    associated_token::mint = mint,
+    associated_token::authority = boss
+    )]
+    pub treasury: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub claimer: Signer<'info>,
+    // token program
+    pub token_program: Program<'info, Token>,
+}
+
+#[derive(Accounts)]
+pub struct ClaimAsBoss<'info> {
+    #[account(
+    address = leader_board.leader.pda
+    )]
+    pub winner: Account<'info, Contender>,
     #[account(
     seeds = [
     pda::leader_board::SEED.as_bytes()
