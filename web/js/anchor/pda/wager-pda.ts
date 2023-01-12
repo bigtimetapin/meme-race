@@ -3,6 +3,7 @@ import {PublicKey} from "@solana/web3.js";
 import {getMemeUrl, RawContender} from "./contender-pda";
 import {AnchorProvider, Program} from "@project-serum/anchor";
 import {MemeRace} from "../idl/idl";
+import {BONK_DECIMALS} from "../util/constants";
 
 export interface WagerPda extends Pda {
 }
@@ -47,7 +48,7 @@ export async function getManyWagerPda(
             );
             return {
                 wagerSize: wager.wagerSize.toNumber(),
-                wagerSizeFormatted: wager.wagerSize.toNumber().toLocaleString(),
+                wagerSizeFormatted: (wager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
                 wagerCount: wager.wagerCount,
                 contender: {
                     pda: contender_.pda,
@@ -74,7 +75,7 @@ export async function getWagerPda(
     );
     return {
         wagerSize: fetchedWager.wagerSize.toNumber(),
-        wagerSizeFormatted: fetchedWager.wagerSize.toNumber().toLocaleString(),
+        wagerSizeFormatted: (fetchedWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
         wagerCount: fetchedWager.wagerCount,
         contender: {
             pda: fetchedWager.contender,
