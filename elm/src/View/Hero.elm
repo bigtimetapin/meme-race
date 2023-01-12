@@ -85,7 +85,6 @@ view exception global body =
                                                     ]
                                                 ]
 
-
                                         False ->
                                             Html.div
                                                 []
@@ -104,7 +103,6 @@ view exception global body =
                                                         ]
                                                     ]
                                                 ]
-
 
                                 Nothing ->
                                     Html.div

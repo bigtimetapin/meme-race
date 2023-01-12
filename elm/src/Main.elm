@@ -407,17 +407,70 @@ update msg model =
                                         Listener.Global toGlobal ->
                                             case toGlobal of
                                                 ToGlobal.FoundWalletDisconnected ->
-                                                    ( { model
-                                                        | state =
-                                                            { local = model.state.local
-                                                            , global = Global.NoWalletYet
-                                                            , exception = Exception.Closed
+                                                    let
+                                                        waiting =
+                                                            { model
+                                                                | state =
+                                                                    { local = model.state.local
+                                                                    , global = Global.NoWalletYet
+                                                                    , exception = Exception.Waiting
+                                                                    }
                                                             }
-                                                      }
-                                                    , Cmd.none
-                                                    )
+                                                    in
+                                                    case model.state.local of
+                                                        Local.LeaderBoard _ ->
+                                                            ( waiting
+                                                            , sender <|
+                                                                Sender.encode0 <|
+                                                                    Sender.LeaderBoard <|
+                                                                        LeaderBoardMsg.Fetch
+                                                            )
 
-                                                -- TODO; open exception modal
+
+                                                        Local.Degen _ ->
+                                                            ( waiting
+                                                            , sender <|
+                                                                Sender.encode0 <|
+                                                                    Sender.LeaderBoard <|
+                                                                        LeaderBoardMsg.Fetch
+                                                            )
+
+
+                                                        (Local.Contender (ContenderState.Top contender)) ->
+                                                            ( waiting
+                                                            , sender <|
+                                                                Sender.encode <|
+                                                                    { sender = Sender.Contender <|
+                                                                        ContenderMsg.Fetch
+                                                                    , more = AlmostContender.encode <|
+                                                                        { pda = contender.pda }
+                                                                    }
+                                                            )
+
+                                                        (Local.Contender (ContenderState.NewWager _ contender)) ->
+                                                            ( waiting
+                                                            , sender <|
+                                                                Sender.encode <|
+                                                                    { sender = Sender.Contender <|
+                                                                        ContenderMsg.Fetch
+                                                                    , more = AlmostContender.encode <|
+                                                                        { pda = contender.pda }
+                                                                    }
+                                                            )
+
+                                                        _ ->
+                                                            ( { model
+                                                                | state =
+                                                                    { local = model.state.local
+                                                                    , global = Global.NoWalletYet
+                                                                    , exception = model.state.exception
+                                                                    }
+                                                            }
+                                                            , Cmd.none
+                                                            )
+
+
+
                                                 ToGlobal.FoundMissingWalletPlugin ->
                                                     ( { model
                                                         | state =

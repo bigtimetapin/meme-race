@@ -11,7 +11,7 @@ type Exception
 
 
 type alias Href =
-    { url: String
+    { url : String
     , internal : Bool
     }
 
