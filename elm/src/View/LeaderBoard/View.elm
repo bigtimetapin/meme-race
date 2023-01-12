@@ -7,7 +7,8 @@ import Model.Contender.State as ContenderState
 import Model.LeaderBoard.State exposing (..)
 import Model.State.Local.Local as Local
 import Model.Wallet as Wallet
-import Msg.Msg exposing (Msg)
+import Msg.LeaderBoard.Msg as LeaderBoardMsg
+import Msg.Msg exposing (Msg(..))
 
 
 view : State -> Html Msg
@@ -196,47 +197,58 @@ view state =
                     Html.div
                         []
                         [ Html.div
-                            [ class "columns"
+                            [ class "is-family-secondary has-text-centered"
                             ]
-                            [ Html.div
-                                [ class "column is-half"
+                            [ Html.h1
+                                [ class "is-size-2 pb-3"
                                 ]
-                                [ Html.text <|
-                                    String.concat
-                                        [ "Total Pot Size"
-                                        , ": "
-                                        , "$BONK"
-                                        , " "
-                                        , leaderBoard.totalFormatted
-                                        , " "
-                                        , "🎉"
-                                        ]
+                                [ Html.text "MEME RACE"
                                 ]
                             , Html.div
-                                [ class "column is-half"
+                                [ class "pb-2"
                                 ]
-                                [ Html.text <|
-                                    String.concat
-                                        [ "Race closes at"
-                                        , " "
-                                        , "Thursday, Jan. 12th at 11:59pm EST"
-                                        , "👀"
-                                        ]
-                                ]
-                            ]
-                        , Html.div
-                            []
-                            [ Html.div
-                                []
                                 [ Html.h2
-                                    []
-                                    [ Html.text
-                                        """Leader Board 🏆
-                                        """
+                                    [ class "is-size-5"
+                                    ]
+                                    [ Html.text <|
+                                        String.concat
+                                            [ "Pot Total"
+                                            , ": "
+                                            ]
+                                    , Html.strong
+                                        []
+                                        [ Html.text <|
+                                            String.concat
+                                                [ "$BONK"
+                                                , " "
+                                                , leaderBoard.totalFormatted
+                                                ]
+                                        ]
+                                    , Html.a
+                                        [ class "has-sky-blue-text ml-3 mb-6"
+                                        , onClick <|
+                                            FromLeaderBoard <|
+                                                LeaderBoardMsg.Fetch
+                                        ]
+                                        [ Html.text "refresh"
+                                        ]
                                     ]
                                 ]
-                            , table
+                            , Html.div
+                                []
+                                [ Html.h2
+                                    [ class "is-size-5"
+                                    ]
+                                    [ Html.text <|
+                                        String.concat
+                                            [ "Race closes at"
+                                            , " "
+                                            , "Thursday, Jan. 12th at 11:59pm EST"
+                                            ]
+                                    ]
+                                ]
                             ]
+                        , table
                         ]
 
                 False ->
