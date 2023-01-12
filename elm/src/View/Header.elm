@@ -1,7 +1,7 @@
 module View.Header exposing (view)
 
 import Html exposing (Html)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, src, width)
 import Html.Events exposing (onClick)
 import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Global.Global exposing (Global(..))
@@ -30,12 +30,11 @@ view global =
                             Local.LeaderBoard <|
                                 LeaderBoardState.Almost
                         ]
-                        [ Html.div
-                            [ class "is-text-container-4 is-family-secondary"
+                        [ Html.img
+                            [ src "./images/logo.jpg"
+                            , width 250
                             ]
-                            [ Html.text "MEME RACE"
-                            , Html.text "🔥"
-                            ]
+                            []
                         ]
                     ]
                 ]
