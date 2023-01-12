@@ -81,7 +81,12 @@ view state =
                                     ]
                                 , Html.td
                                     []
-                                    [ Html.text contender.score
+                                    [ Html.text <|
+                                        String.concat
+                                            [ "$BONK"
+                                            , ": "
+                                            , contender.score
+                                            ]
                                     ]
                                 , Html.td
                                     []
@@ -89,15 +94,31 @@ view state =
                                     ]
                                 , Html.td
                                     []
-                                    [ Html.text <|
-                                        Wallet.slice contender.authority
+                                    [ Html.a
+                                        [ class "has-sky-blue-text"
+                                        , href <|
+                                            String.concat
+                                                [ "https://solscan.io/account/"
+                                                , contender.authority
+                                                ]
+                                        ]
+                                        [ Html.text <|
+                                            Wallet.slice contender.authority
+                                        ]
                                     ]
                                 , Html.td
                                     []
-                                    [ Html.img
-                                        [ src contender.url
+                                    [ Html.a
+                                        [ Local.href <|
+                                            Local.Contender <|
+                                                ContenderState.Almost <|
+                                                    { pda = contender.pda }
                                         ]
-                                        []
+                                        [ Html.img
+                                            [ src contender.url
+                                            ]
+                                            []
+                                        ]
                                     ]
                                 ]
 
