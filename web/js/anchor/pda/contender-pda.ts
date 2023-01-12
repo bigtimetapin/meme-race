@@ -48,7 +48,7 @@ export async function getManyContenderPda(
                     w => w.contender.equals(rawContender.pda)
                 );
                 if (maybeWager) {
-                    wager = (maybeWager.wagerSize.toNumber() * BONK_DECIMALS).toLocaleString();
+                    wager = (maybeWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString();
                 }
                 // fetch meme url
                 const url = await getMemeUrl(
@@ -118,7 +118,7 @@ async function rawToPolished(
         ) as RawWager;
         console.log(wager_);
         console.log(wager_.wagerSize);
-        wager = ((wager_.wagerSize).toNumber() * BONK_DECIMALS).toLocaleString();
+        wager = ((wager_.wagerSize).toNumber() / BONK_DECIMALS).toLocaleString();
     } catch (error) {
         console.log("no wagers placed on this contender");
         wager = null;

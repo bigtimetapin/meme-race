@@ -53,7 +53,7 @@ export async function getLeaderBoardPda(
         leader,
         race,
         total: fetched.total.toNumber(),
-        totalFormatted: (fetched.total.toNumber() * BONK_DECIMALS).toLocaleString(),
+        totalFormatted: (fetched.total.toNumber() / BONK_DECIMALS).toLocaleString(),
         open: fetched.open
     }
 }
