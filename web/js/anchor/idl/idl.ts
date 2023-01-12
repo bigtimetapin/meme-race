@@ -198,7 +198,7 @@ export type MemeRace = {
       "args": []
     },
     {
-      "name": "claimFromPot",
+      "name": "claimWithWager",
       "accounts": [
         {
           "name": "winner",
@@ -207,6 +207,52 @@ export type MemeRace = {
         },
         {
           "name": "wager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "leaderBoard",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "boss",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treasury",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "claimer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimAsBoss",
+      "accounts": [
+        {
+          "name": "winner",
           "isMut": false,
           "isSigner": false
         },
@@ -331,6 +377,10 @@ export type MemeRace = {
           },
           {
             "name": "total",
+            "type": "u64"
+          },
+          {
+            "name": "claimed",
             "type": "u64"
           },
           {
@@ -593,7 +643,7 @@ export const IDL: MemeRace = {
       "args": []
     },
     {
-      "name": "claimFromPot",
+      "name": "claimWithWager",
       "accounts": [
         {
           "name": "winner",
@@ -602,6 +652,52 @@ export const IDL: MemeRace = {
         },
         {
           "name": "wager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "leaderBoard",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "boss",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treasury",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "claimer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimAsBoss",
+      "accounts": [
+        {
+          "name": "winner",
           "isMut": false,
           "isSigner": false
         },
@@ -726,6 +822,10 @@ export const IDL: MemeRace = {
           },
           {
             "name": "total",
+            "type": "u64"
+          },
+          {
+            "name": "claimed",
             "type": "u64"
           },
           {

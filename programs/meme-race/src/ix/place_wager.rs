@@ -71,9 +71,9 @@ pub fn ix(ctx: Context<PlaceWager>, wager: u64) -> Result<()> {
             .iter()
             .filter_map(|contender|
                 if (contender).pda.eq(&this_contender.pda) {
-                    Some(contender.clone())
-                } else {
                     None
+                } else {
+                    Some(contender.clone())
                 }
             ).collect::<Vec<TopContender>>();
         top_contenders.push(this_contender);
