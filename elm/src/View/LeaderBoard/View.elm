@@ -101,6 +101,7 @@ view state =
                                                 [ "https://solscan.io/account/"
                                                 , contender.authority
                                                 ]
+                                        , target "_blank"
                                         ]
                                         [ Html.text <|
                                             Wallet.slice contender.authority
