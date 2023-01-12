@@ -112,7 +112,7 @@ view exception global body =
                     in
                     modal <|
                         Html.div
-                            [ class "mx-6 has-white"
+                            [ class "mx-6 has-text-white"
                             ]
                             [ exception_
                             ]
