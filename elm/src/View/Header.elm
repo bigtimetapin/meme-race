@@ -1,7 +1,7 @@
 module View.Header exposing (view)
 
 import Html exposing (Html)
-import Html.Attributes exposing (class, src, width)
+import Html.Attributes exposing (class, src, style, width)
 import Html.Events exposing (onClick)
 import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Global.Global exposing (Global(..))
@@ -40,7 +40,7 @@ view global =
                 ]
             ]
         , Html.div
-            [ class "level-right mr-5 my-3"
+            [ class "level-right mx-5 my-3"
             ]
             [ Html.div
                 [ class "level-item"
@@ -56,7 +56,8 @@ connect global =
     case global of
         NoWalletYet ->
             Html.button
-                [ class "button is-light-text-container-4 mr-2"
+                [ class "button is-light-text-container-4"
+                , style "width" "100%"
                 , onClick <| Msg.Global FromGlobal.Connect
                 ]
                 [ Html.text "Connect Wallet"
@@ -75,20 +76,42 @@ connect global =
                         Just _ ->
                             Html.div
                                 []
-                                []
+                                [ Html.button
+                                    [ class "button"
+                                    , style "width" "100%"
+                                    , onClick <|
+                                        FromDegen <|
+                                            DegenMsg.ToTop
+                                                degen
+                                    ]
+                                    [ Html.text <|
+                                        """degen page 🚀
+                                        """
+                                    ]
+                                ]
 
                         Nothing ->
                             Html.div
                                 []
-                                [ Html.text
-                                    """add meme 2 race 🏎️
-                                    """
+                                [ Html.button
+                                    [ class "button"
+                                    , style "width" "100%"
+                                    , onClick <|
+                                        FromDegen <|
+                                            DegenMsg.ToTop
+                                                degen
+                                    ]
+                                    [ Html.text <|
+                                        """add meme 2 race 🏎️
+                                        """
+                                    ]
                                 ]
             in
             Html.div
                 []
                 [ Html.div
-                    [ class "button"
+                    [ class "button is-static"
+                    , style "width" "100%"
                     ]
                     [ Html.text <|
                         String.concat
@@ -100,27 +123,12 @@ connect global =
                 , Html.div
                     []
                     [ Html.button
-                        [ class "button is-light-text-container-4 mr-2"
+                        [ class "button is-light-text-container-4"
+                        , style "width" "100%"
                         , onClick <| Msg.Global FromGlobal.Disconnect
                         ]
                         [ Html.text "Disconnect"
                         ]
                     ]
-                , Html.div
-                    []
-                    [ contender
-                    , Html.div
-                        []
-                        [ Html.button
-                            [ onClick <|
-                                FromDegen <|
-                                    DegenMsg.ToTop
-                                        degen
-                            ]
-                            [ Html.text <|
-                                """degen page 😎
-                                """
-                            ]
-                        ]
-                    ]
+                , contender
                 ]
