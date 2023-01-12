@@ -75,7 +75,6 @@ export async function getContenderPda(
     const fetched = await program.account.contender.fetch(
         pda
     ) as RawContender;
-    console.log(fetched);
     return await rawToPolished(
         fetched,
         provider,
@@ -87,13 +86,10 @@ export async function getMemeUrl(rawContender: RawContender): Promise<string> {
     const baseUrl = buildUrl(
         rawContender.url
     );
-    console.log(baseUrl);
     const metadata = await getMetadata(
         baseUrl
     );
-    const url = baseUrl + metadata.meme;
-    console.log(url)
-    return url
+    return baseUrl + metadata.meme;
 }
 
 async function rawToPolished(
@@ -116,8 +112,6 @@ async function rawToPolished(
         const wager_ = await program.account.wager.fetch(
             wagerPda.address
         ) as RawWager;
-        console.log(wager_);
-        console.log(wager_.wagerSize);
         wager = ((wager_.wagerSize).toNumber() / BONK_DECIMALS).toLocaleString();
     } catch (error) {
         console.log("no wagers placed on this contender");
