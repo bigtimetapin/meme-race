@@ -20,7 +20,7 @@ pub fn ix(ctx: Context<ClaimFromPot>) -> Result<()> {
     // check that race has been closed
     if !leader_board.open {
         // compute winners pot
-        let pot = ((leader_board.total - winner.score) as f32) * pda::boss::POT_SPLIT;
+        let pot = (leader_board.total as f32) * pda::boss::POT_SPLIT;
         // floor div bc this dog coin has got too many digits anyways
         let share_pct = wager.wager_size.div(winner.score) as f32;
         let share = (pot * share_pct) as u64;
