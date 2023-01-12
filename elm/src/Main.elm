@@ -426,7 +426,6 @@ update msg model =
                                                                         LeaderBoardMsg.Fetch
                                                             )
 
-
                                                         Local.Degen _ ->
                                                             ( waiting
                                                             , sender <|
@@ -435,26 +434,29 @@ update msg model =
                                                                         LeaderBoardMsg.Fetch
                                                             )
 
-
-                                                        (Local.Contender (ContenderState.Top contender)) ->
+                                                        Local.Contender (ContenderState.Top contender) ->
                                                             ( waiting
                                                             , sender <|
                                                                 Sender.encode <|
-                                                                    { sender = Sender.Contender <|
-                                                                        ContenderMsg.Fetch
-                                                                    , more = AlmostContender.encode <|
-                                                                        { pda = contender.pda }
+                                                                    { sender =
+                                                                        Sender.Contender <|
+                                                                            ContenderMsg.Fetch
+                                                                    , more =
+                                                                        AlmostContender.encode <|
+                                                                            { pda = contender.pda }
                                                                     }
                                                             )
 
-                                                        (Local.Contender (ContenderState.NewWager _ contender)) ->
+                                                        Local.Contender (ContenderState.NewWager _ contender) ->
                                                             ( waiting
                                                             , sender <|
                                                                 Sender.encode <|
-                                                                    { sender = Sender.Contender <|
-                                                                        ContenderMsg.Fetch
-                                                                    , more = AlmostContender.encode <|
-                                                                        { pda = contender.pda }
+                                                                    { sender =
+                                                                        Sender.Contender <|
+                                                                            ContenderMsg.Fetch
+                                                                    , more =
+                                                                        AlmostContender.encode <|
+                                                                            { pda = contender.pda }
                                                                     }
                                                             )
 
@@ -465,11 +467,9 @@ update msg model =
                                                                     , global = Global.NoWalletYet
                                                                     , exception = model.state.exception
                                                                     }
-                                                            }
+                                                              }
                                                             , Cmd.none
                                                             )
-
-
 
                                                 ToGlobal.FoundMissingWalletPlugin ->
                                                     ( { model
