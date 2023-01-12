@@ -10,6 +10,7 @@ export interface ContenderPda extends Pda {
 
 export interface Contender {
     score: string
+    rank: number | null
     wager: string | null
     url: string
     authority: PublicKey
@@ -41,7 +42,7 @@ export async function getManyContenderPda(
     )).filter(Boolean) as RawWager[];
     // join
     return await Promise.all(
-        rawContenders.map(async (rawContender) => {
+        rawContenders.map(async (rawContender, index) => {
                 // look for wager
                 let wager: string | null;
                 const maybeWager = rawWagers.find(
@@ -56,6 +57,7 @@ export async function getManyContenderPda(
                 );
                 return {
                     score: (rawContender.score.toNumber() / BONK_DECIMALS).toLocaleString(),
+                    rank: index + 1,
                     wager,
                     url,
                     authority: rawContender.authority,
@@ -119,6 +121,7 @@ async function rawToPolished(
     }
     return {
         score: (raw.score.toNumber() / BONK_DECIMALS).toLocaleString(),
+        rank: null,
         wager: wager,
         url: url,
         authority: raw.authority,

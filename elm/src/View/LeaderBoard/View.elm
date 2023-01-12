@@ -1,9 +1,8 @@
 module View.LeaderBoard.View exposing (view)
 
-import FormatNumber
-import FormatNumber.Locales exposing (usLocale)
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
+import Html.Events exposing (onClick)
 import Model.Contender.State as ContenderState
 import Model.LeaderBoard.State exposing (..)
 import Model.State.Local.Local as Local
@@ -22,6 +21,156 @@ view state =
         Top leaderBoard ->
             case leaderBoard.open of
                 True ->
+                    let
+                        row contender =
+                            let
+                                rank =
+                                    case contender.rank of
+                                        Just r ->
+                                            Html.text <| String.fromInt r
+
+                                        Nothing ->
+                                            Html.div
+                                                []
+                                                []
+
+                                wager =
+                                    case contender.wager of
+                                        Just w ->
+                                            Html.div
+                                                []
+                                                [ Html.text <|
+                                                    String.concat
+                                                        [ "$BONK"
+                                                        , ": "
+                                                        , w
+                                                        ]
+                                                , Html.div
+                                                    []
+                                                    [ Html.a
+                                                        [ class "has-sky-blue-text"
+                                                        , Local.href <|
+                                                            Local.Contender <|
+                                                                ContenderState.Almost <|
+                                                                    { pda = contender.pda }
+                                                        ]
+                                                        [ Html.text "add to your wager 🚀"
+                                                        ]
+                                                    ]
+                                                ]
+
+                                        Nothing ->
+                                            Html.div
+                                                []
+                                                [ Html.a
+                                                    [ class "has-sky-blue-text"
+                                                    , Local.href <|
+                                                        Local.Contender <|
+                                                            ContenderState.Almost <|
+                                                                { pda = contender.pda }
+                                                    ]
+                                                    [ Html.text "place wager 🚀"
+                                                    ]
+                                                ]
+                            in
+                            Html.tr
+                                []
+                                [ Html.th
+                                    []
+                                    [ rank
+                                    ]
+                                , Html.td
+                                    []
+                                    [ Html.text contender.score
+                                    ]
+                                , Html.td
+                                    []
+                                    [ wager
+                                    ]
+                                , Html.td
+                                    []
+                                    [ Html.text <|
+                                        Wallet.slice contender.authority
+                                    ]
+                                , Html.td
+                                    []
+                                    [ Html.img
+                                        [ src contender.url
+                                        ]
+                                        []
+                                    ]
+                                ]
+
+                        rows =
+                            Html.tbody
+                                []
+                            <|
+                                List.map
+                                    row
+                                    leaderBoard.race
+
+                        table =
+                            Html.div
+                                []
+                                [ Html.table
+                                    [ class "table is-fullwidth is-striped is-bordered is-hoverable"
+                                    ]
+                                    [ Html.thead
+                                        []
+                                        [ Html.tr
+                                            []
+                                            [ Html.th
+                                                []
+                                                [ Html.text "rank 🏅"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "wager total 💰"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "your wager 🌱"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "uploader 📩"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "meme 😄"
+                                                ]
+                                            ]
+                                        ]
+                                    , Html.tfoot
+                                        []
+                                        [ Html.tr
+                                            []
+                                            [ Html.th
+                                                []
+                                                [ Html.text "rank 🏅"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "wager total 💰"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "your wager 🌱"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "uploader 📩"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "meme 😄"
+                                                ]
+                                            ]
+                                        ]
+                                    , rows
+                                    ]
+                                ]
+                    in
                     Html.div
                         []
                         [ Html.div
@@ -60,118 +209,11 @@ view state =
                                 [ Html.h2
                                     []
                                     [ Html.text
-                                        """Leader Board 🏅
+                                        """Leader Board 🏆
                                         """
                                     ]
                                 ]
-                            , Html.div
-                                []
-                              <|
-                                List.map
-                                    (\contender ->
-                                        let
-                                            wager =
-                                                case contender.wager of
-                                                    Just w ->
-                                                        Html.div
-                                                            []
-                                                            [ Html.div
-                                                                []
-                                                                [ Html.text <|
-                                                                    String.concat
-                                                                        [ "your current wager"
-                                                                        , ": "
-                                                                        , "$BONK"
-                                                                        , " "
-                                                                        , w
-                                                                        ]
-                                                                ]
-                                                            , Html.div
-                                                                []
-                                                                [ Html.a
-                                                                    [ class "has-sky-blue-text"
-                                                                    , Local.href <|
-                                                                        Local.Contender <|
-                                                                            ContenderState.Almost
-                                                                                { pda = contender.pda
-                                                                                }
-                                                                    ]
-                                                                    [ Html.text "add to your wager 🤔"
-                                                                    ]
-                                                                ]
-                                                            ]
-
-                                                    Nothing ->
-                                                        Html.div
-                                                            []
-                                                            [ Html.a
-                                                                [ class "has-sky-blue-text"
-                                                                , Local.href <|
-                                                                    Local.Contender <|
-                                                                        ContenderState.Almost
-                                                                            { pda = contender.pda
-                                                                            }
-                                                                ]
-                                                                [ Html.text "place wager 🤔"
-                                                                ]
-                                                            ]
-                                        in
-                                        Html.div
-                                            []
-                                            [ Html.div
-                                                [ class "columns"
-                                                ]
-                                                [ Html.div
-                                                    [ class "column is-half"
-                                                    ]
-                                                    [ Html.div
-                                                        []
-                                                        [ Html.text <|
-                                                            String.concat
-                                                                [ "$BONK"
-                                                                , " "
-                                                                , contender.score
-                                                                , " "
-                                                                , "wagered on this meme by the community"
-                                                                ]
-                                                        ]
-                                                    , Html.div
-                                                        []
-                                                        [ Html.text <|
-                                                            String.concat
-                                                                [ "uploaded by"
-                                                                , ": "
-                                                                ]
-                                                        , Html.a
-                                                            [ class "has-sky-blue-text"
-                                                            , href <|
-                                                                String.concat
-                                                                    [ "https://solscan.io/account/"
-                                                                    , contender.authority
-                                                                    ]
-                                                            , target "_blank"
-                                                            ]
-                                                            [ Html.text <|
-                                                                Wallet.slice contender.authority
-                                                            ]
-                                                        ]
-                                                    , Html.div
-                                                        []
-                                                        [ wager
-                                                        ]
-                                                    ]
-                                                , Html.div
-                                                    [ class "column is-half"
-                                                    ]
-                                                    [ Html.img
-                                                        [ src contender.url
-                                                        ]
-                                                        []
-                                                    ]
-                                                ]
-                                            ]
-                                    )
-                                    leaderBoard.race
+                            , table
                             ]
                         ]
 
