@@ -16,11 +16,9 @@ pub fn ix(ctx: Context<ClaimAsUploader>) -> Result<()> {
         &[*bump]
     ];
     let signer_seeds = &[&seeds[..]];
-    // check that claimer has uploader creds
-    // check that still unclaimed
-    let uploader_creds = claimer.key().eq(& winner.authority.key()) && !winner.claimed;
     // check that race has been closed
-    if (!leader_board.open) && uploader_creds {
+    // check that still unclaimed
+    if (!leader_board.open) && !winner.claimed {
         // compute share
         let share = ((leader_board.total as f32) * pda::boss::PER_BOSS_SPLIT) as u64;
         // build transfer ix

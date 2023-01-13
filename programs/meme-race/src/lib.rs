@@ -293,7 +293,9 @@ pub struct ClaimAsUploader<'info> {
     associated_token::authority = boss
     )]
     pub treasury: Account<'info, TokenAccount>,
-    #[account(mut)]
+    #[account(mut,
+    address = winner.authority
+    )]
     pub claimer: Signer<'info>,
     // token program
     pub token_program: Program<'info, Token>,
