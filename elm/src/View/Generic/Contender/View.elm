@@ -95,6 +95,7 @@ singleton contender =
                                 Local.Contender <|
                                     ContenderState.Almost <|
                                         { pda = contender.pda }
+                            , target "_blank"
                             ]
                             [ Html.img
                                 [ src contender.url
@@ -224,6 +225,7 @@ row contender =
                     Local.Contender <|
                         ContenderState.Almost <|
                             { pda = contender.pda }
+                , target "_blank"
                 ]
                 [ Html.img
                     [ src contender.url

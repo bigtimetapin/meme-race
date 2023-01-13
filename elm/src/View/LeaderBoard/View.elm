@@ -130,6 +130,7 @@ view state =
                                             Local.Contender <|
                                                 ContenderState.Almost <|
                                                     { pda = contender.pda }
+                                        , target "_blank"
                                         ]
                                         [ Html.img
                                             [ src contender.url

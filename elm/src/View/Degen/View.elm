@@ -322,10 +322,18 @@ viewWagers wagers =
                             ]
                         , Html.td
                             []
-                            [ Html.img
-                                [ src w.contender.url
+                            [ Html.a
+                                [ Local.href <|
+                                    Local.Contender <|
+                                        ContenderState.Almost <|
+                                            { pda = w.contender.pda }
+                                , target "_blank"
                                 ]
-                                []
+                                [ Html.img
+                                    [ src w.contender.url
+                                    ]
+                                    []
+                                ]
                             ]
                         ]
             in
