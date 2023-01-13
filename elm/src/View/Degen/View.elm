@@ -3,12 +3,15 @@ module View.Degen.View exposing (view)
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
 import Html.Events exposing (onClick)
+import Model.Contender.Contender exposing (Contender)
 import Model.Contender.State as ContenderState
 import Model.Degen.State exposing (State(..))
+import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Local.Local as Local
 import Model.Wager exposing (Wager)
 import Msg.Degen.Msg as DegenMsg
 import Msg.Msg exposing (Msg(..))
+import View.Generic.Contender.View
 
 
 view : State -> Html Msg
@@ -19,97 +22,74 @@ view state =
                 contender =
                     case degen.contender of
                         Just c ->
-                            let
-                                wager =
-                                    case c.wager of
-                                        Just w ->
-                                            Html.div
-                                                []
-                                                [ Html.text <|
-                                                    String.concat
-                                                        [ "$BONK"
-                                                        , " "
-                                                        , w.formatted
-                                                        , " "
-                                                        , "wagered by yourself on your own meme you dirty dog 😷"
-                                                        ]
-                                                , Html.div
-                                                    []
-                                                    [ Html.text <|
-                                                        String.concat
-                                                            [ "which makes up"
-                                                            , " "
-                                                            , w.percentage
-                                                            , " "
-                                                            , "of the total wagers placed on this candidate 👀"
-                                                            ]
-                                                    ]
-                                                ]
-
-                                        Nothing ->
-                                            Html.div
-                                                []
-                                                []
-                            in
                             Html.div
-                                []
+                                [ class "columns box"
+                                ]
                                 [ Html.div
-                                    [ class "columns"
+                                    [ class "column is-half"
                                     ]
-                                    [ Html.div
-                                        [ class "column is-half"
+                                    [ Html.text
+                                        """You've successfully added a meme to race 💰
+                                        """
+                                    , Html.div
+                                        [ class "my-6"
                                         ]
-                                        [ Html.div
-                                            []
-                                            [ Html.text <|
-                                                String.concat
-                                                    [ "$BONK"
-                                                    , " "
-                                                    , c.score
-                                                    , " "
-                                                    , "wagered on your meme by the community"
-                                                    ]
-                                            ]
-                                        , wager
-                                        , Html.div
-                                            [ class "pt-3"
-                                            ]
-                                            [ Html.text
-                                                """view your 
-                                                """
-                                            , Html.a
-                                                [ class "has-sky-blue-text"
-                                                , Local.href <|
-                                                    Local.Contender <|
-                                                        ContenderState.Almost
-                                                            { pda = c.pda
-                                                            }
-                                                ]
-                                                [ Html.text
-                                                    """contender-url
-                                                    """
-                                                ]
-                                            , Html.text
-                                                """ & share it on your socials \u{1FAE1}
-                                                """
-                                            ]
+                                        [ Html.text
+                                            """Anyone can place a wager on your meme . . . including yourself 😉
+                                            """
                                         ]
                                     , Html.div
-                                        [ class "column is-half"
+                                        [ class "mb-6"
                                         ]
-                                        [ Html.img
-                                            [ src c.url
+                                        [ Html.text
+                                            """Share your
+                                            """
+                                        , Html.a
+                                            [ class "has-sky-blue-text"
+                                            , target "_blank"
+                                            , Local.href <|
+                                                Local.Contender <|
+                                                    ContenderState.Almost
+                                                        { pda = c.pda
+                                                        }
                                             ]
-                                            []
+                                            [ Html.text
+                                                """contender-url
+                                                """
+                                            ]
+                                        , Html.text
+                                            """ on your socials & coordinate with your friends for initial discovery
+                                            """
                                         ]
+                                    , Html.div
+                                        []
+                                        [ Html.text
+                                            """If you can collect enough wagers you'll end up on the
+                                            """
+                                        , Html.a
+                                            [ class "has-sky-blue-text"
+                                            , Local.href <|
+                                                Local.LeaderBoard <|
+                                                    LeaderBoardState.Almost
+                                            ]
+                                            [ Html.text "leader-board 🏆"
+                                            ]
+                                        ]
+                                    ]
+                                , Html.div
+                                    [ class "column is-half"
+                                    ]
+                                    [ View.Generic.Contender.View.singleton c
                                     ]
                                 ]
 
                         Nothing ->
                             Html.div
-                                []
+                                [ class "box"
+                                ]
                                 [ Html.div
-                                    []
+                                    [ class "mb-3"
+                                    ]
                                     [ Html.text
                                         """Looks like you haven't added a meme to the race 😵
                                         """
@@ -117,7 +97,8 @@ view state =
                                 , Html.div
                                     []
                                     [ Html.button
-                                        [ onClick <|
+                                        [ class "button"
+                                        , onClick <|
                                             FromDegen <|
                                                 DegenMsg.StartNewContenderForm
                                                     degen
@@ -128,7 +109,8 @@ view state =
                                 ]
             in
             Html.div
-                []
+                [ class "mt-6"
+                ]
                 [ contender
                 , viewWagers degen.wagers
                 ]
