@@ -8,9 +8,9 @@ pub const SIZE: usize = 8 // discriminator
     + 32 // boss two
     + (1 * 2); // claims
 
-pub const PER_BOSS_SPLIT: f32 = 10.0; // times 3
+pub const PER_BOSS_SPLIT: f32 = 0.10; // times 3
 
-pub const POT_SPLIT: f32 = 70.0;
+pub const POT_SPLIT: f32 = 0.70;
 
 #[account]
 pub struct Boss {
