@@ -35,17 +35,17 @@ view state =
                                         , " "
                                         , "on this candidate 😏"
                                         ]
-                                    , Html.div
-                                        []
-                                        [ Html.text <|
-                                            String.concat
-                                                [ "which makes up"
-                                                , " "
-                                                , w.percentage
-                                                , " "
-                                                , "of the total wagers placed on this candidate 👀"
-                                                ]
-                                        ]
+                                , Html.div
+                                    []
+                                    [ Html.text <|
+                                        String.concat
+                                            [ "which makes up"
+                                            , " "
+                                            , w.percentage
+                                            , " "
+                                            , "of the total wagers placed on this candidate 👀"
+                                            ]
+                                    ]
                                 ]
                             , Html.div
                                 []

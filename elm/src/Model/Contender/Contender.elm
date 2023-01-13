@@ -11,7 +11,7 @@ type alias Contender =
     , wager :
         Maybe
             { wager : Int
-            , percentage: String
+            , percentage : String
             , formatted : String
             }
     , url : String
@@ -32,7 +32,7 @@ decoder =
         (Decode.maybe <| Decode.field "rank" Decode.int)
         (Decode.maybe <|
             Decode.field "wager" <|
-                Decode.map3 (\w p f -> { wager = w, percentage = p,formatted = f })
+                Decode.map3 (\w p f -> { wager = w, percentage = p, formatted = f })
                     (Decode.field "wager" Decode.int)
                     (Decode.field "percentage" Decode.string)
                     (Decode.field "formatted" Decode.string)

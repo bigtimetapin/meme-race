@@ -35,10 +35,10 @@ view state =
                                                 []
                                                 []
 
-                                (wager, wagerPct) =
+                                ( wager, wagerPct ) =
                                     case contender.wager of
                                         Just w ->
-                                            (Html.div
+                                            ( Html.div
                                                 []
                                                 [ Html.text <|
                                                     String.concat
@@ -66,7 +66,7 @@ view state =
                                             )
 
                                         Nothing ->
-                                            (Html.div
+                                            ( Html.div
                                                 []
                                                 [ Html.a
                                                     [ class "has-sky-blue-text"
