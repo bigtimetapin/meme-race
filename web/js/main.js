@@ -9,6 +9,7 @@ import {placeWager} from "./anchor/methods/place-wager";
 import {PublicKey} from "@solana/web3.js";
 import {deriveLeaderBoardPda, getLeaderBoardPda} from "./anchor/pda/leader-board-pda";
 import {close} from "./anchor/methods/close";
+import {claimWithWager} from "./anchor/methods/claim-with-wager";
 
 // init phantom
 let phantom = null;
@@ -177,6 +178,18 @@ export async function main(app, json) {
                         )
                     }
                 )
+            );
+            // leader-board claim with wager
+        } else if (sender === "leader-board-claim-with-wager") {
+            // get phantom
+            phantom = await getPhantom(app);
+            // get provider & program
+            const pp = getPP(phantom);
+            // invoke rpc
+            await claimWithWager(
+                app,
+                pp.provider,
+                pp.programs.meme
             );
             // admin init
         } else if (sender === "admin-init") {

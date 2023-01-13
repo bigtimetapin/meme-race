@@ -2,11 +2,13 @@ module View.LeaderBoard.View exposing (view)
 
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
+import Html.Events exposing (onClick)
 import Model.Contender.Contender exposing (Contender)
 import Model.Contender.State as ContenderState
 import Model.LeaderBoard.State as LeaderBoardState exposing (..)
 import Model.State.Local.Local as Local
 import Model.Wallet as Wallet
+import Msg.LeaderBoard.Msg as LeaderBoardMsg
 import Msg.Msg exposing (Msg(..))
 
 
@@ -320,7 +322,10 @@ view state =
                                                         ]
                                                     ]
                                                 , Html.button
-                                                    []
+                                                    [ onClick <|
+                                                        FromLeaderBoard <|
+                                                            LeaderBoardMsg.ClaimWithWager
+                                                    ]
                                                     [ Html.text
                                                         """claim winnings 🎉
                                                         """
