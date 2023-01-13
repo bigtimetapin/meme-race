@@ -19,4 +19,13 @@ view =
                 """init
                 """
             ]
+        , Html.button
+            [ onClick <|
+                FromAdmin <|
+                    AdminMsg.Close
+            ]
+            [ Html.text
+                """close
+                """
+            ]
         ]

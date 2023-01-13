@@ -207,12 +207,58 @@ export type MemeRace = {
         },
         {
           "name": "wager",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "leaderBoard",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "boss",
           "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treasury",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "claimer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimAsUploader",
+      "accounts": [
+        {
+          "name": "winner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "leaderBoard",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -252,18 +298,13 @@ export type MemeRace = {
       "name": "claimAsBoss",
       "accounts": [
         {
-          "name": "winner",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "leaderBoard",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "boss",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -312,6 +353,14 @@ export type MemeRace = {
           {
             "name": "two",
             "type": "publicKey"
+          },
+          {
+            "name": "oneClaimed",
+            "type": "bool"
+          },
+          {
+            "name": "twoClaimed",
+            "type": "bool"
           }
         ]
       }
@@ -336,6 +385,10 @@ export type MemeRace = {
           {
             "name": "pda",
             "type": "publicKey"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
           }
         ]
       }
@@ -418,6 +471,10 @@ export type MemeRace = {
           {
             "name": "contender",
             "type": "publicKey"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
           }
         ]
       }
@@ -652,12 +709,58 @@ export const IDL: MemeRace = {
         },
         {
           "name": "wager",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "leaderBoard",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "boss",
           "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ata",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "treasury",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "claimer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claimAsUploader",
+      "accounts": [
+        {
+          "name": "winner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "leaderBoard",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -697,18 +800,13 @@ export const IDL: MemeRace = {
       "name": "claimAsBoss",
       "accounts": [
         {
-          "name": "winner",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "leaderBoard",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "boss",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -757,6 +855,14 @@ export const IDL: MemeRace = {
           {
             "name": "two",
             "type": "publicKey"
+          },
+          {
+            "name": "oneClaimed",
+            "type": "bool"
+          },
+          {
+            "name": "twoClaimed",
+            "type": "bool"
           }
         ]
       }
@@ -781,6 +887,10 @@ export const IDL: MemeRace = {
           {
             "name": "pda",
             "type": "publicKey"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
           }
         ]
       }
@@ -863,6 +973,10 @@ export const IDL: MemeRace = {
           {
             "name": "contender",
             "type": "publicKey"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
           }
         ]
       }

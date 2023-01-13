@@ -8,6 +8,7 @@ import {deriveContenderPda, getContenderPda} from "./anchor/pda/contender-pda";
 import {placeWager} from "./anchor/methods/place-wager";
 import {PublicKey} from "@solana/web3.js";
 import {deriveLeaderBoardPda, getLeaderBoardPda} from "./anchor/pda/leader-board-pda";
+import {close} from "./anchor/methods/close";
 
 // init phantom
 let phantom = null;
@@ -177,6 +178,7 @@ export async function main(app, json) {
                     }
                 )
             );
+            // admin init
         } else if (sender === "admin-init") {
             // get phantom
             phantom = await getPhantom(app);
@@ -184,6 +186,17 @@ export async function main(app, json) {
             const pp = getPP(phantom);
             // invoke rpc
             await initialize(
+                pp.provider,
+                pp.programs.meme
+            );
+            // admin close
+        } else if (sender === "admin-close") {
+            // get phantom
+            phantom = await getPhantom(app);
+            // get provider & program
+            const pp = getPP(phantom);
+            // invoke rpc
+            await close(
                 pp.provider,
                 pp.programs.meme
             );

@@ -323,6 +323,14 @@ update msg model =
                             Sender.Admin fromAdmin
                     )
 
+                AdminMsg.Close ->
+                    ( model
+                    , sender <|
+                        Sender.encode0 <|
+                            Sender.Admin fromAdmin
+                    )
+
+
         FromJs fromJsMsg ->
             case fromJsMsg of
                 -- JS sending success for decoding
