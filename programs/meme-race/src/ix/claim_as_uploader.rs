@@ -6,7 +6,6 @@ pub fn ix(ctx: Context<ClaimAsUploader>) -> Result<()> {
     // grab accounts
     let leader_board = &mut ctx.accounts.leader_board;
     let winner = &mut ctx.accounts.winner;
-    let claimer = &ctx.accounts.claimer;
     // build signer seeds
     let bump = ctx.bumps.get(
         pda::boss::SEED
