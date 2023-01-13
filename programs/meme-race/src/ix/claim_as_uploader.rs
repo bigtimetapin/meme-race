@@ -1,13 +1,12 @@
-use std::ops::Div;
 use anchor_lang::prelude::*;
 use anchor_spl::token::{transfer, Transfer};
-use crate::{ClaimWithWager, pda};
+use crate::{ClaimAsUploader, pda};
 
-pub fn ix(ctx: Context<ClaimWithWager>) -> Result<()> {
+pub fn ix(ctx: Context<ClaimAsUploader>) -> Result<()> {
     // grab accounts
     let leader_board = &mut ctx.accounts.leader_board;
-    let wager = &mut ctx.accounts.wager;
-    let winner = &ctx.accounts.winner;
+    let winner = &mut ctx.accounts.winner;
+    let claimer = &ctx.accounts.claimer;
     // build signer seeds
     let bump = ctx.bumps.get(
         pda::boss::SEED
@@ -17,14 +16,13 @@ pub fn ix(ctx: Context<ClaimWithWager>) -> Result<()> {
         &[*bump]
     ];
     let signer_seeds = &[&seeds[..]];
-    // check that race has been closed
+    // check that claimer has uploader creds
     // check that still unclaimed
-    if !leader_board.open && !wager.claimed {
-        // compute winners pot
-        let pot = (leader_board.total as f32) * pda::boss::POT_SPLIT;
-        // floor div bc this dog coin has got too many digits anyways
-        let share_pct = wager.wager_size.div(winner.score) as f32;
-        let share = (pot * share_pct) as u64;
+    let uploader_creds = claimer.key().eq(& winner.authority.key()) && !winner.claimed;
+    // check that race has been closed
+    if (!leader_board.open) && uploader_creds {
+        // compute share
+        let share = ((leader_board.total as f32) * pda::boss::PER_BOSS_SPLIT) as u64;
         // build transfer ix
         let transfer_accounts = Transfer {
             from: ctx.accounts.treasury.to_account_info(),
@@ -44,7 +42,7 @@ pub fn ix(ctx: Context<ClaimWithWager>) -> Result<()> {
         )?;
         // increment claimed
         leader_board.claimed += share;
-        wager.claimed = true;
+        winner.claimed = true;
     }
     Ok(())
 }

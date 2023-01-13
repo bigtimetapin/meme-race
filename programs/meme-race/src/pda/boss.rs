@@ -5,7 +5,8 @@ pub const SEED: &str = "boss";
 pub const SIZE: usize = 8 // discriminator
     + 32 // mint
     + 32 // boss one
-    + 32; // boss two
+    + 32 // boss two
+    + (1 * 2); // claims
 
 pub const PER_BOSS_SPLIT: f32 = 10.0; // times 3
 
@@ -18,4 +19,7 @@ pub struct Boss {
     // bosses
     pub one: Pubkey,
     pub two: Pubkey,
+    // claims
+    pub one_claimed: bool,
+    pub two_claimed: bool,
 }

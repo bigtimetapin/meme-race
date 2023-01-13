@@ -41,6 +41,10 @@ pub mod meme_race {
         ix::claim_with_wager::ix(ctx)
     }
 
+    pub fn claim_as_uploader(ctx: Context<ClaimAsUploader>) -> Result<()> {
+        ix::claim_as_uploader::ix(ctx)
+    }
+
     pub fn claim_as_boss(ctx: Context<ClaimAsBoss>) -> Result<()> {
         ix::claim_as_boss::ix(ctx)
     }
@@ -215,7 +219,7 @@ pub struct ClaimWithWager<'info> {
     address = leader_board.leader.pda
     )]
     pub winner: Account<'info, Contender>,
-    #[account(
+    #[account(mut,
     seeds = [
     pda::wager::SEED.as_bytes(),
     winner.key().as_ref(),
@@ -223,7 +227,46 @@ pub struct ClaimWithWager<'info> {
     ], bump,
     )]
     pub wager: Account<'info, Wager>,
+    #[account(mut,
+    seeds = [
+    pda::leader_board::SEED.as_bytes()
+    ], bump,
+    )]
+    pub leader_board: Account<'info, LeaderBoard>,
     #[account(
+    seeds = [
+    pda::boss::SEED.as_bytes()
+    ], bump,
+    )]
+    pub boss: Account<'info, Boss>,
+    #[account(
+    address = boss.mint,
+    owner = token_program.key()
+    )]
+    pub mint: Account<'info, Mint>,
+    #[account(mut,
+    associated_token::mint = mint,
+    associated_token::authority = claimer
+    )]
+    pub ata: Account<'info, TokenAccount>,
+    #[account(mut,
+    associated_token::mint = mint,
+    associated_token::authority = boss
+    )]
+    pub treasury: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub claimer: Signer<'info>,
+    // token program
+    pub token_program: Program<'info, Token>,
+}
+
+#[derive(Accounts)]
+pub struct ClaimAsUploader<'info> {
+    #[account(mut,
+    address = leader_board.leader.pda
+    )]
+    pub winner: Account<'info, Contender>,
+    #[account(mut,
     seeds = [
     pda::leader_board::SEED.as_bytes()
     ], bump,
@@ -258,17 +301,13 @@ pub struct ClaimWithWager<'info> {
 
 #[derive(Accounts)]
 pub struct ClaimAsBoss<'info> {
-    #[account(
-    address = leader_board.leader.pda
-    )]
-    pub winner: Account<'info, Contender>,
-    #[account(
+    #[account(mut,
     seeds = [
     pda::leader_board::SEED.as_bytes()
     ], bump,
     )]
     pub leader_board: Account<'info, LeaderBoard>,
-    #[account(
+    #[account(mut,
     seeds = [
     pda::boss::SEED.as_bytes()
     ], bump,

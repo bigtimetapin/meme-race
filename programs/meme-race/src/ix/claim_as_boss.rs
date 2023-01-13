@@ -5,9 +5,8 @@ use crate::{ClaimAsBoss, pda};
 pub fn ix(ctx: Context<ClaimAsBoss>) -> Result<()> {
     // grab accounts
     let leader_board = &mut ctx.accounts.leader_board;
-    let winner = &ctx.accounts.winner;
+    let boss = &mut ctx.accounts.boss;
     let claimer = &ctx.accounts.claimer;
-    let boss = &ctx.accounts.boss;
     // build signer seeds
     let bump = ctx.bumps.get(
         pda::boss::SEED
@@ -18,9 +17,9 @@ pub fn ix(ctx: Context<ClaimAsBoss>) -> Result<()> {
     ];
     let signer_seeds = &[&seeds[..]];
     // check that claimer has boss creds
-    let boss_creds = claimer.key().eq(&winner.authority)
-        || claimer.key().eq(&boss.one.key())
-        || claimer.key().eq(&boss.two.key());
+    // check that still unclaimed
+    let boss_creds = (claimer.key().eq(&boss.one.key()) && !boss.one_claimed)
+        || (claimer.key().eq(&boss.two.key()) && !boss.two_claimed);
     // check that race has been closed
     if (!leader_board.open) && boss_creds {
         // compute share
@@ -29,7 +28,7 @@ pub fn ix(ctx: Context<ClaimAsBoss>) -> Result<()> {
         let transfer_accounts = Transfer {
             from: ctx.accounts.treasury.to_account_info(),
             to: ctx.accounts.ata.to_account_info(),
-            authority: ctx.accounts.boss.to_account_info(),
+            authority: boss.to_account_info(),
         };
         let transfer_cpi_context = CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -44,6 +43,11 @@ pub fn ix(ctx: Context<ClaimAsBoss>) -> Result<()> {
         )?;
         // increment claimed
         leader_board.claimed += share;
+        if claimer.key().eq(&boss.one.key()) {
+            boss.one_claimed = true;
+        } else {
+            boss.two_claimed = true;
+        }
     }
     Ok(())
 }
