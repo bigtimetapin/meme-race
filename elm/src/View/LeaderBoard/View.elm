@@ -2,6 +2,7 @@ module View.LeaderBoard.View exposing (view)
 
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
+import Model.Contender.Contender exposing (Contender)
 import Model.Contender.State as ContenderState
 import Model.LeaderBoard.State as LeaderBoardState exposing (..)
 import Model.State.Local.Local as Local
@@ -21,6 +22,7 @@ view state =
             case leaderBoard.open of
                 True ->
                     let
+                        row : Contender -> Html Msg
                         row contender =
                             let
                                 rank =
@@ -33,16 +35,16 @@ view state =
                                                 []
                                                 []
 
-                                wager =
+                                (wager, wagerPct) =
                                     case contender.wager of
                                         Just w ->
-                                            Html.div
+                                            (Html.div
                                                 []
                                                 [ Html.text <|
                                                     String.concat
                                                         [ "$BONK"
                                                         , ": "
-                                                        , w
+                                                        , w.formatted
                                                         ]
                                                 , Html.div
                                                     []
@@ -57,9 +59,14 @@ view state =
                                                         ]
                                                     ]
                                                 ]
+                                            , Html.div
+                                                []
+                                                [ Html.text w.percentage
+                                                ]
+                                            )
 
                                         Nothing ->
-                                            Html.div
+                                            (Html.div
                                                 []
                                                 [ Html.a
                                                     [ class "has-sky-blue-text"
@@ -71,6 +78,10 @@ view state =
                                                     [ Html.text "place wager 🚀"
                                                     ]
                                                 ]
+                                            , Html.div
+                                                []
+                                                []
+                                            )
                             in
                             Html.tr
                                 []
@@ -90,6 +101,10 @@ view state =
                                 , Html.td
                                     []
                                     [ wager
+                                    ]
+                                , Html.td
+                                    []
+                                    [ wagerPct
                                     ]
                                 , Html.td
                                     []
@@ -154,6 +169,10 @@ view state =
                                                 ]
                                             , Html.th
                                                 []
+                                                [ Html.text "your wager pct ➗"
+                                                ]
+                                            , Html.th
+                                                []
                                                 [ Html.text "uploader 📩"
                                                 ]
                                             , Html.th
@@ -177,6 +196,10 @@ view state =
                                             , Html.th
                                                 []
                                                 [ Html.text "your wager 🌱"
+                                                ]
+                                            , Html.th
+                                                []
+                                                [ Html.text "your wager pct ➗"
                                                 ]
                                             , Html.th
                                                 []
@@ -257,7 +280,31 @@ view state =
                                 Just w ->
                                     Html.div
                                         []
-                                        [ Html.button
+                                        [ Html.div
+                                            []
+                                            [ Html.text <|
+                                                String.concat
+                                                    [ "Looks like you wagered"
+                                                    , " "
+                                                    , "$BONK"
+                                                    , ": "
+                                                    , w.formatted
+                                                    , " "
+                                                    , "on this meme 💰"
+                                                    ]
+                                            , Html.div
+                                                []
+                                                [ Html.text <|
+                                                    String.concat
+                                                        [ "which makes up"
+                                                        , " "
+                                                        , w.percentage
+                                                        , " "
+                                                        , "of the total wagers placed on this candidate 👀"
+                                                        ]
+                                                ]
+                                            ]
+                                        , Html.button
                                             []
                                             [ Html.text
                                                 """claim winnings 🎉
@@ -277,7 +324,7 @@ view state =
                     Html.div
                         []
                         [ Html.div
-                            [ class "columns"
+                            [ class "columns box my-6"
                             ]
                             [ Html.div
                                 [ class "column is-half"
@@ -304,30 +351,35 @@ view state =
                             []
                             [ Html.div
                                 []
-                                [ Html.text "Winner 🏅"
-                                ]
-                            , Html.div
-                                []
                                 [ Html.div
                                     [ class "columns"
                                     ]
                                     [ Html.div
-                                        [ class "column is-half"
+                                        [ class "column is-half box"
                                         ]
                                         [ Html.div
-                                            []
+                                            [ class "mb-2"
+                                            ]
+                                            [ Html.text "Winner 🏅"
+                                            ]
+                                        , Html.div
+                                            [ class "mb-2"
+                                            ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "$BONK"
+                                                    [ "Wager Total"
+                                                    , ": "
+                                                    , "$BONK"
                                                     , " "
                                                     , leaderBoard.leader.score
                                                     ]
                                             ]
                                         , Html.div
-                                            []
+                                            [ class "mb-2"
+                                            ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "uploaded by"
+                                                    [ "Uploaded by"
                                                     , ": "
                                                     ]
                                             , Html.a

@@ -31,9 +31,20 @@ view state =
                                         , " "
                                         , "$BONK"
                                         , ": "
-                                        , w
+                                        , w.formatted
                                         , " "
                                         , "on this candidate 😏"
+                                        ]
+                                    , Html.div
+                                        []
+                                        [ Html.text <|
+                                            String.concat
+                                                [ "which makes up"
+                                                , " "
+                                                , w.percentage
+                                                , " "
+                                                , "of the total wagers placed on this candidate 👀"
+                                                ]
                                         ]
                                 ]
                             , Html.div

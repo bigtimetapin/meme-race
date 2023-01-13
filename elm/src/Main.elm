@@ -330,7 +330,6 @@ update msg model =
                             Sender.Admin fromAdmin
                     )
 
-
         FromJs fromJsMsg ->
             case fromJsMsg of
                 -- JS sending success for decoding

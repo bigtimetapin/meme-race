@@ -11,7 +11,11 @@ export interface ContenderPda extends Pda {
 export interface Contender {
     score: string
     rank: number | null
-    wager: string | null
+    wager: {
+        wager: number
+        percentage: string
+        formatted: string
+    } | null
     url: string
     authority: PublicKey
     pda: PublicKey
@@ -44,12 +48,16 @@ export async function getManyContenderPda(
     return await Promise.all(
         rawContenders.map(async (rawContender, index) => {
                 // look for wager
-                let wager: string | null;
+                let wager;
                 const maybeWager = rawWagers.find(
                     w => w.contender.equals(rawContender.pda)
                 );
                 if (maybeWager) {
-                    wager = (maybeWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString();
+                    wager = {
+                        wager: maybeWager.wagerSize.toNumber(),
+                        percentage: (100 * (maybeWager.wagerSize.toNumber() / rawContender.score.toNumber())).toString() + "%",
+                        formatted: (maybeWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
+                    };
                 }
                 // fetch meme url
                 const url = await getMemeUrl(
@@ -109,12 +117,18 @@ async function rawToPolished(
         provider,
         program
     );
-    let wager: string | null;
+    let wager;
     try {
         const wager_ = await program.account.wager.fetch(
             wagerPda.address
         ) as RawWager;
-        wager = ((wager_.wagerSize).toNumber() / BONK_DECIMALS).toLocaleString();
+        console.log((100 * (wager_.wagerSize.toNumber() / raw.score.toNumber())).toString());
+        wager = {
+            wager: (wager_.wagerSize).toNumber(),
+            percentage: (100 * (wager_.wagerSize.toNumber() / raw.score.toNumber())).toString() + "%",
+            formatted: (wager_.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString()
+        };
+        console.log(wager);
     } catch (error) {
         console.log("no wagers placed on this contender");
         wager = null;

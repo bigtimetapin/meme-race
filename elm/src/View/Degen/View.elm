@@ -29,10 +29,21 @@ view state =
                                                     String.concat
                                                         [ "$BONK"
                                                         , " "
-                                                        , w
+                                                        , w.formatted
                                                         , " "
                                                         , "wagered by yourself on your own meme you dirty dog 😷"
                                                         ]
+                                                , Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ "which makes up"
+                                                            , " "
+                                                            , w.percentage
+                                                            , " "
+                                                            , "of the total wagers placed on this candidate 👀"
+                                                            ]
+                                                    ]
                                                 ]
 
                                         Nothing ->
@@ -309,6 +320,7 @@ viewWagers wagers =
                                             [ Html.text <|
                                                 String.concat
                                                     [ "distributed over"
+                                                    , " "
                                                     , String.fromInt w.wagerCount
                                                     , " "
                                                     , "total wagers placed"
@@ -317,7 +329,8 @@ viewWagers wagers =
                                         , Html.div
                                             []
                                             [ Html.a
-                                                [ Local.href <|
+                                                [ class "has-sky-blue-text"
+                                                , Local.href <|
                                                     Local.Contender <|
                                                         ContenderState.Almost
                                                             { pda = w.contender.pda
