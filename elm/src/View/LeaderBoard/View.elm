@@ -2,12 +2,10 @@ module View.LeaderBoard.View exposing (view)
 
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
-import Html.Events exposing (onClick)
 import Model.Contender.State as ContenderState
-import Model.LeaderBoard.State exposing (..)
+import Model.LeaderBoard.State as LeaderBoardState exposing (..)
 import Model.State.Local.Local as Local
 import Model.Wallet as Wallet
-import Msg.LeaderBoard.Msg as LeaderBoardMsg
 import Msg.Msg exposing (Msg(..))
 
 
@@ -223,9 +221,9 @@ view state =
                                         ]
                                     , Html.a
                                         [ class "has-sky-blue-text ml-3 mb-6"
-                                        , onClick <|
-                                            FromLeaderBoard <|
-                                                LeaderBoardMsg.Fetch
+                                        , Local.href <|
+                                            Local.LeaderBoard <|
+                                                LeaderBoardState.Almost
                                         ]
                                         [ Html.text "refresh"
                                         ]
