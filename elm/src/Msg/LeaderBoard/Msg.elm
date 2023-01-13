@@ -5,6 +5,7 @@ type Msg
     = Fetch
     | ClaimWithWager
     | ClaimAsUploader
+    | ClaimAsBoss
 
 
 toString : Msg -> String
@@ -18,3 +19,6 @@ toString msg =
 
         ClaimAsUploader ->
             "leader-board-claim-as-uploader"
+
+        ClaimAsBoss ->
+            "leader-board-claim-as-boss"

@@ -411,7 +411,10 @@ view state =
                                         , Html.div
                                             []
                                             [ Html.button
-                                                []
+                                                [ onClick <|
+                                                    FromLeaderBoard <|
+                                                        LeaderBoardMsg.ClaimAsBoss
+                                                ]
                                                 [ Html.text "claim winnings"
                                                 ]
                                             ]

@@ -4,13 +4,14 @@ import {initialize} from "./anchor/methods/initialize";
 import {addContender} from "./anchor/methods/add-contender";
 import {getGlobal} from "./anchor/pda/get-global";
 import {deriveDegenPda, getDegenPda} from "./anchor/pda/degen-pda";
-import {deriveContenderPda, getContenderPda} from "./anchor/pda/contender-pda";
+import {getContenderPda} from "./anchor/pda/contender-pda";
 import {placeWager} from "./anchor/methods/place-wager";
 import {PublicKey} from "@solana/web3.js";
 import {deriveLeaderBoardPda, getLeaderBoardPda} from "./anchor/pda/leader-board-pda";
 import {close} from "./anchor/methods/close";
 import {claimWithWager} from "./anchor/methods/claim-with-wager";
 import {claimAsUploader} from "./anchor/methods/claim-as-uploader";
+import {claimAsBoss} from "./anchor/methods/claim-as-boss";
 
 // init phantom
 let phantom = null;
@@ -200,6 +201,18 @@ export async function main(app, json) {
             const pp = getPP(phantom);
             // invoke rpc
             await claimAsUploader(
+                app,
+                pp.provider,
+                pp.programs.meme
+            );
+            // leader-board claim as boss
+        } else if (sender === "leader-board-claim-as-boss") {
+            // get phantom
+            phantom = await getPhantom(app);
+            // get provider & program
+            const pp = getPP(phantom);
+            // invoke rpc
+            await claimAsBoss(
                 app,
                 pp.provider,
                 pp.programs.meme
