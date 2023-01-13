@@ -129,20 +129,18 @@ update msg model =
                     ( model, Nav.load href )
 
         FromLeaderBoard fromLeaderBoard ->
-            case fromLeaderBoard of
-                LeaderBoardMsg.Fetch ->
-                    ( { model
-                        | state =
-                            { local = model.state.local
-                            , global = model.state.global
-                            , exception = Exception.Waiting
-                            }
-                      }
-                    , sender <|
-                        Sender.encode0 <|
-                            Sender.LeaderBoard <|
-                                fromLeaderBoard
-                    )
+            ( { model
+                | state =
+                    { local = model.state.local
+                    , global = model.state.global
+                    , exception = Exception.Waiting
+                    }
+              }
+            , sender <|
+                Sender.encode0 <|
+                    Sender.LeaderBoard <|
+                        fromLeaderBoard
+            )
 
         FromContender fromContender ->
             case fromContender of

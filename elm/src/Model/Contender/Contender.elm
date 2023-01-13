@@ -13,9 +13,13 @@ type alias Contender =
             { wager : Int
             , percentage : String
             , formatted : String
+            , claimed : Bool
             }
     , url : String
-    , authority : PublicKey
+    , authority :
+        { address : PublicKey
+        , claimed : Bool
+        }
     , pda : PublicKey
     }
 
@@ -32,11 +36,16 @@ decoder =
         (Decode.maybe <| Decode.field "rank" Decode.int)
         (Decode.maybe <|
             Decode.field "wager" <|
-                Decode.map3 (\w p f -> { wager = w, percentage = p, formatted = f })
+                Decode.map4 (\w p f c -> { wager = w, percentage = p, formatted = f, claimed = c })
                     (Decode.field "wager" Decode.int)
                     (Decode.field "percentage" Decode.string)
                     (Decode.field "formatted" Decode.string)
+                    (Decode.field "claimed" Decode.bool)
         )
         (Decode.field "url" Decode.string)
-        (Decode.field "authority" Decode.string)
+        (Decode.field "authority" <|
+            Decode.map2 (\a c -> { address = a, claimed = c })
+                (Decode.field "address" Decode.string)
+                (Decode.field "claimed" Decode.bool)
+        )
         (Decode.field "pda" Decode.string)

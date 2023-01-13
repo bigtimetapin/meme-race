@@ -103,12 +103,12 @@ view state =
                             , href <|
                                 String.concat
                                     [ "https://solscan.io/account/"
-                                    , contender.authority
+                                    , contender.authority.address
                                     ]
                             , target "_blank"
                             ]
                             [ Html.text <|
-                                Wallet.slice contender.authority
+                                Wallet.slice contender.authority.address
                             ]
                         ]
                     ]

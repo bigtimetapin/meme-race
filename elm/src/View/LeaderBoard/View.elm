@@ -113,12 +113,12 @@ view state =
                                         , href <|
                                             String.concat
                                                 [ "https://solscan.io/account/"
-                                                , contender.authority
+                                                , contender.authority.address
                                                 ]
                                         , target "_blank"
                                         ]
                                         [ Html.text <|
-                                            Wallet.slice contender.authority
+                                            Wallet.slice contender.authority.address
                                         ]
                                     ]
                                 , Html.td
@@ -278,39 +278,54 @@ view state =
                         wager =
                             case leaderBoard.leader.wager of
                                 Just w ->
-                                    Html.div
-                                        []
-                                        [ Html.div
-                                            []
-                                            [ Html.text <|
-                                                String.concat
-                                                    [ "Looks like you wagered"
-                                                    , " "
-                                                    , "$BONK"
-                                                    , ": "
-                                                    , w.formatted
-                                                    , " "
-                                                    , "on this meme 💰"
-                                                    ]
-                                            , Html.div
+                                    case w.claimed of
+                                        True ->
+                                            Html.div
                                                 []
                                                 [ Html.text <|
                                                     String.concat
-                                                        [ "which makes up"
+                                                        [ "You've successfully claimed your"
                                                         , " "
                                                         , w.percentage
                                                         , " "
-                                                        , "of the total wagers placed on this candidate 👀"
+                                                        , "share of the winner's pot ❤️"
                                                         ]
                                                 ]
-                                            ]
-                                        , Html.button
-                                            []
-                                            [ Html.text
-                                                """claim winnings 🎉
-                                                """
-                                            ]
-                                        ]
+
+                                        False ->
+                                            Html.div
+                                                []
+                                                [ Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ "Looks like you wagered"
+                                                            , " "
+                                                            , "$BONK"
+                                                            , ": "
+                                                            , w.formatted
+                                                            , " "
+                                                            , "on this meme 💰"
+                                                            ]
+                                                    , Html.div
+                                                        []
+                                                        [ Html.text <|
+                                                            String.concat
+                                                                [ "which makes up"
+                                                                , " "
+                                                                , w.percentage
+                                                                , " "
+                                                                , "of the total wagers placed on this candidate 👀"
+                                                                ]
+                                                        ]
+                                                    ]
+                                                , Html.button
+                                                    []
+                                                    [ Html.text
+                                                        """claim winnings 🎉
+                                                        """
+                                                    ]
+                                                ]
 
                                 Nothing ->
                                     Html.div
@@ -387,12 +402,12 @@ view state =
                                                 , href <|
                                                     String.concat
                                                         [ "https://solscan.io/account/"
-                                                        , leaderBoard.leader.authority
+                                                        , leaderBoard.leader.authority.address
                                                         ]
                                                 , target "_blank"
                                                 ]
                                                 [ Html.text <|
-                                                    Wallet.slice leaderBoard.leader.authority
+                                                    Wallet.slice leaderBoard.leader.authority.address
                                                 ]
                                             ]
                                         , Html.div

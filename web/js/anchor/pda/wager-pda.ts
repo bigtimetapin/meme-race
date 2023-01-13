@@ -22,6 +22,7 @@ export interface RawWager {
     wagerSize: any // decoded as BN
     wagerCount: number
     contender: PublicKey // pda pointer
+    claimed: boolean
 }
 
 export async function getManyWagerPda(

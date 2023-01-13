@@ -15,9 +15,13 @@ export interface Contender {
         wager: number
         percentage: string
         formatted: string
+        claimed: boolean
     } | null
     url: string
-    authority: PublicKey
+    authority: {
+        address: PublicKey
+        claimed: boolean
+    }
     pda: PublicKey
 }
 
@@ -26,6 +30,7 @@ export interface RawContender {
     url: PublicKey
     authority: PublicKey
     pda: PublicKey
+    claimed: boolean
 }
 
 export async function getManyContenderPda(
@@ -57,6 +62,7 @@ export async function getManyContenderPda(
                         wager: maybeWager.wagerSize.toNumber(),
                         percentage: (100 * (maybeWager.wagerSize.toNumber() / rawContender.score.toNumber())).toString() + "%",
                         formatted: (maybeWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
+                        claimed: maybeWager.claimed
                     };
                 }
                 // fetch meme url
@@ -68,7 +74,10 @@ export async function getManyContenderPda(
                     rank: index + 1,
                     wager,
                     url,
-                    authority: rawContender.authority,
+                    authority: {
+                        address: rawContender.authority,
+                        claimed: rawContender.claimed
+                    },
                     pda: rawContender.pda
                 } as Contender
             }
@@ -126,7 +135,8 @@ async function rawToPolished(
         wager = {
             wager: (wager_.wagerSize).toNumber(),
             percentage: (100 * (wager_.wagerSize.toNumber() / raw.score.toNumber())).toString() + "%",
-            formatted: (wager_.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString()
+            formatted: (wager_.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
+            claimed: wager_.claimed
         };
         console.log(wager);
     } catch (error) {
@@ -138,7 +148,10 @@ async function rawToPolished(
         rank: null,
         wager: wager,
         url: url,
-        authority: raw.authority,
+        authority: {
+            address: raw.authority,
+            claimed: raw.claimed
+        },
         pda: raw.pda
     }
 }
