@@ -78,7 +78,16 @@ export async function getDegenPda(
             contenderPda.address
         );
     } catch (error) {
-        console.log("no contender found for this degen");
+        console.log("no contender found for this degen . . . trying one more time"); // could be rpc lag
+        try {
+            maybeContender = await getContenderPda(
+                provider,
+                programs.meme,
+                contenderPda.address
+            );
+        } catch (error) {
+            console.log("no contender found for this degen");
+        }
     }
     // fetch shadow balance
     const shdwAtaPda = deriveAtaPda(
