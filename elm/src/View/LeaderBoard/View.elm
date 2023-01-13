@@ -340,6 +340,84 @@ view state =
                                             better luck next time 🤝
                                             """
                                         ]
+
+                        uploader =
+                            case ( leaderBoard.claim.wallet.uploader.authenticated, leaderBoard.claim.wallet.uploader.claimed ) of
+                                ( True, True ) ->
+                                    Html.div
+                                        []
+                                        [ Html.text
+                                            """You've successfully claimed your 10% share of the winner's pot as
+                                            delegated for uploading the winning meme ❤️
+                                            """
+                                        ]
+
+                                ( True, False ) ->
+                                    Html.div
+                                        []
+                                        [ Html.text
+                                            """It looks like you uploaded the winning meme 👀
+                                            """
+                                        , Html.div
+                                            []
+                                            [ Html.text
+                                                """which means you've been delegated 10% of the winner's pot
+                                                """
+                                            ]
+                                        , Html.div
+                                            []
+                                            [ Html.button
+                                                []
+                                                [ Html.text "claim winnings"
+                                                ]
+                                            ]
+                                        ]
+
+                                _ ->
+                                    Html.div
+                                        []
+                                        []
+
+                        boss f =
+                            let
+                                selected =
+                                    f leaderBoard.claim.wallet
+                            in
+                            case ( selected.authenticated, selected.claimed ) of
+                                ( True, True ) ->
+                                    Html.div
+                                        []
+                                        [ Html.text
+                                            """You've successfully claimed your 10% share of the winner's pot as
+                                            delegated with boss credentials ❤️
+                                            """
+                                        ]
+
+                                ( True, False ) ->
+                                    Html.div
+                                        []
+                                        [ Html.text
+                                            """It looks like you've got boss credentials 👀
+                                            """
+                                        , Html.div
+                                            []
+                                            [ Html.text
+                                                """which means you've been delegated 10% of the winner's pot
+                                                """
+                                            ]
+                                        , Html.div
+                                            []
+                                            [ Html.button
+                                                []
+                                                [ Html.text "claim winnings"
+                                                ]
+                                            ]
+                                        ]
+
+                                _ ->
+                                    Html.div
+                                        []
+                                        []
                     in
                     Html.div
                         []
@@ -416,8 +494,24 @@ view state =
                                                 ]
                                             ]
                                         , Html.div
-                                            []
+                                            [ class "mt-6"
+                                            ]
                                             [ wager
+                                            ]
+                                        , Html.div
+                                            [ class "mt-6"
+                                            ]
+                                            [ uploader
+                                            ]
+                                        , Html.div
+                                            [ class "mt-6"
+                                            ]
+                                            [ boss .bossOne
+                                            ]
+                                        , Html.div
+                                            [ class "mt-6"
+                                            ]
+                                            [ boss .bossTwo
                                             ]
                                         ]
                                     , Html.div
