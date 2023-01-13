@@ -151,7 +151,7 @@ view state =
                             Html.div
                                 []
                                 [ Html.table
-                                    [ class "table is-fullwidth is-striped is-bordered is-hoverable"
+                                    [ class "table-pink is-fullwidth is-striped is-bordered is-hoverable"
                                     ]
                                     [ Html.thead
                                         []
@@ -428,7 +428,7 @@ view state =
                     Html.div
                         []
                         [ Html.div
-                            [ class "columns box my-6"
+                            [ class "columns box-pink my-6"
                             ]
                             [ Html.div
                                 [ class "column is-half"
@@ -459,7 +459,7 @@ view state =
                                     [ class "columns"
                                     ]
                                     [ Html.div
-                                        [ class "column is-half box"
+                                        [ class "column is-half box-pink"
                                         ]
                                         [ Html.div
                                             [ class "mb-2"

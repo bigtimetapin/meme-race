@@ -293,7 +293,14 @@ $size-7: 12px;
   }
 }
 
-.table, .box {
+.box-pink {
+  @extend .box;
+  border: 20px solid #a569bd;
+  border-radius: 20px !important;
+}
+
+.table-pink {
+  @extend .table;
   border: 20px solid #a569bd;
   border-radius: 20px !important;
 }

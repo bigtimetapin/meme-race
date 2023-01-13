@@ -24,7 +24,7 @@ view state =
                     case degen.contender of
                         Just c ->
                             Html.div
-                                [ class "columns box"
+                                [ class "columns box-pink"
                                 ]
                                 [ Html.div
                                     [ class "column is-half"
@@ -86,7 +86,7 @@ view state =
 
                         Nothing ->
                             Html.div
-                                [ class "box"
+                                [ class "box-pink"
                                 ]
                                 [ Html.div
                                     [ class "mb-3"
@@ -330,7 +330,7 @@ viewWagers wagers =
                         ]
             in
             Html.div
-                [ class "box"
+                [ class "box-pink"
                 ]
                 [ Html.h3
                     [ class "mt-6 mb-3 is-family-secondary"
