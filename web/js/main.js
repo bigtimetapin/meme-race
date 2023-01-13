@@ -10,6 +10,7 @@ import {PublicKey} from "@solana/web3.js";
 import {deriveLeaderBoardPda, getLeaderBoardPda} from "./anchor/pda/leader-board-pda";
 import {close} from "./anchor/methods/close";
 import {claimWithWager} from "./anchor/methods/claim-with-wager";
+import {claimAsUploader} from "./anchor/methods/claim-as-uploader";
 
 // init phantom
 let phantom = null;
@@ -187,6 +188,18 @@ export async function main(app, json) {
             const pp = getPP(phantom);
             // invoke rpc
             await claimWithWager(
+                app,
+                pp.provider,
+                pp.programs.meme
+            );
+            // leader-board claim as uploader
+        } else if (sender === "leader-board-claim-as-uploader") {
+            // get phantom
+            phantom = await getPhantom(app);
+            // get provider & program
+            const pp = getPP(phantom);
+            // invoke rpc
+            await claimAsUploader(
                 app,
                 pp.provider,
                 pp.programs.meme
