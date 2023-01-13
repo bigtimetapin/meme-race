@@ -31,7 +31,6 @@ export async function claimWithWager(app, provider: AnchorProvider, program: Pro
         bossPda.address,
         BONK
     )
-    console.log(treasury.toString());
     await program
         .methods
         .claimWithWager()
