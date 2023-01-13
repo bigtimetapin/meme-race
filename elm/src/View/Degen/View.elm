@@ -9,6 +9,7 @@ import Model.Degen.State exposing (State(..))
 import Model.LeaderBoard.State as LeaderBoardState
 import Model.State.Local.Local as Local
 import Model.Wager exposing (Wager)
+import Model.Wallet as Wallet
 import Msg.Degen.Msg as DegenMsg
 import Msg.Msg exposing (Msg(..))
 import View.Generic.Contender.View
@@ -112,7 +113,11 @@ view state =
                 [ class "mt-6"
                 ]
                 [ contender
-                , viewWagers degen.wagers
+                , Html.div
+                    [ class "mt-6"
+                    ]
+                    [ viewWagers degen.wagers
+                    ]
                 ]
 
         NewContender newContenderForm degen ->
@@ -254,7 +259,11 @@ view state =
                 []
                 [ shadowBalance
                 , form_
-                , viewWagers degen.wagers
+                , Html.div
+                    [ class "mt-6"
+                    ]
+                    [ viewWagers degen.wagers
+                    ]
                 ]
 
 
@@ -267,74 +276,130 @@ viewWagers wagers =
                 []
 
         nel ->
+            let
+                row w =
+                    Html.tr
+                        []
+                        [ Html.td
+                            []
+                            [ Html.text w.wagerSizeFormatted
+                            , Html.div
+                                []
+                                [ Html.a
+                                    [ class "has-sky-blue-text"
+                                    , Local.href <|
+                                        Local.Contender <|
+                                            ContenderState.Almost
+                                                { pda = w.contender.pda
+                                                }
+                                    ]
+                                    [ Html.text "add to your wager 🤔"
+                                    ]
+                                ]
+                            ]
+                        , Html.td
+                            []
+                            [ Html.text w.wagerPercentage
+                            ]
+                        , Html.td
+                            []
+                            [ Html.text <| String.fromInt w.wagerCount
+                            ]
+                        , Html.td
+                            []
+                            [ Html.a
+                                [ class "has-sky-blue-text"
+                                , href <|
+                                    String.concat
+                                        [ "https://solscan.io/account/"
+                                        , w.contender.uploader
+                                        ]
+                                , target "_blank"
+                                ]
+                                [ Html.text <|
+                                    Wallet.slice w.contender.uploader
+                                ]
+                            ]
+                        , Html.td
+                            []
+                            [ Html.img
+                                [ src w.contender.url
+                                ]
+                                []
+                            ]
+                        ]
+            in
             Html.div
-                []
+                [ class "box"
+                ]
                 [ Html.h3
-                    []
+                    [ class "mt-6 mb-3 is-family-secondary"
+                    ]
                     [ Html.text "Here's your wager list you degen \u{1FAE1}"
                     ]
                 , Html.div
                     []
-                  <|
-                    List.map
-                        (\w ->
-                            Html.div
+                    [ Html.table
+                        [ class "table"
+                        ]
+                        [ Html.thead
+                            []
+                            [ Html.tr
                                 []
-                                [ Html.div
-                                    [ class "columns"
+                                [ Html.th
+                                    []
+                                    [ Html.text "your wager 🌱"
                                     ]
-                                    [ Html.div
-                                        [ class "column is-half"
-                                        ]
-                                        [ Html.div
-                                            []
-                                            [ Html.text <|
-                                                String.concat
-                                                    [ "$BONK"
-                                                    , " "
-                                                    , w.wagerSizeFormatted
-                                                    , " "
-                                                    , "wagered in total"
-                                                    ]
-                                            ]
-                                        , Html.div
-                                            []
-                                            [ Html.text <|
-                                                String.concat
-                                                    [ "distributed over"
-                                                    , " "
-                                                    , String.fromInt w.wagerCount
-                                                    , " "
-                                                    , "total wagers placed"
-                                                    ]
-                                            ]
-                                        , Html.div
-                                            []
-                                            [ Html.a
-                                                [ class "has-sky-blue-text"
-                                                , Local.href <|
-                                                    Local.Contender <|
-                                                        ContenderState.Almost
-                                                            { pda = w.contender.pda
-                                                            }
-                                                ]
-                                                [ Html.text "add to your wager 🤔"
-                                                ]
-                                            ]
-                                        ]
-                                    , Html.div
-                                        [ class "column is-half"
-                                        ]
-                                        [ Html.div
-                                            []
-                                            [ Html.img
-                                                [ src w.contender.url
-                                                ]
-                                                []
-                                            ]
-                                        ]
+                                , Html.th
+                                    []
+                                    [ Html.text "your wager pct of total ➗"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "# of sub-wagers 🔄"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "uploader 📩"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "meme 😄"
                                     ]
                                 ]
-                        )
-                        nel
+                            ]
+                        , Html.tfoot
+                            []
+                            [ Html.tr
+                                []
+                                [ Html.th
+                                    []
+                                    [ Html.text "wager total 💰"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "your wager 🌱"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "your wager pct ➗"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "uploader 📩"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "meme 😄"
+                                    ]
+                                ]
+                            ]
+                        , Html.tbody
+                            []
+                          <|
+                            List.map
+                                row
+                                nel
+                        ]
+                    ]
                 ]

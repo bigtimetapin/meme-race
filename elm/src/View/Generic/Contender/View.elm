@@ -1,4 +1,4 @@
-module View.Generic.Contender.View exposing (singleton)
+module View.Generic.Contender.View exposing (many, singleton)
 
 import Html exposing (Html)
 import Html.Attributes exposing (class, href, src, target)
@@ -108,6 +108,132 @@ singleton contender =
         ]
 
 
+many : List Contender -> Html Msg
+many contenders =
+    Html.div
+        []
+        [ Html.table
+            [ class "table"
+            ]
+            [ Html.thead
+                []
+                [ Html.tr
+                    []
+                    [ Html.th
+                        []
+                        [ Html.text "wager total 💰"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "your wager 🌱"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "your wager pct ➗"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "uploader 📩"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "meme 😄"
+                        ]
+                    ]
+                ]
+            , Html.tfoot
+                []
+                [ Html.tr
+                    []
+                    [ Html.th
+                        []
+                        [ Html.text "wager total 💰"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "your wager 🌱"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "your wager pct ➗"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "uploader 📩"
+                        ]
+                    , Html.th
+                        []
+                        [ Html.text "meme 😄"
+                        ]
+                    ]
+                ]
+            , Html.tbody
+                []
+              <|
+                List.map
+                    row
+                    contenders
+            ]
+        ]
+
+
+row : Contender -> Html Msg
+row contender =
+    let
+        ( wager, wagerPct ) =
+            getWager contender
+    in
+    Html.tr
+        []
+        [ Html.td
+            []
+            [ Html.text <|
+                String.concat
+                    [ "$BONK"
+                    , ": "
+                    , contender.score
+                    ]
+            ]
+        , Html.td
+            []
+            [ wager
+            ]
+        , Html.td
+            []
+            [ wagerPct
+            ]
+        , Html.td
+            []
+            [ Html.a
+                [ class "has-sky-blue-text"
+                , href <|
+                    String.concat
+                        [ "https://solscan.io/account/"
+                        , contender.authority.address
+                        ]
+                , target "_blank"
+                ]
+                [ Html.text <|
+                    Wallet.slice contender.authority.address
+                ]
+            ]
+        , Html.td
+            []
+            [ Html.a
+                [ Local.href <|
+                    Local.Contender <|
+                        ContenderState.Almost <|
+                            { pda = contender.pda }
+                ]
+                [ Html.img
+                    [ src contender.url
+                    ]
+                    []
+                ]
+            ]
+        ]
+
+
 getWager : Contender -> ( Html Msg, Html Msg )
 getWager contender =
     case contender.wager of
@@ -156,89 +282,3 @@ getWager contender =
                 []
                 []
             )
-
-
-
--- row contender =
---     Html.table
---             [ class "table"
---             ]
---             [ Html.thead
---                 []
---                 [ Html.tr
---                     []
---                     [ Html.th
---                         []
---                         [ Html.text "wager total 💰"
---                         ]
---                     , Html.th
---                         []
---                         [ Html.text "your wager 🌱"
---                         ]
---                     , Html.th
---                         []
---                         [ Html.text "your wager pct ➗"
---                         ]
---                     , Html.th
---                         []
---                         [ Html.text "uploader 📩"
---                         ]
---                     , Html.th
---                         []
---                         [ Html.text "meme 😄"
---                         ]
---                     ]
---                 ]
---             , Html.tbody
---                 []
---                 [ Html.tr
---                     []
---                     [ Html.td
---                         []
---                         [ Html.text <|
---                             String.concat
---                                 [ "$BONK"
---                                 , ": "
---                                 , contender.score
---                                 ]
---                         ]
---                         , Html.td
---                             []
---                             [ wager
---                             ]
---                         , Html.td
---                             []
---                             [ wagerPct
---                             ]
---                         , Html.td
---                             []
---                             [ Html.a
---                                 [ class "has-sky-blue-text"
---                                 , href <|
---                                     String.concat
---                                         [ "https://solscan.io/account/"
---                                         , contender.authority.address
---                                         ]
---                                 , target "_blank"
---                                 ]
---                                 [ Html.text <|
---                                     Wallet.slice contender.authority.address
---                                 ]
---                             ]
---                         , Html.td
---                             []
---                             [ Html.a
---                                 [ Local.href <|
---                                     Local.Contender <|
---                                         ContenderState.Almost <|
---                                             { pda = contender.pda }
---                                 ]
---                                 [ Html.img
---                                     [ src contender.url
---                                     ]
---                                     []
---                                 ]
---                             ]
---                     ]
---                 ]
---             ]

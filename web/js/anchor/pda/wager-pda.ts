@@ -11,9 +11,11 @@ export interface WagerPda extends Pda {
 export interface Wager {
     wagerSize: number
     wagerSizeFormatted: string
+    wagerPercentage: string
     wagerCount: number
     contender: {
         pda: PublicKey,
+        uploader: PublicKey,
         url: string
     }
 }
@@ -50,9 +52,11 @@ export async function getManyWagerPda(
             return {
                 wagerSize: wager.wagerSize.toNumber(),
                 wagerSizeFormatted: (wager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
+                wagerPercentage: (100 * (wager.wagerSize.toNumber() / contender_.score.toNumber())).toString() + "%",
                 wagerCount: wager.wagerCount,
                 contender: {
                     pda: contender_.pda,
+                    uploader: contender_.authority,
                     url: memeUrl
                 }
             } as Wager
@@ -77,9 +81,11 @@ export async function getWagerPda(
     return {
         wagerSize: fetchedWager.wagerSize.toNumber(),
         wagerSizeFormatted: (fetchedWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
+        wagerPercentage: (100 * (fetchedWager.wagerSize.toNumber() / fetchedContender.score.toNumber())).toString() + "%",
         wagerCount: fetchedWager.wagerCount,
         contender: {
             pda: fetchedWager.contender,
+            uploader: fetchedContender.authority,
             url: memeUrl
         }
     }
