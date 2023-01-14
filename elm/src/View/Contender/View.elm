@@ -27,13 +27,14 @@ view state =
                                 []
                                 [ Html.text w.formatted
                                 , Html.button
-                                    [ onClick <|
+                                    [ class "ml-3"
+                                    , onClick <|
                                         FromContender <|
                                             ContenderMsg.StartNewWager
                                                 contender
                                     ]
                                     [ Html.text
-                                        """you won't wager more on this candidate 😉
+                                        """add 2 your wager 😉
                                         """
                                     ]
                                 ]
