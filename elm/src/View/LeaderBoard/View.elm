@@ -150,7 +150,8 @@ view state =
 
                         table =
                             Html.div
-                                []
+                                [ class "table-container"
+                                ]
                                 [ Html.table
                                     [ class "table-pink is-fullwidth is-striped is-bordered is-hoverable"
                                     ]
