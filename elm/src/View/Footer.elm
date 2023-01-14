@@ -26,10 +26,10 @@ view =
             ]
             [ Html.a
                 [ class "has-sky-blue-text"
-                , href "https://solscan.io/account/3QXrVyksRJYpDgzuesbQKmqJmEuhei2RvkYVqUAqRE9P"
+                , href "https://explorer.solana.com/address/3QXrVyksRJYpDgzuesbQKmqJmEuhei2RvkYVqUAqRE9P"
                 , target "_blank"
                 ]
-                [ Html.text "solscan"
+                [ Html.text "explorer"
                 ]
             ]
         , Html.div
