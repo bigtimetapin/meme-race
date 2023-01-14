@@ -150,15 +150,13 @@ view state =
                 upload =
                     case degen.shadow.balance >= 250000000 of
                         True ->
-                            Html.div
-                                []
-                                [ Html.button
-                                    [ onClick <|
-                                        FromDegen <|
-                                            DegenMsg.SelectMeme degen
-                                    ]
-                                    [ Html.text "select meme to upload"
-                                    ]
+                            Html.button
+                                [ class "button"
+                                , onClick <|
+                                    FromDegen <|
+                                        DegenMsg.SelectMeme degen
+                                ]
+                                [ Html.text "select meme to upload"
                                 ]
 
                         False ->
@@ -228,17 +226,15 @@ view state =
                             Html.div
                                 []
                                 [ upload
-                                , Html.div
-                                    []
-                                    [ Html.button
-                                        [ onClick <|
-                                            FromDegen <|
-                                                DegenMsg.AddNewContender dataUrl
-                                        ]
-                                        [ Html.text
-                                            """upload meme!
+                                , Html.button
+                                    [ class "button"
+                                    , onClick <|
+                                        FromDegen <|
+                                            DegenMsg.AddNewContender dataUrl
+                                    ]
+                                    [ Html.text
+                                        """upload meme
                                             """
-                                        ]
                                     ]
                                 , Html.div
                                     []
@@ -256,11 +252,20 @@ view state =
                                 ]
             in
             Html.div
-                []
-                [ shadowBalance
-                , form_
+                [ class "box-pink"
+                ]
+                [ Html.div
+                    [ class "mb-6"
+                    ]
+                    [ shadowBalance
+                    ]
                 , Html.div
-                    [ class "mt-6"
+                    [ class "mb-6"
+                    ]
+                    [ form_
+                    ]
+                , Html.div
+                    [ class "mb-6"
                     ]
                     [ viewWagers degen.wagers
                     ]
