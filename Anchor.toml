@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-meme_race = "3uEYaDAsPToBcGM4iYopi4yM7Q7DJHfnprvzvKEqEvmJ"
+meme_race = "3QXrVyksRJYpDgzuesbQKmqJmEuhei2RvkYVqUAqRE9P"
 
 [registry]
 url = "https://api.apr.dev"

@@ -11,7 +11,7 @@ use crate::pda::wager_index::WagerIndex;
 mod pda;
 mod ix;
 
-declare_id!("3uEYaDAsPToBcGM4iYopi4yM7Q7DJHfnprvzvKEqEvmJ");
+declare_id!("3QXrVyksRJYpDgzuesbQKmqJmEuhei2RvkYVqUAqRE9P");
 
 #[program]
 pub mod meme_race {
