@@ -164,7 +164,7 @@ view state =
                                                 ]
                                             , Html.th
                                                 []
-                                                [ Html.text "wager total 💰"
+                                                [ Html.text "pot total 💰"
                                                 ]
                                             , Html.th
                                                 []
@@ -194,7 +194,7 @@ view state =
                                                 ]
                                             , Html.th
                                                 []
-                                                [ Html.text "wager total 💰"
+                                                [ Html.text "pot total 💰"
                                                 ]
                                             , Html.th
                                                 []
@@ -472,7 +472,7 @@ view state =
                                             ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "Wager Total"
+                                                    [ "Pot Total"
                                                     , ": "
                                                     , "$BONK"
                                                     , " "

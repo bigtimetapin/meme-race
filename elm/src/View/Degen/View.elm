@@ -393,15 +393,15 @@ viewWagers wagers =
                                 []
                                 [ Html.th
                                     []
-                                    [ Html.text "wager total 💰"
-                                    ]
-                                , Html.th
-                                    []
                                     [ Html.text "your wager 🌱"
                                     ]
                                 , Html.th
                                     []
-                                    [ Html.text "your wager pct ➗"
+                                    [ Html.text "your wager pct of total ➗"
+                                    ]
+                                , Html.th
+                                    []
+                                    [ Html.text "# of sub-wagers 🔄"
                                     ]
                                 , Html.th
                                     []

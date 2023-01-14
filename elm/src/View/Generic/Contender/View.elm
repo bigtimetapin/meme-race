@@ -26,7 +26,7 @@ singleton contender =
                     []
                     [ Html.td
                         []
-                        [ Html.text "wager total 💰"
+                        [ Html.text "pot total 💰"
                         ]
                     , Html.td
                         []
@@ -122,7 +122,7 @@ many contenders =
                     []
                     [ Html.th
                         []
-                        [ Html.text "wager total 💰"
+                        [ Html.text "pot total 💰"
                         ]
                     , Html.th
                         []
@@ -148,7 +148,7 @@ many contenders =
                     []
                     [ Html.th
                         []
-                        [ Html.text "wager total 💰"
+                        [ Html.text "pot total 💰"
                         ]
                     , Html.th
                         []
