@@ -8,20 +8,9 @@ import Msg.Msg exposing (Msg)
 view : Html Msg
 view =
     Html.footer
-        [ class "level box-pink mb-6"
+        [ class "level box mb-6"
         ]
         [ Html.div
-            [ class "level-item"
-            ]
-            [ Html.a
-                [ class "has-sky-blue-text"
-                , href "https://github.com/bigtimetapin/meme-race"
-                , target "_blank"
-                ]
-                [ Html.text "open-source 💯"
-                ]
-            ]
-        , Html.div
             [ class "level-item"
             ]
             [ Html.a
@@ -30,6 +19,17 @@ view =
                 , target "_blank"
                 ]
                 [ Html.text "on-chain 🔍"
+                ]
+            ]
+        , Html.div
+            [ class "level-item"
+            ]
+            [ Html.a
+                [ class "has-sky-blue-text"
+                , href "https://github.com/bigtimetapin/meme-race"
+                , target "_blank"
+                ]
+                [ Html.text "open-source 💯"
                 ]
             ]
         , Html.div
