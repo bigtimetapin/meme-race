@@ -1,7 +1,7 @@
 module View.Degen.View exposing (view)
 
 import Html exposing (Html)
-import Html.Attributes exposing (class, href, src, target)
+import Html.Attributes exposing (class, href, src, style, target)
 import Html.Events exposing (onClick)
 import Model.Contender.Contender exposing (Contender)
 import Model.Contender.State as ContenderState
@@ -17,272 +17,293 @@ import View.Generic.Contender.View
 
 view : State -> Html Msg
 view state =
-    case state of
-        Top degen ->
-            let
-                contender =
-                    case degen.contender of
-                        Just c ->
-                            Html.div
-                                [ class "columns box-pink"
-                                ]
-                                [ Html.div
-                                    [ class "column is-half"
-                                    ]
-                                    [ Html.text
-                                        """You've successfully added a meme to race 💰
-                                        """
-                                    , Html.div
-                                        [ class "my-6"
+    let
+        html =
+            case state of
+                Top degen ->
+                    let
+                        contender =
+                            case degen.contender of
+                                Just c ->
+                                    Html.div
+                                        [ class "columns box-pink"
                                         ]
-                                        [ Html.text
-                                            """Anyone can place a wager on your meme . . . including yourself 😉
-                                            """
-                                        ]
-                                    , Html.div
-                                        [ class "mb-6"
-                                        ]
-                                        [ Html.text
-                                            """Share your
-                                            """
-                                        , Html.a
-                                            [ class "has-sky-blue-text"
-                                            , target "_blank"
-                                            , Local.href <|
-                                                Local.Contender <|
-                                                    ContenderState.Almost
-                                                        { pda = c.pda
-                                                        }
+                                        [ Html.div
+                                            [ class "column is-half"
                                             ]
                                             [ Html.text
-                                                """contender-url
+                                                """You've successfully added a meme to race 💰
+                                                """
+                                            , Html.div
+                                                [ class "my-6"
+                                                ]
+                                                [ Html.text
+                                                    """Anyone can place a wager on your meme . . . including yourself 😉
+                                                    """
+                                                ]
+                                            , Html.div
+                                                [ class "mb-6"
+                                                ]
+                                                [ Html.text
+                                                    """Share your
+                                                    """
+                                                , Html.a
+                                                    [ class "has-sky-blue-text"
+                                                    , target "_blank"
+                                                    , Local.href <|
+                                                        Local.Contender <|
+                                                            ContenderState.Almost
+                                                                { pda = c.pda
+                                                                }
+                                                    ]
+                                                    [ Html.text
+                                                        """contender-url
+                                                        """
+                                                    ]
+                                                , Html.text
+                                                    """ on your socials & coordinate with your friends for initial discovery
+                                                    """
+                                                ]
+                                            , Html.div
+                                                []
+                                                [ Html.text
+                                                    """If you can collect enough wagers you'll end up on the
+                                                    """
+                                                , Html.a
+                                                    [ class "has-sky-blue-text"
+                                                    , Local.href <|
+                                                        Local.LeaderBoard <|
+                                                            LeaderBoardState.Almost
+                                                    ]
+                                                    [ Html.text "leader-board 🏆"
+                                                    ]
+                                                ]
+                                            ]
+                                        , Html.div
+                                            [ class "column is-half"
+                                            ]
+                                            [ View.Generic.Contender.View.singleton c
+                                            ]
+                                        ]
+
+                                Nothing ->
+                                    Html.div
+                                        [ class "box-pink"
+                                        ]
+                                        [ Html.div
+                                            [ class "mb-3"
+                                            ]
+                                            [ Html.text
+                                                """Looks like you haven't added a meme to the race 😵
                                                 """
                                             ]
-                                        , Html.text
-                                            """ on your socials & coordinate with your friends for initial discovery
-                                            """
-                                        ]
-                                    , Html.div
-                                        []
-                                        [ Html.text
-                                            """If you can collect enough wagers you'll end up on the
-                                            """
-                                        , Html.a
-                                            [ class "has-sky-blue-text"
-                                            , Local.href <|
-                                                Local.LeaderBoard <|
-                                                    LeaderBoardState.Almost
-                                            ]
-                                            [ Html.text "leader-board 🏆"
+                                        , Html.div
+                                            []
+                                            [ Html.button
+                                                [ class "button"
+                                                , onClick <|
+                                                    FromDegen <|
+                                                        DegenMsg.StartNewContenderForm
+                                                            degen
+                                                ]
+                                                [ Html.text "Upload meme 😎"
+                                                ]
                                             ]
                                         ]
-                                    ]
-                                , Html.div
-                                    [ class "column is-half"
-                                    ]
-                                    [ View.Generic.Contender.View.singleton c
-                                    ]
-                                ]
-
-                        Nothing ->
-                            Html.div
-                                [ class "box-pink"
-                                ]
-                                [ Html.div
-                                    [ class "mb-3"
-                                    ]
-                                    [ Html.text
-                                        """Looks like you haven't added a meme to the race 😵
-                                        """
-                                    ]
-                                , Html.div
-                                    []
-                                    [ Html.button
-                                        [ class "button"
-                                        , onClick <|
-                                            FromDegen <|
-                                                DegenMsg.StartNewContenderForm
-                                                    degen
-                                        ]
-                                        [ Html.text "Upload meme 😎"
-                                        ]
-                                    ]
-                                ]
-            in
-            Html.div
-                [ class "mt-6"
-                ]
-                [ contender
-                , Html.div
-                    [ class "mt-6"
-                    ]
-                    [ viewWagers degen.wagers
-                    ]
-                ]
-
-        NewContender newContenderForm degen ->
-            let
-                shadowBalance =
+                    in
                     Html.div
-                        []
-                        [ Html.div
-                            []
-                            [ Html.text
-                                """Your
-                                """
-                            , Html.a
-                                [ class "has-sky-blue-text"
-                                , href "https://solscan.io/token/SHDWyBxihqiCj6YekG2GUr7wqKLeLAMK1gHZck9pL6y"
-                                , target "_blank"
-                                ]
-                                [ Html.text "$SHDW"
-                                ]
-                            , Html.text <|
-                                String.concat
-                                    [ " "
-                                    , "balance"
-                                    , ": "
-                                    , String.fromFloat (Basics.toFloat degen.shadow.balance / 1000000000)
-                                    ]
+                        [ class "mt-6"
+                        ]
+                        [ contender
+                        , Html.div
+                            [ class "mt-6"
+                            ]
+                            [ viewWagers degen.wagers
                             ]
                         ]
 
-                upload =
-                    case degen.shadow.balance >= 250000000 of
-                        True ->
-                            Html.button
-                                [ class "button"
-                                , onClick <|
-                                    FromDegen <|
-                                        DegenMsg.SelectMeme degen
-                                ]
-                                [ Html.text "select meme to upload"
-                                ]
-
-                        False ->
+                NewContender newContenderForm degen ->
+                    let
+                        shadowBalance =
                             Html.div
                                 []
                                 [ Html.div
-                                    [ class "mb-3"
-                                    ]
+                                    []
                                     [ Html.text
-                                        """It looks like you have an insufficient $SHDW balance 👀
-                                        """
-                                    ]
-                                , Html.div
-                                    [ class "mb-3"
-                                    ]
-                                    [ Html.text
-                                        """We are using
+                                        """Your
                                         """
                                     , Html.a
                                         [ class "has-sky-blue-text"
-                                        , href "https://docs.genesysgo.com/shadow/shadow-drive/before-you-begin"
+                                        , href "https://solscan.io/token/SHDWyBxihqiCj6YekG2GUr7wqKLeLAMK1gHZck9pL6y"
                                         , target "_blank"
                                         ]
-                                        [ Html.text "shadow-drive"
+                                        [ Html.text "$SHDW"
                                         ]
-                                    , Html.text
-                                        """ for decentralized storage of the meme you're gonna upload 🤪
-                                        """
+                                    , Html.text <|
+                                        String.concat
+                                            [ " "
+                                            , "balance"
+                                            , ": "
+                                            , String.fromFloat (Basics.toFloat degen.shadow.balance / 1000000000)
+                                            ]
                                     ]
-                                , Html.div
-                                    [ class "mb-3"
-                                    ]
-                                    [ Html.text
-                                        """Before uploading we require a minimum balance of 0.25 $SHDW which is
-                                        equivalent to 1GB of permanent storage on the network.
-                                        """
-                                    ]
-                                , Html.div
-                                    [ class "mb-3"
-                                    ]
-                                    [ Html.text
-                                        """Why this requirement? Because the max upload size is 1GB & we want your
-                                        transaction to land the first time. Also, we're *long* $SHDW & you should be too.
-                                        """
-                                    ]
-                                , Html.div
-                                    [ class "mb-3"
-                                    ]
-                                    [ Html.a
-                                        [ class "has-sky-blue-text"
-                                        , href "https://jup.ag/swap/SOL-SHDW"
-                                        , target "_blank"
-                                        ]
-                                        [ Html.text "$SOL --> $SHDW"
-                                        ]
-                                    ]
-                                , Html.div
-                                    []
-                                    [ Html.button
+                                ]
+
+                        upload =
+                            case degen.shadow.balance >= 250000000 of
+                                True ->
+                                    Html.button
                                         [ class "button"
                                         , onClick <|
                                             FromDegen <|
-                                                DegenMsg.RefreshShadowBalance
+                                                DegenMsg.SelectMeme degen
                                         ]
-                                        [ Html.text "refresh"
+                                        [ Html.text "select meme to upload"
                                         ]
-                                    ]
-                                ]
 
-                form_ =
-                    case newContenderForm of
-                        Just dataUrl ->
-                            Html.div
-                                []
-                                [ Html.div
-                                    [ class "mb-2"
-                                    ]
-                                    [ upload
-                                    , Html.button
-                                        [ class "button ml-2"
-                                        , onClick <|
-                                            FromDegen <|
-                                                DegenMsg.AddNewContender dataUrl
-                                        ]
-                                        [ Html.text
-                                            """upload meme
-                                                """
-                                        ]
-                                    ]
-                                , Html.div
-                                    []
-                                    [ Html.img
-                                        [ src dataUrl
-                                        ]
+                                False ->
+                                    Html.div
                                         []
-                                    ]
-                                ]
+                                        [ Html.div
+                                            [ class "mb-3"
+                                            ]
+                                            [ Html.text
+                                                """It looks like you have an insufficient $SHDW balance 👀
+                                                """
+                                            ]
+                                        , Html.div
+                                            [ class "mb-3"
+                                            ]
+                                            [ Html.text
+                                                """We are using
+                                                """
+                                            , Html.a
+                                                [ class "has-sky-blue-text"
+                                                , href "https://docs.genesysgo.com/shadow/shadow-drive/before-you-begin"
+                                                , target "_blank"
+                                                ]
+                                                [ Html.text "shadow-drive"
+                                                ]
+                                            , Html.text
+                                                """ for decentralized storage of the meme you're gonna upload 🤪
+                                                """
+                                            ]
+                                        , Html.div
+                                            [ class "mb-3"
+                                            ]
+                                            [ Html.text
+                                                """Before uploading we require a minimum balance of 0.25 $SHDW which is
+                                                equivalent to 1GB of permanent storage on the network.
+                                                """
+                                            ]
+                                        , Html.div
+                                            [ class "mb-3"
+                                            ]
+                                            [ Html.text
+                                                """Why this requirement? Because the max upload size is 1GB & we want your
+                                                transaction to land the first time. Also, we're *long* $SHDW & you should be too.
+                                                """
+                                            ]
+                                        , Html.div
+                                            [ class "mb-3"
+                                            ]
+                                            [ Html.a
+                                                [ class "has-sky-blue-text"
+                                                , href "https://jup.ag/swap/SOL-SHDW"
+                                                , target "_blank"
+                                                ]
+                                                [ Html.text "$SOL --> $SHDW"
+                                                ]
+                                            ]
+                                        , Html.div
+                                            []
+                                            [ Html.button
+                                                [ class "button"
+                                                , onClick <|
+                                                    FromDegen <|
+                                                        DegenMsg.RefreshShadowBalance
+                                                ]
+                                                [ Html.text "refresh"
+                                                ]
+                                            ]
+                                        ]
 
-                        Nothing ->
-                            Html.div
-                                []
-                                [ upload
+                        form_ =
+                            case newContenderForm of
+                                Just dataUrl ->
+                                    Html.div
+                                        []
+                                        [ Html.div
+                                            [ class "mb-2"
+                                            ]
+                                            [ upload
+                                            , Html.button
+                                                [ class "button ml-2"
+                                                , onClick <|
+                                                    FromDegen <|
+                                                        DegenMsg.AddNewContender dataUrl
+                                                ]
+                                                [ Html.text
+                                                    """upload meme
+                                                        """
+                                                ]
+                                            ]
+                                        , Html.div
+                                            []
+                                            [ Html.img
+                                                [ src dataUrl
+                                                ]
+                                                []
+                                            ]
+                                        ]
+
+                                Nothing ->
+                                    Html.div
+                                        []
+                                        [ upload
+                                        ]
+                    in
+                    Html.div
+                        []
+                        [ Html.div
+                            [ class "box-pink mb-6"
+                            ]
+                            [ Html.div
+                                [ class "mb-6"
                                 ]
-            in
-            Html.div
-                []
-                [ Html.div
-                    [ class "box-pink mb-6"
-                    ]
-                    [ Html.div
-                        [ class "mb-6"
+                                [ shadowBalance
+                                ]
+                            , Html.div
+                                [ class "mb-6"
+                                ]
+                                [ form_
+                                ]
+                            ]
+                        , Html.div
+                            [ class "mb-6"
+                            ]
+                            [ viewWagers degen.wagers
+                            ]
                         ]
-                        [ shadowBalance
-                        ]
-                    , Html.div
-                        [ class "mb-6"
-                        ]
-                        [ form_
-                        ]
-                    ]
-                , Html.div
-                    [ class "mb-6"
-                    ]
-                    [ viewWagers degen.wagers
-                    ]
+    in
+    Html.div
+        []
+        [ Html.div
+            [ style "margin-bottom" "100px"
+            ]
+            [ Html.h3
+                [ class "is-family-secondary has-text-centered is-size-4"
                 ]
+                [ Html.text
+                    """DEGEN
+                    """
+                ]
+            ]
+        , Html.div
+            []
+            [ html
+            ]
+        ]
 
 
 viewWagers : List Wager -> Html Msg
