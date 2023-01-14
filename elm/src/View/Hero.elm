@@ -141,7 +141,7 @@ view exception global body =
             [ class "mx-6 my-6"
             ]
             [ Html.h1
-                [ class "is-family-secondary has-text-centered is-size-2 mb-4"
+                [ class "is-family-secondary has-text-centered is-size-2 mb-6"
                 ]
                 [ Html.text "MEME RACE"
                 ]
