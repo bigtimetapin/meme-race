@@ -293,7 +293,21 @@ viewWagers wagers =
                         []
                         [ Html.td
                             []
-                            [ Html.text w.wagerSizeFormatted
+                            [ Html.text <|
+                                String.concat
+                                    [ "$BONK"
+                                    , ": "
+                                    , w.potSizeFormatted
+                                    ]
+                            ]
+                        , Html.td
+                            []
+                            [ Html.text <|
+                                String.concat
+                                    [ "$BONK"
+                                    , ": "
+                                    , w.wagerSizeFormatted
+                                    ]
                             , Html.div
                                 []
                                 [ Html.a
@@ -367,6 +381,10 @@ viewWagers wagers =
                                 []
                                 [ Html.th
                                     []
+                                    [ Html.text "pot total 💰"
+                                    ]
+                                , Html.th
+                                    []
                                     [ Html.text "your wager 🌱"
                                     ]
                                 , Html.th
@@ -392,6 +410,10 @@ viewWagers wagers =
                             [ Html.tr
                                 []
                                 [ Html.th
+                                    []
+                                    [ Html.text "pot total 💰"
+                                    ]
+                                , Html.th
                                     []
                                     [ Html.text "your wager 🌱"
                                     ]

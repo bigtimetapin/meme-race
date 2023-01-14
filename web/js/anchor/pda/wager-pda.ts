@@ -9,6 +9,8 @@ export interface WagerPda extends Pda {
 }
 
 export interface Wager {
+    potSize: number
+    potSizeFormatted: string
     wagerSize: number
     wagerSizeFormatted: string
     wagerPercentage: string
@@ -50,6 +52,8 @@ export async function getManyWagerPda(
                 contender_
             );
             return {
+                potSize: contender_.score.toNumber(),
+                potSizeFormatted: (contender_.score.toNumber() / BONK_DECIMALS).toLocaleString(),
                 wagerSize: wager.wagerSize.toNumber(),
                 wagerSizeFormatted: (wager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
                 wagerPercentage: (100 * (wager.wagerSize.toNumber() / contender_.score.toNumber())).toString() + "%",
@@ -79,6 +83,8 @@ export async function getWagerPda(
         fetchedContender
     );
     return {
+        potSize: fetchedContender.score.toNumber(),
+        potSizeFormatted: (fetchedContender.score.toNumber() / BONK_DECIMALS).toLocaleString(),
         wagerSize: fetchedWager.wagerSize.toNumber(),
         wagerSizeFormatted: (fetchedWager.wagerSize.toNumber() / BONK_DECIMALS).toLocaleString(),
         wagerPercentage: (100 * (fetchedWager.wagerSize.toNumber() / fetchedContender.score.toNumber())).toString() + "%",
