@@ -1,7 +1,7 @@
 module View.Hero exposing (view)
 
 import Html exposing (Html)
-import Html.Attributes exposing (class, href, target)
+import Html.Attributes exposing (class, href, style, target)
 import Html.Events exposing (onClick)
 import Model.State.Exception.Exception as Exception exposing (Exception)
 import Model.State.Global.Global exposing (Global)
@@ -149,7 +149,8 @@ view exception global body =
             , exceptionModal
             ]
         , Html.div
-            [ class "hero-foot"
+            [ class "hero-foot mx-6"
+            , style "margin-top" "100px"
             ]
             [ View.Footer.view
             ]

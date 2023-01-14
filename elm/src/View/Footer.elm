@@ -8,37 +8,39 @@ import Msg.Msg exposing (Msg)
 view : Html Msg
 view =
     Html.footer
-        [ class "level has-right"
+        [ class "level box-pink mb-6"
         ]
         [ Html.div
             [ class "level-item"
             ]
             [ Html.a
-                [ href "https://github.com/bigtimetapin/somos-crowd"
+                [ class "has-sky-blue-text"
+                , href "https://github.com/bigtimetapin/meme-race"
                 , target "_blank"
                 ]
-                [ Html.span
-                    [ class "icon is-medium"
-                    ]
-                    [ Html.i
-                        [ class "fab fa-sm fa-github"
-                        ]
-                        []
-                    ]
+                [ Html.text "github"
                 ]
             ]
         , Html.div
             [ class "level-item"
             ]
             [ Html.a
-                [ class "icon is-medium"
-                , href "mailto:bigtimetapin@gmail.com"
+                [ class "has-sky-blue-text"
+                , href "https://medium.com/@memeracedotcom/how-to-meme-race-d875e966fde6"
                 , target "_blank"
                 ]
-                [ Html.i
-                    [ class "far fa-sm fa-envelope"
-                    ]
-                    []
+                [ Html.text "how-to"
+                ]
+            ]
+        , Html.div
+            [ class "level-item"
+            ]
+            [ Html.a
+                [ class "has-sky-blue-text"
+                , href "https://medium.com/@memeracedotcom/meme-race-contact-pages-44bb97a13c68"
+                , target "_blank"
+                ]
+                [ Html.text "doxx"
                 ]
             ]
         ]
