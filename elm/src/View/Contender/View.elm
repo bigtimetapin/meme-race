@@ -207,7 +207,8 @@ view state =
                                 ]
             in
             Html.div
-                []
+                [ class "box-pink"
+                ]
                 [ Html.div
                     [ class "columns"
                     ]
