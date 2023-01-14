@@ -163,13 +163,15 @@ view state =
                             Html.div
                                 []
                                 [ Html.div
-                                    []
+                                    [ class "mb-3"
+                                    ]
                                     [ Html.text
                                         """It looks like you have an insufficient $SHDW balance 👀
                                         """
                                     ]
                                 , Html.div
-                                    []
+                                    [ class "mb-3"
+                                    ]
                                     [ Html.text
                                         """We are using
                                         """
@@ -185,21 +187,24 @@ view state =
                                         """
                                     ]
                                 , Html.div
-                                    []
+                                    [ class "mb-3"
+                                    ]
                                     [ Html.text
                                         """Before uploading we require a minimum balance of 0.25 $SHDW which is
                                         equivalent to 1GB of permanent storage on the network.
                                         """
                                     ]
                                 , Html.div
-                                    []
+                                    [ class "mb-3"
+                                    ]
                                     [ Html.text
                                         """Why this requirement? Because the max upload size is 1GB & we want your
                                         transaction to land the first time. Also, we're *long* $SHDW & you should be too.
                                         """
                                     ]
                                 , Html.div
-                                    []
+                                    [ class "mb-3"
+                                    ]
                                     [ Html.a
                                         [ class "has-sky-blue-text"
                                         , href "https://jup.ag/swap/SOL-SHDW"
@@ -211,7 +216,8 @@ view state =
                                 , Html.div
                                     []
                                     [ Html.button
-                                        [ onClick <|
+                                        [ class "button"
+                                        , onClick <|
                                             FromDegen <|
                                                 DegenMsg.RefreshShadowBalance
                                         ]
