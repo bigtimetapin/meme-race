@@ -232,7 +232,8 @@ view state =
                         ]
     in
     Html.div
-        []
+        [ class "box"
+        ]
         [ Html.div
             [ style "margin-bottom" "100px"
             ]
@@ -245,7 +246,8 @@ view state =
                 ]
             ]
         , Html.div
-            []
+            [ style "margin-bottom" "50px"
+            ]
             [ html
             ]
         ]

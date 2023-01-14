@@ -16,9 +16,10 @@ singleton contender =
             getWager contender
     in
     Html.div
-        []
+        [ class "table-container"
+        ]
         [ Html.table
-            [ class "table"
+            [ class "table-pink"
             ]
             [ Html.tbody
                 []
