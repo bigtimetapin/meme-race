@@ -231,16 +231,20 @@ view state =
                         Just dataUrl ->
                             Html.div
                                 []
-                                [ upload
-                                , Html.button
-                                    [ class "button"
-                                    , onClick <|
-                                        FromDegen <|
-                                            DegenMsg.AddNewContender dataUrl
+                                [ Html.div
+                                    [ class "mb-2"
                                     ]
-                                    [ Html.text
-                                        """upload meme
-                                            """
+                                    [ upload
+                                    , Html.button
+                                        [ class "button ml-2"
+                                        , onClick <|
+                                            FromDegen <|
+                                                DegenMsg.AddNewContender dataUrl
+                                        ]
+                                        [ Html.text
+                                            """upload meme
+                                                """
+                                        ]
                                     ]
                                 , Html.div
                                     []
@@ -258,17 +262,20 @@ view state =
                                 ]
             in
             Html.div
-                [ class "box-pink"
-                ]
+                []
                 [ Html.div
-                    [ class "mb-6"
+                    [ class "box-pink mb-6"
                     ]
-                    [ shadowBalance
-                    ]
-                , Html.div
-                    [ class "mb-6"
-                    ]
-                    [ form_
+                    [ Html.div
+                        [ class "mb-6"
+                        ]
+                        [ shadowBalance
+                        ]
+                    , Html.div
+                        [ class "mb-6"
+                        ]
+                        [ form_
+                        ]
                     ]
                 , Html.div
                     [ class "mb-6"
