@@ -18,7 +18,7 @@ view =
                 , href "https://github.com/bigtimetapin/meme-race"
                 , target "_blank"
                 ]
-                [ Html.text "github"
+                [ Html.text "open-source 💯"
                 ]
             ]
         , Html.div
@@ -29,7 +29,7 @@ view =
                 , href "https://explorer.solana.com/address/3QXrVyksRJYpDgzuesbQKmqJmEuhei2RvkYVqUAqRE9P"
                 , target "_blank"
                 ]
-                [ Html.text "explorer"
+                [ Html.text "on-chain 🔍"
                 ]
             ]
         , Html.div
@@ -40,7 +40,7 @@ view =
                 , href "https://medium.com/@memeracedotcom/how-to-meme-race-d875e966fde6"
                 , target "_blank"
                 ]
-                [ Html.text "how-to"
+                [ Html.text "how-to 🤓"
                 ]
             ]
         , Html.div
@@ -51,7 +51,7 @@ view =
                 , href "https://medium.com/@memeracedotcom/meme-race-contact-pages-44bb97a13c68"
                 , target "_blank"
                 ]
-                [ Html.text "doxx"
+                [ Html.text "doxx ✅"
                 ]
             ]
         ]
