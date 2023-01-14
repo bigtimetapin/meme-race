@@ -26,6 +26,17 @@ view =
             ]
             [ Html.a
                 [ class "has-sky-blue-text"
+                , href "https://solscan.io/account/3QXrVyksRJYpDgzuesbQKmqJmEuhei2RvkYVqUAqRE9P"
+                , target "_blank"
+                ]
+                [ Html.text "solscan"
+                ]
+            ]
+        , Html.div
+            [ class "level-item"
+            ]
+            [ Html.a
+                [ class "has-sky-blue-text"
                 , href "https://medium.com/@memeracedotcom/how-to-meme-race-d875e966fde6"
                 , target "_blank"
                 ]
