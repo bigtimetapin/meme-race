@@ -264,7 +264,7 @@ view state =
                                         String.concat
                                             [ "Race closes at"
                                             , " "
-                                            , "Thursday, Jan. 12th at 11:59pm EST"
+                                            , "Sunday, Jan. 22nd at 11:59pm EST"
                                             ]
                                     ]
                                 ]
