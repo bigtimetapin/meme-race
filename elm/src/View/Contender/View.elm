@@ -20,36 +20,13 @@ view state =
 
         Top contender ->
             let
-                ( wager, newWager ) =
+                ( wager, wagerPct ) =
                     case contender.wager of
                         Just w ->
                             ( Html.div
                                 []
-                                [ Html.text <|
-                                    String.concat
-                                        [ "You've personally wagered"
-                                        , " "
-                                        , "$BONK"
-                                        , ": "
-                                        , w.formatted
-                                        , " "
-                                        , "on this candidate 😏"
-                                        ]
-                                , Html.div
-                                    []
-                                    [ Html.text <|
-                                        String.concat
-                                            [ "which makes up"
-                                            , " "
-                                            , w.percentage
-                                            , " "
-                                            , "of the total wagers placed on this candidate 👀"
-                                            ]
-                                    ]
-                                ]
-                            , Html.div
-                                []
-                                [ Html.button
+                                [ Html.text w.formatted
+                                , Html.button
                                     [ onClick <|
                                         FromContender <|
                                             ContenderMsg.StartNewWager
@@ -60,13 +37,14 @@ view state =
                                         """
                                     ]
                                 ]
+                            , Html.div
+                                []
+                                [ Html.text w.percentage
+                                ]
                             )
 
                         Nothing ->
                             ( Html.div
-                                []
-                                []
-                            , Html.div
                                 []
                                 [ Html.button
                                     [ onClick <|
@@ -75,70 +53,97 @@ view state =
                                                 contender
                                     ]
                                     [ Html.text
-                                        """place a wager on this candidate 🤝
+                                        """place wager
                                         """
                                     ]
                                 ]
+                            , Html.div
+                                []
+                                []
                             )
             in
             Html.div
-                []
-                [ Html.div
-                    []
-                    [ Html.h2
+                [ class "mt-6"
+                ]
+                [ Html.table
+                    [ class "table-pink is-fullwidth"
+                    ]
+                    [ Html.tbody
                         []
-                        [ Html.text
-                            """Contender 👑
-                            """
-                        ]
-                    , Html.div
-                        []
-                        [ Html.text <|
-                            String.concat
-                                [ "uploaded by"
-                                , ": "
+                        [ Html.tr
+                            []
+                            [ Html.td
+                                []
+                                [ Html.text "pot total 💰"
                                 ]
-                        , Html.a
-                            [ class "has-sky-blue-text"
-                            , href <|
-                                String.concat
-                                    [ "https://solscan.io/account/"
-                                    , contender.authority.address
-                                    ]
-                            , target "_blank"
+                            , Html.td
+                                []
+                                [ Html.text <|
+                                    String.concat
+                                        [ "$BONK"
+                                        , ": "
+                                        , contender.score
+                                        ]
+                                ]
                             ]
-                            [ Html.text <|
-                                Wallet.slice contender.authority.address
-                            ]
-                        ]
-                    ]
-                , Html.div
-                    [ class "columns"
-                    ]
-                    [ Html.div
-                        [ class "column is-half"
-                        ]
-                        [ Html.div
+                        , Html.tr
                             []
-                            [ Html.text <|
-                                String.concat
-                                    [ "$BONK"
-                                    , ": "
-                                    , contender.score
-                                    , " "
-                                    , "in total wagered on this candidate"
-                                    ]
+                            [ Html.td
+                                []
+                                [ Html.text "your wager 🌱"
+                                ]
+                            , Html.td
+                                []
+                                [ wager
+                                ]
                             ]
-                        , wager
-                        , newWager
-                        ]
-                    , Html.div
-                        [ class "column is-half"
-                        ]
-                        [ Html.img
-                            [ src contender.url
-                            ]
+                        , Html.tr
                             []
+                            [ Html.td
+                                []
+                                [ Html.text "your wager pct ➗"
+                                ]
+                            , Html.td
+                                []
+                                [ wagerPct
+                                ]
+                            ]
+                        , Html.tr
+                            []
+                            [ Html.td
+                                []
+                                [ Html.text "uploader 📩"
+                                ]
+                            , Html.td
+                                []
+                                [ Html.a
+                                    [ class "has-sky-blue-text"
+                                    , href <|
+                                        String.concat
+                                            [ "https://solscan.io/account/"
+                                            , contender.authority.address
+                                            ]
+                                    , target "_blank"
+                                    ]
+                                    [ Html.text <|
+                                        Wallet.slice contender.authority.address
+                                    ]
+                                ]
+                            ]
+                        , Html.tr
+                            []
+                            [ Html.td
+                                []
+                                [ Html.text "meme 😄"
+                                ]
+                            , Html.td
+                                []
+                                [ Html.img
+                                    [ src contender.url
+                                    ]
+                                    []
+                                ]
+                            ]
                         ]
                     ]
                 ]
