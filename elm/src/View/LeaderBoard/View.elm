@@ -291,7 +291,7 @@ view state =
                                         ]
                                     ]
                                 , Html.div
-                                    [ style "margin-top" "50px"
+                                    [ style "margin-top" "100px"
                                     ]
                                     [ table
                                     ]
