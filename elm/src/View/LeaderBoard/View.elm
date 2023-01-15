@@ -234,8 +234,9 @@ view state =
                                             ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "Pot Total"
-                                                    , ":"
+                                                    [ "Pot Size"
+                                                    , " "
+                                                    , "@"
                                                     ]
                                             , Html.b
                                                 [ class "is-bold"
@@ -266,8 +267,9 @@ view state =
                                             ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "Burn Total"
-                                                    , ":"
+                                                    [ "Burn"
+                                                    , " "
+                                                    , "@"
                                                     ]
                                             , Html.b
                                                 [ class "is-bold"
