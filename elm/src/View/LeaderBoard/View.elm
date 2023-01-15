@@ -249,14 +249,6 @@ view state =
                                                         , leaderBoard.totalFormatted
                                                         ]
                                                 ]
-                                            , Html.a
-                                                [ class "has-sky-blue-text ml-3 mb-6"
-                                                , Local.href <|
-                                                    Local.LeaderBoard <|
-                                                        LeaderBoardState.Almost
-                                                ]
-                                                [ Html.text "refresh"
-                                                ]
                                             ]
                                         ]
                                     , Html.div
@@ -567,7 +559,7 @@ view state =
         [ class "box"
         ]
         [ Html.div
-            [ style "margin-bottom" "100px"
+            [ style "margin-bottom" "35px"
             ]
             [ Html.h3
                 [ class "is-family-secondary has-text-centered is-size-4"
@@ -575,6 +567,22 @@ view state =
                 [ Html.text
                     """LEADERBOARD
                     """
+                ]
+            ]
+        , Html.div
+            [ style "margin-bottom" "100px"
+            ]
+            [ Html.h4
+                [ class "is-family-secondary has-text-centered is-size-5"
+                ]
+                [ Html.a
+                    [ class "has-sky-blue-text"
+                    , Local.href <|
+                        Local.LeaderBoard <|
+                            LeaderBoardState.Almost
+                    ]
+                    [ Html.text "refresh"
+                    ]
                 ]
             ]
         , Html.div
