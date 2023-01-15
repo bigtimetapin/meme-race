@@ -234,7 +234,7 @@ view state =
                                             ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "Pot Size"
+                                                    [ "Winners Pot"
                                                     , " "
                                                     , "@"
                                                     ]
@@ -259,7 +259,7 @@ view state =
                                             ]
                                             [ Html.text <|
                                                 String.concat
-                                                    [ "Burn"
+                                                    [ "Burned"
                                                     , " "
                                                     , "@"
                                                     ]
