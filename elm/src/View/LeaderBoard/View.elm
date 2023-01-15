@@ -259,6 +259,30 @@ view state =
                                             ]
                                         ]
                                     , Html.div
+                                        [ style "margin-bottom" "50px"
+                                        ]
+                                        [ Html.h2
+                                            [ class "is-size-5"
+                                            ]
+                                            [ Html.text <|
+                                                String.concat
+                                                    [ "Burn Total"
+                                                    , ":"
+                                                    ]
+                                            , Html.b
+                                                [ class "is-bold"
+                                                ]
+                                                [ Html.text <|
+                                                    String.concat
+                                                        [ " "
+                                                        , "$BONK"
+                                                        , " "
+                                                        , leaderBoard.totalFormatted
+                                                        ]
+                                                ]
+                                            ]
+                                        ]
+                                    , Html.div
                                         []
                                         [ Html.h2
                                             [ class "is-size-5"
