@@ -154,6 +154,55 @@ view state =
                 NewWager newWagerForm contender ->
                     let
                         input =
+                            let
+                                table wager burn burnPct =
+                                    Html.table
+                                        [ class "table"
+                                        ]
+                                        [ Html.tbody
+                                            []
+                                            [ Html.tr
+                                                []
+                                                [ Html.td
+                                                    []
+                                                    [ Html.text
+                                                        """wager size 💰
+                                                        """
+                                                    ]
+                                                , Html.td
+                                                    []
+                                                    [ wager
+                                                    ]
+                                                ]
+                                            , Html.tr
+                                                []
+                                                [ Html.td
+                                                    []
+                                                    [ Html.text
+                                                        """burn size 🔥
+                                                        """
+                                                    ]
+                                                , Html.td
+                                                    []
+                                                    [ burn
+                                                    ]
+                                                ]
+                                            , Html.tr
+                                                []
+                                                [ Html.td
+                                                    []
+                                                    [ Html.text
+                                                        """burn pct ➗
+                                                        """
+                                                    ]
+                                                , Html.td
+                                                    []
+                                                    [ burnPct
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                            in
                             case newWagerForm.newWager of
                                 Just newWager ->
                                     Html.div
@@ -169,13 +218,38 @@ view state =
                                             ]
                                             []
                                         , Html.div
-                                            []
-                                            [ Html.text <|
-                                                String.concat
-                                                    [ "$BONK"
-                                                    , ": "
-                                                    , newWager.formatted
+                                            [ class "my-2"
+                                            ]
+                                            [ table
+                                                (Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ "$BONK"
+                                                            , ": "
+                                                            , newWager.wager.formatted
+                                                            ]
                                                     ]
+                                                )
+                                                (Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ "$BONK"
+                                                            , ": "
+                                                            , newWager.burn.formatted
+                                                            ]
+                                                    ]
+                                                )
+                                                (Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ String.fromFloat <| 100 * newWagerForm.burn
+                                                            , "%"
+                                                            ]
+                                                    ]
+                                                )
                                             ]
                                         , Html.div
                                             []
@@ -207,6 +281,38 @@ view state =
                                             , placeholder "new wager"
                                             ]
                                             []
+                                        , Html.div
+                                            [ class "mt-2"
+                                            ]
+                                            [ table
+                                                (Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ "$BONK"
+                                                            , ": 0"
+                                                            ]
+                                                    ]
+                                                )
+                                                (Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ "$BONK"
+                                                            , ": 0"
+                                                            ]
+                                                    ]
+                                                )
+                                                (Html.div
+                                                    []
+                                                    [ Html.text <|
+                                                        String.concat
+                                                            [ String.fromFloat <| 100 * newWagerForm.burn
+                                                            , "%"
+                                                            ]
+                                                    ]
+                                                )
+                                            ]
                                         ]
                     in
                     Html.div

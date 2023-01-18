@@ -166,8 +166,18 @@ update msg model =
                     )
 
                 ContenderMsg.TypingNewWager string form contender ->
-                    case String.toInt string of
-                        Just int ->
+                    case ( String.toInt string, string ) of
+                        ( Just int, _ ) ->
+                            let
+                                float =
+                                    Basics.toFloat int
+
+                                burn =
+                                    float * form.burn
+
+                                wager =
+                                    float - burn
+                            in
                             ( { model
                                 | state =
                                     { local =
@@ -176,8 +186,15 @@ update msg model =
                                                 { form
                                                     | newWager =
                                                         Just <|
-                                                            { wager = int
-                                                            , formatted = FormatNumber.format usLocale (Basics.toFloat int)
+                                                            { total = int
+                                                            , wager =
+                                                                { numeric = wager
+                                                                , formatted = FormatNumber.format usLocale wager
+                                                                }
+                                                            , burn =
+                                                                { numeric = burn
+                                                                , formatted = FormatNumber.format usLocale burn
+                                                                }
                                                             }
                                                 }
                                                 contender
@@ -188,7 +205,24 @@ update msg model =
                             , Cmd.none
                             )
 
-                        Nothing ->
+                        ( Nothing, "" ) ->
+                            ( { model
+                                | state =
+                                    { local =
+                                        Local.Contender <|
+                                            ContenderState.NewWager
+                                                { form
+                                                    | newWager = Nothing
+                                                }
+                                                contender
+                                    , global = model.state.global
+                                    , exception = model.state.exception
+                                    }
+                              }
+                            , Cmd.none
+                            )
+
+                        _ ->
                             ( model
                             , Cmd.none
                             )
@@ -197,7 +231,7 @@ update msg model =
                     let
                         scaled =
                             { newWager
-                                | wager = newWager.wager * 100000
+                                | total = newWager.total * 100000
                             }
                     in
                     ( { model

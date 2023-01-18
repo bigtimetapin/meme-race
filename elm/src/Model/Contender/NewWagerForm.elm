@@ -9,11 +9,19 @@ import Util.Decode as Util
 
 type alias NewWagerForm =
     { newWager : Maybe NewWager
+    , burn : Float
     }
 
 
 type alias NewWager =
-    { wager : Int
+    { total : Int
+    , wager : Tup
+    , burn : Tup
+    }
+
+
+type alias Tup =
+    { numeric : Float
     , formatted : String
     }
 
@@ -21,6 +29,7 @@ type alias NewWager =
 default : NewWagerForm
 default =
     { newWager = Nothing
+    , burn = 0.5
     }
 
 
@@ -28,7 +37,7 @@ encode : NewWager -> Contender -> String
 encode newWager contender =
     Encode.encode 0 <|
         Encode.object
-            [ ( "wager", Encode.int newWager.wager )
+            [ ( "wager", Encode.int newWager.total )
             , ( "contender"
               , Encode.object
                     [ ( "pda", Encode.string contender.pda )
