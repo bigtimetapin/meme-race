@@ -331,6 +331,11 @@ export type MemeRace = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "slotHashes",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": []
@@ -831,6 +836,11 @@ export const IDL: MemeRace = {
         },
         {
           "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "slotHashes",
           "isMut": false,
           "isSigner": false
         }

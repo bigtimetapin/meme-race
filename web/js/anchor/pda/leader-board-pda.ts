@@ -97,7 +97,7 @@ export async function getLeaderBoardPda(
                 uploader
             },
             claimed: fetched.claimed.toNumber(),
-            claimedFormatted: fetched.claimed.toNumber().toLocaleString()
+            claimedFormatted: (fetched.claimed.toNumber() / BONK_DECIMALS).toLocaleString()
         }
     }
 }

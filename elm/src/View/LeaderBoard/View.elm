@@ -455,14 +455,34 @@ view state =
                                     [ Html.div
                                         [ class "column is-half"
                                         ]
-                                        [ Html.text <|
-                                            String.concat
-                                                [ "Total Pot Size"
-                                                , ": "
-                                                , leaderBoard.totalFormatted
-                                                , " "
-                                                , "😮\u{200D}💨"
+                                        [ Html.div
+                                            [ class "columns"
+                                            ]
+                                            [ Html.div
+                                                [ class "column is-half"
                                                 ]
+                                                [ Html.text <|
+                                                    String.concat
+                                                        [ "Total Pot Size"
+                                                        , ": "
+                                                        , leaderBoard.totalFormatted
+                                                        , " "
+                                                        , "😮\u{200D}💨"
+                                                        ]
+                                                ]
+                                            , Html.div
+                                                [ class "column is-half"
+                                                ]
+                                                [ Html.text <|
+                                                    String.concat
+                                                        [ "Total Claimed"
+                                                        , ": "
+                                                        , leaderBoard.claim.claimedFormatted
+                                                        , " "
+                                                        , "❤️"
+                                                        ]
+                                                ]
+                                            ]
                                         ]
                                     , Html.div
                                         [ class "column is-half"
